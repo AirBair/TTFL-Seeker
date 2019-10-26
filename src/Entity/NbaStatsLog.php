@@ -281,7 +281,7 @@ class NbaStatsLog
 
     public function getFreeThrowsAttempts(): ?int
     {
-        return $this->freeThrowsAttempst;
+        return $this->freeThrowsAttempts;
     }
 
     public function setFreeThrowsAttempts(int $freeThrowsAttempts): self

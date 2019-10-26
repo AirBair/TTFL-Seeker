@@ -22,10 +22,16 @@ class NbaDataSynchronizer
      */
     private $nbaDataProvider;
 
-    public function __construct(EntityManagerInterface $em, NbaDataProvider $nbaDataProvider)
+    /**
+     * @var FantasyPointsCalculator
+     */
+    private $fantasyPointsCalculator;
+
+    public function __construct(EntityManagerInterface $em, NbaDataProvider $nbaDataProvider, FantasyPointsCalculator $fantasyPointsCalculator)
     {
         $this->em = $em;
         $this->nbaDataProvider = $nbaDataProvider;
+        $this->fantasyPointsCalculator = $fantasyPointsCalculator;
     }
 
     public function synchronizeTeams(): int
@@ -174,8 +180,9 @@ class NbaDataSynchronizer
                 ->setFreeThrowsAttempts((int) $activePlayer['fta'])
                 ->setMinutesPlayed(('' !== $activePlayer['min']) ? (int) (explode(':', $activePlayer['min'])[0]) : 0)
                 ->setHasWon((int) $activePlayer['teamId'] === $winningTeam->getId())
-                ->setFantasyPoints(0)
                 ->setIsBestPick(false);
+
+            $nbaStatsLog->setFantasyPoints($this->fantasyPointsCalculator->calculatePlayerGameFantasyPoints($nbaStatsLog));
         }
 
         return \count($nbaDataBoxscore['activePlayers']);
