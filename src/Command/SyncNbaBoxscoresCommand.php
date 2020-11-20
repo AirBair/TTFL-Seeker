@@ -34,7 +34,7 @@ class SyncNbaBoxscoresCommand extends Command
             ->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yersteday)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -43,5 +43,7 @@ class SyncNbaBoxscoresCommand extends Command
         $result = $this->nbaDataSynchronizer->synchronizeBoxscores($day);
 
         $io->success($result['games'].' games boxscores & '.$result['activePlayers'].' active players have been synchronized.');
+
+        return Command::SUCCESS;
     }
 }

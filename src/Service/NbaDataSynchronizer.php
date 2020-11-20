@@ -100,7 +100,7 @@ class NbaDataSynchronizer
             }
 
             $game
-                ->setSeason(intval($_ENV['NBA_YEAR']))
+                ->setSeason((int) ($_ENV['NBA_YEAR']))
                 ->setLocalNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
                 ->setVisitorNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
                 ->setGameDay(new \DateTime($nbaDataGame['startDateEastern']))

@@ -31,12 +31,14 @@ class SyncNbaPlayersCommand extends Command
         $this->setDescription('Synchronize players from NBA API to the local database.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
         $result = $this->nbaDataSynchronizer->synchronizePlayers();
 
         $io->success($result.' players have been synchronized.');
+
+        return Command::SUCCESS;
     }
 }
