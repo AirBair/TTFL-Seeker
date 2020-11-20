@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\FantasyPickRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\PickRepository")
+ * @ORM\Entity(repositoryClass=FantasyPickRepository::class)
  */
-class Pick
+class FantasyPick
 {
     /**
      * @ORM\Id
@@ -22,18 +23,23 @@ class Pick
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $season;
+
+    /**
      * @ORM\Column(type="date")
      */
     private $pickedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="picks")
+     * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyPicks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private $fantasyUser;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaPlayer")
+     * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaPlayer;
@@ -48,6 +54,18 @@ class Pick
         return $this->id;
     }
 
+    public function getSeason(): int
+    {
+        return $this->season;
+    }
+
+    public function setSeason(int $season): self
+    {
+        $this->season = $season;
+
+        return $this;
+    }
+
     public function getPickedAt(): ?\DateTimeInterface
     {
         return $this->pickedAt;
@@ -60,14 +78,14 @@ class Pick
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getFantasyUser(): ?FantasyUser
     {
-        return $this->user;
+        return $this->fantasyUser;
     }
 
-    public function setUser(?User $user): self
+    public function setFantasyUser(?FantasyUser $fantasyUser): self
     {
-        $this->user = $user;
+        $this->fantasyUser = $fantasyUser;
 
         return $this;
     }

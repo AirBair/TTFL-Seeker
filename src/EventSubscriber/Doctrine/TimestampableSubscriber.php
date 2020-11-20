@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\EventSubscriber\Doctrine;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 class TimestampableSubscriber implements EventSubscriber
 {

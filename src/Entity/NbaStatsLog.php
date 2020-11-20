@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\NbaStatsLogRepository")
+ * @ORM\Entity(repositoryClass=NbaStatsLogRepository::class)
  */
 class NbaStatsLog
 {
@@ -22,16 +23,22 @@ class NbaStatsLog
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaGame", inversedBy="nbaStatsLogs")
+     * @ORM\ManyToOne(targetEntity=NbaGame::class, inversedBy="nbaStatsLogs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaGame;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaPlayer", inversedBy="nbaStatsLogs")
+     * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaPlayer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=NbaTeam::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $nbaTeam;
 
     /**
      * @ORM\Column(type="integer")
@@ -143,6 +150,18 @@ class NbaStatsLog
     public function setNbaPlayer(?NbaPlayer $nbaPlayer): self
     {
         $this->nbaPlayer = $nbaPlayer;
+
+        return $this;
+    }
+
+    public function getNbaTeam(): ?NbaTeam
+    {
+        return $this->nbaTeam;
+    }
+
+    public function setNbaTeam(?NbaTeam $nbaTeam): self
+    {
+        $this->nbaTeam = $nbaTeam;
 
         return $this;
     }

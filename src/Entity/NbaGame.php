@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\NbaGameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\NbaGameRepository")
+ * @ORM\Entity(repositoryClass=NbaGameRepository::class)
  */
 class NbaGame
 {
@@ -21,6 +22,11 @@ class NbaGame
      * @ORM\Column(type="string", length=255)
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $season;
 
     /**
      * @ORM\Column(type="date")
@@ -33,13 +39,13 @@ class NbaGame
     private $scheduledAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaTeam")
+     * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $localNbaTeam;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaTeam")
+     * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $visitorNbaTeam;
@@ -55,7 +61,7 @@ class NbaGame
     private $visitorScore;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\NbaStatsLog", mappedBy="nbaGame", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=NbaStatsLog::class, mappedBy="nbaGame", orphanRemoval=true)
      */
     private $nbaStatsLogs;
 
@@ -77,6 +83,18 @@ class NbaGame
     public function setId(string $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getSeason(): int
+    {
+        return $this->season;
+    }
+
+    public function setSeason(int $season): self
+    {
+        $this->season = $season;
 
         return $this;
     }

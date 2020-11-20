@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\NbaPlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\NbaPlayerRepository")
+ * @ORM\Entity(repositoryClass=NbaPlayerRepository::class)
  */
 class NbaPlayer
 {
@@ -48,7 +47,7 @@ class NbaPlayer
     private $isInjured;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\NbaTeam", inversedBy="nbaPlayers")
+     * @ORM\ManyToOne(targetEntity=NbaTeam::class, inversedBy="nbaPlayers")
      */
     private $nbaTeam;
 
@@ -63,19 +62,9 @@ class NbaPlayer
     private $pastYearFantasyPoints;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\NbaStatsLog", mappedBy="nbaPlayer", orphanRemoval=true)
-     */
-    private $nbaStatsLogs;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
-
-    public function __construct()
-    {
-        $this->nbaStatsLogs = new ArrayCollection();
-    }
 
     public function getId(): ?string
     {
@@ -181,36 +170,6 @@ class NbaPlayer
     public function setPastYearFantasyPoints(?float $pastYearFantasyPoints): self
     {
         $this->pastYearFantasyPoints = $pastYearFantasyPoints;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|NbaStatsLog[]
-     */
-    public function getNbaStatsLogs(): Collection
-    {
-        return $this->nbaStatsLogs;
-    }
-
-    public function addNbaStatsLog(NbaStatsLog $nbaStatsLog): self
-    {
-        if (!$this->nbaStatsLogs->contains($nbaStatsLog)) {
-            $this->nbaStatsLogs[] = $nbaStatsLog;
-            $nbaStatsLog->setNbaPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNbaStatsLog(NbaStatsLog $nbaStatsLog): self
-    {
-        if ($this->nbaStatsLogs->contains($nbaStatsLog)) {
-            $this->nbaStatsLogs->removeElement($nbaStatsLog);
-            if ($nbaStatsLog->getNbaPlayer() === $this) {
-                $nbaStatsLog->setNbaPlayer(null);
-            }
-        }
 
         return $this;
     }

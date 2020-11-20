@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Pick;
+use App\Entity\FantasyPick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
-class PickRepository extends ServiceEntityRepository
+class FantasyPickRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Pick::class);
+        parent::__construct($registry, FantasyPick::class);
     }
 }

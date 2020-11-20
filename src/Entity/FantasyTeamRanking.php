@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\FantasyTeamRankingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\RankingEvolutionRepository")
+ * @ORM\Entity(repositoryClass=FantasyTeamRankingRepository::class)
  */
-class RankingEvolution
+class FantasyTeamRanking
 {
     /**
      * @ORM\Id
@@ -22,10 +23,15 @@ class RankingEvolution
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="rankingEvolutions")
+     * @ORM\Column(type="integer")
+     */
+    private $season;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyTeamRankings")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private $fantasyTeam;
 
     /**
      * @ORM\Column(type="integer")
@@ -35,10 +41,10 @@ class RankingEvolution
     /**
      * @ORM\Column(type="integer")
      */
-    private $ranking;
+    private $rank;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $rankingAt;
 
@@ -52,14 +58,26 @@ class RankingEvolution
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getSeason(): ?int
     {
-        return $this->user;
+        return $this->season;
     }
 
-    public function setUser(?User $user): self
+    public function setSeason(int $season): self
     {
-        $this->user = $user;
+        $this->season = $season;
+
+        return $this;
+    }
+
+    public function getFantasyTeam(): ?FantasyTeam
+    {
+        return $this->fantasyTeam;
+    }
+
+    public function setFantasyTeam(?FantasyTeam $fantasyTeam): self
+    {
+        $this->fantasyTeam = $fantasyTeam;
 
         return $this;
     }
@@ -76,14 +94,14 @@ class RankingEvolution
         return $this;
     }
 
-    public function getRanking(): ?int
+    public function getRank(): ?int
     {
-        return $this->ranking;
+        return $this->rank;
     }
 
-    public function setRanking(int $ranking): self
+    public function setRank(int $rank): self
     {
-        $this->ranking = $ranking;
+        $this->rank = $rank;
 
         return $this;
     }

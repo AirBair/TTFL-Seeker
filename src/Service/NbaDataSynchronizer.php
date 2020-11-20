@@ -100,6 +100,7 @@ class NbaDataSynchronizer
             }
 
             $game
+                ->setSeason(intval($_ENV['NBA_YEAR']))
                 ->setLocalNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
                 ->setVisitorNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
                 ->setGameDay(new \DateTime($nbaDataGame['startDateEastern']))
@@ -147,6 +148,7 @@ class NbaDataSynchronizer
 
         foreach ($nbaDataBoxscore['activePlayers'] as $activePlayer) {
             $nbaPlayer = $this->em->getRepository(NbaPlayer::class)->find($activePlayer['personId']);
+            $nbaTeam = $this->em->getRepository(NbaTeam::class)->find($activePlayer['teamId']);
 
             if (null === $nbaPlayer) {
                 continue;
@@ -160,7 +162,8 @@ class NbaDataSynchronizer
             if (null === $nbaStatsLog) {
                 $nbaStatsLog = (new NbaStatsLog())
                     ->setNbaPlayer($nbaPlayer)
-                    ->setNbaGame($nbaGame);
+                    ->setNbaGame($nbaGame)
+                    ->setNbaTeam($nbaTeam);
 
                 $this->em->persist($nbaStatsLog);
             }

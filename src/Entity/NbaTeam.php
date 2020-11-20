@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\NbaTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ApiResource
  *
- * @ORM\Entity(repositoryClass="App\Repository\NbaTeamRepository")
+ * @ORM\Entity(repositoryClass=NbaTeamRepository::class)
  */
 class NbaTeam
 {
@@ -48,7 +49,7 @@ class NbaTeam
     private $division;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\NbaPlayer", mappedBy="nbaTeam")
+     * @ORM\OneToMany(targetEntity=NbaPlayer::class, mappedBy="nbaTeam")
      */
     private $nbaPlayers;
 
