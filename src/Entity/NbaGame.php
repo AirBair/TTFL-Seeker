@@ -75,6 +75,11 @@ class NbaGame
         $this->nbaStatsLogs = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return (string) ($this->gameDay->format('d/m/Y').' - '.$this->localNbaTeam->getTricode().' vs '.$this->visitorNbaTeam->getTricode());
+    }
+
     public function getId(): ?string
     {
         return $this->id;

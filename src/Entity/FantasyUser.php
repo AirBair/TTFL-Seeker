@@ -36,6 +36,11 @@ class FantasyUser implements UserInterface
     private $ttflId;
 
     /**
+     * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyUsers")
+     */
+    private $fantasyTeam;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -71,6 +76,11 @@ class FantasyUser implements UserInterface
         $this->fantasyUserRankings = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return (string) $this->username;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +106,18 @@ class FantasyUser implements UserInterface
     public function setTtflId(int $ttflId): self
     {
         $this->ttflId = $ttflId;
+
+        return $this;
+    }
+
+    public function getFantasyTeam(): ?FantasyTeam
+    {
+        return $this->fantasyTeam;
+    }
+
+    public function setFantasyTeam(?FantasyTeam $fantasyTeam): self
+    {
+        $this->fantasyTeam = $fantasyTeam;
 
         return $this;
     }

@@ -34,9 +34,19 @@ class FantasyTeam
      */
     private $fantasyTeamRankings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FantasyUser::class, mappedBy="fantasyTeam")
+     */
+    private $fantasyUsers;
+
     public function __construct()
     {
         $this->fantasyTeamRankings = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->name;
     }
 
     public function getId(): ?int
@@ -80,6 +90,36 @@ class FantasyTeam
             // set the owning side to null (unless already changed)
             if ($fantasyTeamRanking->getFantasyTeam() === $this) {
                 $fantasyTeamRanking->setFantasyTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FantasyUser[]
+     */
+    public function getFantasyUsers(): Collection
+    {
+        return $this->fantasyUsers;
+    }
+
+    public function addFantasyUser(FantasyUser $fantasyUser): self
+    {
+        if (!$this->fantasyUsers->contains($fantasyUser)) {
+            $this->fantasyUsers[] = $fantasyUser;
+            $fantasyUser->setFantasyTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFantasyUser(FantasyUser $fantasyUser): self
+    {
+        if ($this->fantasyUsers->removeElement($fantasyUser)) {
+            // set the owning side to null (unless already changed)
+            if ($fantasyUser->getFantasyTeam() === $this) {
+                $fantasyUser->setFantasyTeam(null);
             }
         }
 
