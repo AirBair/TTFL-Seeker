@@ -45,9 +45,19 @@ class FantasyPick
     private $nbaPlayer;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $fantasyPoints;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    public function __toString(): string
+    {
+        return (string) ($this->fantasyUser.' - '.$this->pickedAt->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts');
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +108,18 @@ class FantasyPick
     public function setNbaPlayer(?NbaPlayer $nbaPlayer): self
     {
         $this->nbaPlayer = $nbaPlayer;
+
+        return $this;
+    }
+
+    public function getFantasyPoints(): ?int
+    {
+        return $this->fantasyPoints;
+    }
+
+    public function setFantasyPoints(int $fantasyPoints): self
+    {
+        $this->fantasyPoints = $fantasyPoints;
 
         return $this;
     }

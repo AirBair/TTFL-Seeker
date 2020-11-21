@@ -63,6 +63,11 @@ class NbaTeam
         $this->nbaPlayers = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return (string) ($this->getCity().' '.$this->getNickname());
+    }
+
     public function getId(): ?string
     {
         return $this->id;

@@ -41,7 +41,7 @@ class FantasyTeamRanking
     /**
      * @ORM\Column(type="integer")
      */
-    private $rank;
+    private $fantasyRank;
 
     /**
      * @ORM\Column(type="datetime")
@@ -52,6 +52,11 @@ class FantasyTeamRanking
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    public function __toString(): string
+    {
+        return (string) ($this->fantasyTeam.' - '.$this->rankingAt->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th');
+    }
 
     public function getId(): ?int
     {
@@ -94,14 +99,14 @@ class FantasyTeamRanking
         return $this;
     }
 
-    public function getRank(): ?int
+    public function getFantasyRank(): ?int
     {
-        return $this->rank;
+        return $this->fantasyRank;
     }
 
-    public function setRank(int $rank): self
+    public function setFantasyRank(int $fantasyRank): self
     {
-        $this->rank = $rank;
+        $this->fantasyRank = $fantasyRank;
 
         return $this;
     }

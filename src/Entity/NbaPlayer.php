@@ -66,6 +66,11 @@ class NbaPlayer
      */
     private $updatedAt;
 
+    public function __toString(): string
+    {
+        return (string) ($this->lastName.' '.$this->firstName);
+    }
+
     public function getId(): ?string
     {
         return $this->id;
