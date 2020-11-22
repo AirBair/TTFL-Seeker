@@ -41,6 +41,13 @@ class NbaGame
     /**
      * @Groups({"nbaGame:read"})
      *
+     * @ORM\Column(type="boolean")
+     */
+    private $isPlayoffs;
+
+    /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="date")
      */
     private $gameDay;
@@ -98,6 +105,8 @@ class NbaGame
 
     public function __construct()
     {
+        $this->season = (int) $_ENV['NBA_YEAR'];
+        $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
         $this->nbaStatsLogs = new ArrayCollection();
     }
 
@@ -126,6 +135,18 @@ class NbaGame
     public function setSeason(int $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getIsPlayoffs(): bool
+    {
+        return $this->isPlayoffs;
+    }
+
+    public function setIsPlayoffs(bool $isPlayoffs): self
+    {
+        $this->isPlayoffs = $isPlayoffs;
 
         return $this;
     }

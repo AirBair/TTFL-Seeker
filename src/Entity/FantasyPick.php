@@ -40,6 +40,13 @@ class FantasyPick
     /**
      * @Groups({"fantasyPick:read"})
      *
+     * @ORM\Column(type="boolean")
+     */
+    private $isPlayoffs;
+
+    /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Column(type="date")
      */
     private $pickedAt;
@@ -74,6 +81,12 @@ class FantasyPick
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->season = (int) $_ENV['NBA_YEAR'];
+        $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
+    }
+
     public function __toString(): string
     {
         return (string) ($this->fantasyUser.' - '.$this->pickedAt->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts');
@@ -92,6 +105,18 @@ class FantasyPick
     public function setSeason(int $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getIsPlayoffs(): bool
+    {
+        return $this->isPlayoffs;
+    }
+
+    public function setIsPlayoffs(bool $isPlayoffs): self
+    {
+        $this->isPlayoffs = $isPlayoffs;
 
         return $this;
     }
