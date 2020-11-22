@@ -51,6 +51,11 @@ class FantasyUser implements UserInterface
     private $password;
 
     /**
+     * Plain password used before encryption. Not persisted in database.
+     */
+    private $plainPassword;
+
+    /**
      * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
      */
     private $fantasyPicks;
@@ -145,6 +150,18 @@ class FantasyUser implements UserInterface
     public function setPassword(?string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return (string) $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
