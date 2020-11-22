@@ -7,15 +7,23 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FantasyPickRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"fantasyPick:read"}},
+ *     denormalizationContext={"groups": {"fantasyPick:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=FantasyPickRepository::class)
  */
 class FantasyPick
 {
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -23,33 +31,45 @@ class FantasyPick
     private $id;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $season;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Column(type="date")
      */
     private $pickedAt;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyPicks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $fantasyUser;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaPlayer;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
 
     /**
+     * @Groups({"fantasyPick:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;

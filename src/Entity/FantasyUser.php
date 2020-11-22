@@ -10,15 +10,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"fantasyUser:read"}},
+ *     denormalizationContext={"groups": {"fantasyUser:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=FantasyUserRepository::class)
  */
 class FantasyUser implements UserInterface
 {
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -26,16 +34,22 @@ class FantasyUser implements UserInterface
     private $id;
 
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
 
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $ttflId;
 
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyUsers")
      */
     private $fantasyTeam;
@@ -56,11 +70,15 @@ class FantasyUser implements UserInterface
     private $plainPassword;
 
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
      */
     private $fantasyPicks;
 
     /**
+     * @Groups({"fantasyUser:read"})
+     *
      * @ORM\OneToMany(targetEntity=FantasyUserRanking::class, mappedBy="fantasyUser", orphanRemoval=true)
      */
     private $fantasyUserRankings;
