@@ -1,0 +1,8 @@
+monolog:
+  channels: ['synchronization']
+  handlers:
+    synchronization:
+      type: stream
+      path: "%kernel.logs_dir%/synchronization.log"
+      level: info
+      channels: ['synchronization']
