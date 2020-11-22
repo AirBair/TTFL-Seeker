@@ -48,6 +48,13 @@ class FantasyUserRanking
     /**
      * @Groups({"fantasyUserRanking:read"})
      *
+     * @ORM\Column(type="boolean")
+     */
+    private $isPlayoffs;
+
+    /**
+     * @Groups({"fantasyUserRanking:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
@@ -73,6 +80,12 @@ class FantasyUserRanking
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->season = (int) $_ENV['NBA_YEAR'];
+        $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
+    }
+
     public function __toString(): string
     {
         return (string) ($this->fantasyUser.' - '.$this->rankingAt->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th');
@@ -91,6 +104,18 @@ class FantasyUserRanking
     public function setSeason(int $season): self
     {
         $this->season = $season;
+
+        return $this;
+    }
+
+    public function getIsPlayoffs(): bool
+    {
+        return $this->isPlayoffs;
+    }
+
+    public function setIsPlayoffs(bool $isPlayoffs): self
+    {
+        $this->isPlayoffs = $isPlayoffs;
 
         return $this;
     }

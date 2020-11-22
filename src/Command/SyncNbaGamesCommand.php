@@ -28,14 +28,14 @@ class SyncNbaGamesCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Synchronize regular season games from NBA API to the local database.');
+        $this->setDescription('Synchronize games from NBA API to the local database.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $result = $this->nbaDataSynchronizer->synchronizeRegularSeasonGames();
+        $result = $this->nbaDataSynchronizer->synchronizeGames();
 
         $io->success($result.' games have been synchronized.');
 

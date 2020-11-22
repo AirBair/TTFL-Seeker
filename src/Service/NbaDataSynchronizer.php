@@ -98,9 +98,9 @@ class NbaDataSynchronizer
         return \count($nbaDataPlayers);
     }
 
-    public function synchronizeRegularSeasonGames(): int
+    public function synchronizeGames(): int
     {
-        $nbaDataGames = $this->nbaDataProvider->getRegularSeasonGamesList();
+        $nbaDataGames = $this->nbaDataProvider->getGamesList();
 
         foreach ($nbaDataGames as $nbaDataGame) {
             $game = $this->em->getRepository(NbaGame::class)->find($nbaDataGame['gameId']);
@@ -112,6 +112,7 @@ class NbaDataSynchronizer
 
             $game
                 ->setSeason((int) ($_ENV['NBA_YEAR']))
+                ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
                 ->setLocalNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
                 ->setVisitorNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
                 ->setGameDay(new \DateTime($nbaDataGame['startDateEastern']))

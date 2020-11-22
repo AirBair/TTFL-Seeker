@@ -12,6 +12,9 @@ use JasonRoman\NbaApi\Request\Data\Prod\Teams\TeamsRequest;
 
 class NbaDataProvider
 {
+    const NBA_REGULAR_SEASON_STAGE = 2;
+    const NBA_PLAYOFFS_STAGE = 4;
+
     /**
      * @var NbaApiClient
      */
@@ -20,18 +23,24 @@ class NbaDataProvider
     /**
      * @var int
      */
-    private $nbaYear;
+    private $nbaSeasonYear;
+
+    /**
+     * @var int
+     */
+    private $nbaSeasonStage;
 
     public function __construct()
     {
         $this->nbaApiClient = new NbaApiClient();
-        $this->nbaYear = (int) $_ENV['NBA_YEAR'];
+        $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
+        $this->nbaSeasonStage = ($_ENV['NBA_PLAYOFFS']) ? self::NBA_PLAYOFFS_STAGE : self::NBA_REGULAR_SEASON_STAGE;
     }
 
     public function getTeamsList(): array
     {
         $request = TeamsRequest::fromArray([
-            'year' => $this->nbaYear,
+            'year' => $this->nbaSeasonYear,
         ]);
 
         try {
@@ -47,7 +56,7 @@ class NbaDataProvider
     public function getPlayersList(): array
     {
         $request = LeagueRosterPlayersRequest::fromArray([
-            'year' => $this->nbaYear,
+            'year' => $this->nbaSeasonYear,
         ]);
 
         try {
@@ -58,10 +67,10 @@ class NbaDataProvider
         return $results['league']['standard'] ?? [];
     }
 
-    public function getRegularSeasonGamesList()
+    public function getGamesList()
     {
         $request = LeagueScheduleRequest::fromArray([
-            'year' => $this->nbaYear,
+            'year' => $this->nbaSeasonYear,
         ]);
 
         try {
@@ -70,7 +79,7 @@ class NbaDataProvider
         }
 
         return array_filter($results['league']['standard'] ?? [], function ($game) {
-            return 2 === $game['seasonStageId'];
+            return $this->nbaSeasonStage === $game['seasonStageId'];
         });
     }
 
