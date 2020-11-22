@@ -9,6 +9,7 @@ use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Entity\NbaTeam;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class NbaDataSynchronizer
 {
@@ -27,11 +28,17 @@ class NbaDataSynchronizer
      */
     private $fantasyPointsCalculator;
 
-    public function __construct(EntityManagerInterface $em, NbaDataProvider $nbaDataProvider, FantasyPointsCalculator $fantasyPointsCalculator)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(EntityManagerInterface $em, NbaDataProvider $nbaDataProvider, FantasyPointsCalculator $fantasyPointsCalculator, LoggerInterface $synchronizationLogger)
     {
         $this->em = $em;
         $this->nbaDataProvider = $nbaDataProvider;
         $this->fantasyPointsCalculator = $fantasyPointsCalculator;
+        $this->logger = $synchronizationLogger;
     }
 
     public function synchronizeTeams(): int
@@ -55,6 +62,8 @@ class NbaDataSynchronizer
         }
 
         $this->em->flush();
+
+        $this->logger->info(\count($nbaDataTeams).' NBA Teams have been synchronized');
 
         return \count($nbaDataTeams);
     }
@@ -84,6 +93,8 @@ class NbaDataSynchronizer
 
         $this->em->flush();
 
+        $this->logger->info(\count($nbaDataPlayers).' NBA Players have been synchronized');
+
         return \count($nbaDataPlayers);
     }
 
@@ -112,6 +123,8 @@ class NbaDataSynchronizer
 
         $this->em->flush();
 
+        $this->logger->info(\count($nbaDataGames).' NBA Games have been synchronized');
+
         return \count($nbaDataGames);
     }
 
@@ -126,6 +139,8 @@ class NbaDataSynchronizer
         }
 
         $this->em->flush();
+
+        $this->logger->info(\count($nbaGames).' NBA Games boxscores with '.$nbaActivePlayers.' active NBA Players have been synchronized for the date of '.$day->format('d/m/Y').'.');
 
         return [
             'games' => \count($nbaGames),

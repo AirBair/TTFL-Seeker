@@ -74,7 +74,7 @@ class NbaDataProvider
         });
     }
 
-    public function gameBoxScore(\DateTime $gameDate, string $gameId)
+    public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId)
     {
         $request = BoxscoreRequest::fromArray([
             'gameDate' => $gameDate,
