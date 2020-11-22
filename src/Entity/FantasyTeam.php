@@ -9,15 +9,23 @@ use App\Repository\FantasyTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"fantasyTeam:read"}},
+ *     denormalizationContext={"groups": {"fantasyTeam:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=FantasyTeamRepository::class)
  */
 class FantasyTeam
 {
     /**
+     * @Groups({"fantasyTeam:read"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -25,6 +33,8 @@ class FantasyTeam
     private $id;
 
     /**
+     * @Groups({"fantasyTeam:read"})
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
@@ -35,6 +45,8 @@ class FantasyTeam
     private $fantasyTeamRankings;
 
     /**
+     * @Groups({"fantasyTeam:read"})
+     *
      * @ORM\OneToMany(targetEntity=FantasyUser::class, mappedBy="fantasyTeam")
      */
     private $fantasyUsers;

@@ -7,15 +7,23 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FantasyTeamRankingRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"fantasyTeamRanking:read"}},
+ *     denormalizationContext={"groups": {"fantasyTeamRanking:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=FantasyTeamRankingRepository::class)
  */
 class FantasyTeamRanking
 {
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -23,32 +31,44 @@ class FantasyTeamRanking
     private $id;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $season;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyTeamRankings")
      * @ORM\JoinColumn(nullable=false)
      */
     private $fantasyTeam;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fantasyRank;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $rankingAt;
 
     /**
+     * @Groups({"fantasyTeamRanking:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;

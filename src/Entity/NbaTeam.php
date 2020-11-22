@@ -9,51 +9,73 @@ use App\Repository\NbaTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"nbaTeam:read"}},
+ *     denormalizationContext={"groups": {"nbaTeam:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=NbaTeamRepository::class)
  */
 class NbaTeam
 {
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
     private $id;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $city;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $nickname;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $tricode;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $conference;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $division;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\OneToMany(targetEntity=NbaPlayer::class, mappedBy="nbaTeam")
      */
     private $nbaPlayers;
 
     /**
+     * @Groups({"nbaTeam:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;

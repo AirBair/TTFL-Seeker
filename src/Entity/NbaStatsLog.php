@@ -7,15 +7,23 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"nbaStatsLog:read"}},
+ *     denormalizationContext={"groups": {"nbaStatsLog:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=NbaStatsLogRepository::class)
  */
 class NbaStatsLog
 {
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -23,104 +31,144 @@ class NbaStatsLog
     private $id;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaGame::class, inversedBy="nbaStatsLogs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaGame;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaPlayer;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $nbaTeam;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $points;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $assists;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $rebounds;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $steals;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $blocks;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $turnovers;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fieldGoals;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fieldGoalsAttempts;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $threePointsFieldGoals;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $threePointsFieldGoalsAttempts;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $freeThrows;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $freeThrowsAttempts;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $minutesPlayed;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="boolean")
      */
     private $hasWon;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="boolean")
      */
     private $isBestPick;
 
     /**
+     * @Groups({"nbaStatsLog:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;

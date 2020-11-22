@@ -9,63 +9,89 @@ use App\Repository\NbaGameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"nbaGame:read"}},
+ *     denormalizationContext={"groups": {"nbaGame:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=NbaGameRepository::class)
  */
 class NbaGame
 {
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
     private $id;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="integer")
      */
     private $season;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="date")
      */
     private $gameDay;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $scheduledAt;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $localNbaTeam;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $visitorNbaTeam;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $localScore;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $visitorScore;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\OneToMany(targetEntity=NbaStatsLog::class, mappedBy="nbaGame", orphanRemoval=true)
      */
     private $nbaStatsLogs;
 
     /**
+     * @Groups({"nbaGame:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;

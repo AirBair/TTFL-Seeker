@@ -7,61 +7,87 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\NbaPlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups": {"nbaPlayer:read"}},
+ *     denormalizationContext={"groups": {"nbaPlayer:write"}},
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ * )
  *
  * @ORM\Entity(repositoryClass=NbaPlayerRepository::class)
  */
 class NbaPlayer
 {
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
     private $id;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $position;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $jersey;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="boolean")
      */
     private $isInjured;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class, inversedBy="nbaPlayers")
      */
     private $nbaTeam;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="float", nullable=true)
      */
     private $averageFantasyPoints;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="float", nullable=true)
      */
     private $pastYearFantasyPoints;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
