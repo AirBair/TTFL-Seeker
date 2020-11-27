@@ -48,6 +48,13 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
+    private $fullName;
+
+    /**
+     * @Groups({"nbaPlayer:read"})
+     *
+     * @ORM\Column(type="string", length=255)
+     */
     private $position;
 
     /**
@@ -129,6 +136,18 @@ class NbaPlayer
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
 
         return $this;
     }

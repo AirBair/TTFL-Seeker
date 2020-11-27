@@ -56,6 +56,7 @@ class NbaDataSynchronizer
             $team
                 ->setCity($nbaDataTeam['city'])
                 ->setNickname($nbaDataTeam['nickname'])
+                ->setFullName($nbaDataTeam['city'].' '.$nbaDataTeam['nickname'])
                 ->setTricode($nbaDataTeam['tricode'])
                 ->setConference($nbaDataTeam['confName'])
                 ->setDivision($nbaDataTeam['divName']);
@@ -85,6 +86,7 @@ class NbaDataSynchronizer
             $player
                 ->setLastname($nbaDataPlayer['lastName'])
                 ->setFirstname($nbaDataPlayer['firstName'])
+                ->setFullName($nbaDataPlayer['firstName'].' '.$nbaDataPlayer['lastName'])
                 ->setPosition($nbaDataPlayer['pos'])
                 ->setJersey($nbaDataPlayer['jersey'])
                 ->setNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataPlayer['teamId']))

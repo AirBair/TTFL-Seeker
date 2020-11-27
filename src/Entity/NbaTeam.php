@@ -46,6 +46,13 @@ class NbaTeam
     private $nickname;
 
     /**
+     * @Groups({"nbaPlayer:read"})
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fullName;
+
+    /**
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -122,6 +129,18 @@ class NbaTeam
     public function setNickname(string $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): self
+    {
+        $this->fullName = $fullName;
 
         return $this;
     }
