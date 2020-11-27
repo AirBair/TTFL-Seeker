@@ -69,7 +69,7 @@ class FantasyTeamRanking
     /**
      * @Groups({"fantasyTeamRanking:read"})
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $rankingAt;
 
