@@ -2,8 +2,17 @@
     "devDependencies": {
         "@mdi/font": "^5.8.55",
         "@symfony/webpack-encore": "^0.30.2",
+        "@typescript-eslint/eslint-plugin": "^4.8.2",
+        "@typescript-eslint/parser": "^4.8.2",
         "axios": "^0.21.0",
         "core-js": "^3.0.0",
+        "eslint": "^7.14.0",
+        "eslint-config-standard": "^16.0.2",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^5.0.0",
+        "eslint-plugin-vue": "^7.1.0",
         "regenerator-runtime": "^0.13.2",
         "sass": "^1.28.0",
         "sass-loader": "^8.0.0",
@@ -27,6 +36,7 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "lint": "eslint assets --ext .ts,.vue"
     }
 }
