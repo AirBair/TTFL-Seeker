@@ -1,0 +1,45 @@
+name: CI/CD
+
+on: [push, pull_request]
+
+jobs:
+    php:
+        runs-on: ubuntu-latest
+        container:
+            image: airbair/php:ttfl
+            credentials:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+        services:
+            mariadb:
+                image: mariadb
+                env:
+                    MYSQL_DATABASE: ttfl
+                    MYSQL_USER: ttfl
+                    MYSQL_ROOT_PASSWORD: ttfl
+                    MYSQL_PASSWORD: ttfl
+        env:
+            APP_ENV: test
+            DATABASE_URL: "mysql://ttfl:ttfl@mariadb:3306/ttfl?serverVersion=mariadb-10.5.8"
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/cache@v1
+              with:
+                path: vendor
+                key: composer-${{ hashFiles('**/composer.lock') }}
+            - run: composer install
+            - run: php-cs-fixer fix --dry-run --diff
+            - run: php bin/phpunit
+    yarn:
+        runs-on: ubuntu-latest
+        container: node:alpine
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/cache@v1
+              with:
+                path: node_modules
+                key: yarn-${{ hashFiles('**/yarn.lock') }}
+            - run: yarn install
+            - run: yarn lint
+            - run: yarn build
+
