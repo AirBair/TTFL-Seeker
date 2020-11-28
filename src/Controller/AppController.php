@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AppController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/{vuejsRouting}", name="index", requirements={"vuejsRouting": "^(?!api|nba-api|admin|security|_(profiler|wdt)).*"})
      */
     public function index(): Response
     {
