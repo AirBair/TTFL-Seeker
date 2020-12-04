@@ -42,7 +42,7 @@ class SyncNbaBoxscoresCommand extends Command
 
         $result = $this->nbaDataSynchronizer->synchronizeBoxscores($day);
 
-        $io->success($result['games'].' games boxscores with '.$result['activePlayers'].' active players have been synchronized for the date of '.$day->format('d/m/Y').'.');
+        $io->success($result['games'].' games boxscores with '.$result['activePlayers'].' active players have been synchronized for the date of '.$day->format('d/m/Y').".\n".'Best fantasy score is '.$result['bestFantasyScore'].' points.');
 
         return Command::SUCCESS;
     }

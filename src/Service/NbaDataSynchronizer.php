@@ -143,11 +143,14 @@ class NbaDataSynchronizer
 
         $this->em->flush();
 
-        $this->logger->info(\count($nbaGames).' NBA Games boxscores with '.$nbaActivePlayers.' active NBA Players have been synchronized for the date of '.$day->format('d/m/Y').'.');
+        $bestFantasyScore = $this->markBestPick($day);
+
+        $this->logger->info(\count($nbaGames).' NBA Games boxscores with '.$nbaActivePlayers.' active NBA Players have been synchronized for the date of '.$day->format('d/m/Y').'. Best fantasy score is '.$bestFantasyScore.' points.');
 
         return [
             'games' => \count($nbaGames),
             'activePlayers' => $nbaActivePlayers,
+            'bestFantasyScore' => $bestFantasyScore,
         ];
     }
 
@@ -207,5 +210,22 @@ class NbaDataSynchronizer
         }
 
         return \count($nbaDataBoxscore['activePlayers']);
+    }
+
+    public function markBestPick(\DateTime $day): int
+    {
+        $nbaStatsLogRepository = $this->em->getRepository(NbaStatsLog::class);
+
+        $bestFantasyScore = $nbaStatsLogRepository->getBestFantasyScore($day);
+
+        /** @var NbaStatsLog[] $bestPicks */
+        $bestPicks = $nbaStatsLogRepository->findByGameDayAndFantasyPoints($day, $bestFantasyScore);
+        foreach ($bestPicks as $bestPick) {
+            $bestPick->setIsBestPick(true);
+        }
+
+        $this->em->flush();
+
+        return $bestFantasyScore;
     }
 }

@@ -14,4 +14,28 @@ class NbaStatsLogRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, NbaStatsLog::class);
     }
+
+    public function getBestFantasyScore(\DateTime $day): int
+    {
+        return (int) $this->createQueryBuilder('nsl')
+            ->select('MAX(nsl.fantasyPoints)')
+            ->leftJoin('nsl.nbaGame', 'ng')
+            ->where('ng.gameDay = :gameDay')
+            ->setParameter('gameDay', $day)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByGameDayAndFantasyPoints(\DateTime $day, int $fantasyPoints): array
+    {
+        return $this->createQueryBuilder('nsl')
+            ->select('nsl')
+            ->leftJoin('nsl.nbaGame', 'ng')
+            ->where('ng.gameDay = :gameDay')
+            ->andWhere('nsl.fantasyPoints = :fantasyPoints')
+            ->setParameter('gameDay', $day)
+            ->setParameter('fantasyPoints', $fantasyPoints)
+            ->getQuery()
+            ->getResult();
+    }
 }
