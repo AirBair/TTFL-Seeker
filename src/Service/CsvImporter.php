@@ -46,10 +46,10 @@ class CsvImporter
             4 => 'Boboxy',
             5 => 'HYPERION',
             6 => 'Piix77',
-            7 => 'Raptor1977',
-            8 => 'Scred',
-            9 => 'Tibulle',
-            10 => 'Tomigo',
+            7 => 'Tibulle',
+            8 => 'Tomigo',
+            9 => 'Raptor1977',
+            10 => 'Scred',
             11 => 'StarSeeker',
         ];
 
@@ -139,10 +139,10 @@ class CsvImporter
             4 => 'Boboxy',
             5 => 'HYPERION',
             6 => 'Piix77',
-            7 => 'Raptor1977',
-            8 => 'Scred',
-            9 => 'Tibulle',
-            10 => 'Tomigo',
+            7 => 'Tibulle',
+            8 => 'Tomigo',
+            9 => 'Raptor1977',
+            10 => 'Scred',
             11 => 'StarSeeker',
         ];
 
