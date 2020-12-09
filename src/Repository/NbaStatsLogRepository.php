@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,5 +38,23 @@ class NbaStatsLogRepository extends ServiceEntityRepository
             ->setParameter('fantasyPoints', $fantasyPoints)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getAvgFantasyPointsOfNbaPlayerOnSeason(NbaPlayer $nbaPlayer, int $season): float
+    {
+        return (float) $this->getEntityManager()
+            ->createQuery('
+                SELECT AVG(nsl.fantasyPoints)
+                FROM '.NbaStatsLog::class.' nsl
+                JOIN nsl.nbaGame ng
+                WHERE
+                    nsl.nbaPlayer = :nbaPlayer AND
+                    ng.season = :season AND
+                    ng.isPlayoffs = 0 AND
+                    nsl.minutesPlayed > 0
+            ')
+            ->setParameter('nbaPlayer', $nbaPlayer)
+            ->setParameter('season', $season)
+            ->getSingleScalarResult();
     }
 }
