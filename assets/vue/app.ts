@@ -1,8 +1,10 @@
 import Vue, { VNode } from 'vue'
-import vuetify from './plugins/vuetify'
 import App from './App.vue'
+import store from './store/store'
+import vuetify from './plugins/vuetify'
 
 const vue = new Vue({
+    store,
     vuetify,
     render (h): VNode {
         return h(App)
