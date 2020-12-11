@@ -1,5 +1,7 @@
 <template>
     <v-app>
+        <app-sidebar />
+        <app-navbar />
         <v-main>
             <v-container class="fill-height" fluid>
                 <v-row align="center" justify="center">
@@ -19,8 +21,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
+import AppNavbar from './components/AppNavbar.vue'
+import AppSidebar from './components/AppSidebar.vue'
 
-@Component
+@Component({
+    components: {
+        AppNavbar,
+        AppSidebar
+    }
+})
 export default class App extends Vue {
 }
 </script>
