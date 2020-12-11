@@ -46,7 +46,7 @@ class NbaTeam
     private $nickname;
 
     /**
-     * @Groups({"nbaPlayer:read"})
+     * @Groups({"nbaTeam:read", "nbaPlayer:read"})
      *
      * @ORM\Column(type="string", length=255)
      */

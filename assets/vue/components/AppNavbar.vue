@@ -2,7 +2,7 @@
     <v-app-bar app dark>
         <v-app-bar-nav-icon @click.stop="toggleSidebarDrawer()" />
         <v-toolbar-title>
-            Coming Soon
+            {{ $route.meta.navbarLabel }}
         </v-toolbar-title>
     </v-app-bar>
 </template>
