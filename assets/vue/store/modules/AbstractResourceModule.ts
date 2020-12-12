@@ -51,7 +51,7 @@ export default class AbstractApiResourceModule<T extends AbstractResource> exten
     }
 
     @Action
-    async find (id: number): Promise<T | null> {
+    async find (id: number | string): Promise<T | null> {
         let response
         this.context.commit('fetchItemPending')
         try {

@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +28,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class NbaStatsLog
 {
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Id
@@ -31,6 +39,11 @@ class NbaStatsLog
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"nbaGame.gameDay"})
+     * @ApiFilter(DateFilter::class, properties={"nbaGame.gameDay"})
+     * @ApiFilter(SearchFilter::class, properties={"nbaGame.season": "exact"})
+     * @ApiFilter(BooleanFilter::class, properties={"nbaGame.isPlayoffs": "exact"})
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaGame::class, inversedBy="nbaStatsLogs")
@@ -39,6 +52,18 @@ class NbaStatsLog
     private $nbaGame;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={
+     *     "nbaPlayer.lastName",
+     *     "nbaPlayer.fullName",
+     *     "nbaPlayer.averageFantasyPoints"
+     * })
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "nbaPlayer": "exact",
+     *     "nbaPlayer.fullName": "partial",
+     *     "nbaPlayer.nbaTeam": "exact",
+     *     "nbaPlayer.nbaTeam.fullName": "partial"
+     * })
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
@@ -47,6 +72,12 @@ class NbaStatsLog
     private $nbaPlayer;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "nbaTeam": "exact",
+     *     "nbaTeam.fullName": "partial"
+     * })
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
@@ -55,6 +86,9 @@ class NbaStatsLog
     private $nbaTeam;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -62,6 +96,9 @@ class NbaStatsLog
     private $points;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -69,6 +106,9 @@ class NbaStatsLog
     private $assists;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -76,6 +116,9 @@ class NbaStatsLog
     private $rebounds;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -83,6 +126,9 @@ class NbaStatsLog
     private $steals;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -90,6 +136,9 @@ class NbaStatsLog
     private $blocks;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -97,6 +146,9 @@ class NbaStatsLog
     private $turnovers;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -104,6 +156,9 @@ class NbaStatsLog
     private $fieldGoals;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -111,6 +166,9 @@ class NbaStatsLog
     private $fieldGoalsAttempts;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -118,6 +176,9 @@ class NbaStatsLog
     private $threePointsFieldGoals;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -125,6 +186,9 @@ class NbaStatsLog
     private $threePointsFieldGoalsAttempts;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -132,6 +196,9 @@ class NbaStatsLog
     private $freeThrows;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -139,6 +206,9 @@ class NbaStatsLog
     private $freeThrowsAttempts;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -146,6 +216,9 @@ class NbaStatsLog
     private $minutesPlayed;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="boolean")
@@ -153,6 +226,9 @@ class NbaStatsLog
     private $hasWon;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
@@ -160,6 +236,9 @@ class NbaStatsLog
     private $fantasyPoints;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="boolean")
@@ -167,6 +246,8 @@ class NbaStatsLog
     private $isBestPick;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"nbaStatsLog:read"})
      *
      * @ORM\Column(type="datetime")

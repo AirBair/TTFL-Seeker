@@ -6,7 +6,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\NbaPlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -24,6 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class NbaPlayer
 {
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\Id
@@ -33,6 +38,7 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      *
      * @Groups({"nbaPlayer:read"})
      *
@@ -42,6 +48,7 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      *
      * @Groups({"nbaPlayer:read"})
      *
@@ -51,6 +58,7 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
      *
      * @Groups({"nbaPlayer:read"})
      *
@@ -59,6 +67,9 @@ class NbaPlayer
     private $fullName;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -66,13 +77,20 @@ class NbaPlayer
     private $position;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"nbaPlayer:read"})
+     * @ApiFilter(SearchFilter::class, strategy="exact")
      *
      * @ORM\Column(type="string", length=255)
      */
     private $jersey;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\Column(type="boolean")
@@ -80,6 +98,12 @@ class NbaPlayer
     private $isInjured;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"nbaTeam.fullName"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "nbaTeam": "exact",
+     *     "nbaTeam.fullName": "partial"
+     * })
+     *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class, inversedBy="nbaPlayers")
@@ -88,6 +112,7 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
      *
      * @Groups({"nbaPlayer:read"})
      *
@@ -97,6 +122,7 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
      *
      * @Groups({"nbaPlayer:read"})
      *
@@ -105,6 +131,8 @@ class NbaPlayer
     private $pastYearFantasyPoints;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\Column(type="datetime")

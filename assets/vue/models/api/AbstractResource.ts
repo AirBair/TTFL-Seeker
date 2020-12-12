@@ -1,4 +1,4 @@
 export default class AbstractResource {
     '@id'?: string
-    id?: number
+    id?: number | string
 }
