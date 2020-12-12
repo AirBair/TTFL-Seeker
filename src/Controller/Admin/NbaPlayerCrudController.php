@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class NbaPlayerCrudController extends AbstractCrudController
@@ -31,7 +32,8 @@ class NbaPlayerCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->disable(Action::NEW, Action::EDIT, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->disable(Action::NEW, Action::DELETE);
     }
 
     public function configureFields(string $pageName): iterable
@@ -44,8 +46,9 @@ class NbaPlayerCrudController extends AbstractCrudController
             TextField::new('jersey'),
             AssociationField::new('nbaTeam'),
             BooleanField::new('isInjured')->renderAsSwitch(false),
-            TextField::new('averageFantasyPoints'),
-            TextField::new('pastYearFantasyPoints'),
+            NumberField::new('averageFantasyPoints'),
+            NumberField::new('pastYearFantasyPoints'),
+            BooleanField::new('isAllowedInExoticLeague')->renderAsSwitch(true),
             DateTimeField::new('updatedAt'),
         ];
     }
