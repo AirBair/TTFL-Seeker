@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\NbaGameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +30,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class NbaGame
 {
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
@@ -32,35 +40,53 @@ class NbaGame
     private $id;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer")
      */
     private $season;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="boolean")
      */
     private $isPlayoffs;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(DateFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="date")
      */
     private $gameDay;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(DateFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $scheduledAt;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "localNbaTeam": "exact",
+     *     "localNbaTeam.fullName": "partial"
+     * })
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
@@ -68,7 +94,13 @@ class NbaGame
     private $localNbaTeam;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "visitorNbaTeam": "exact",
+     *     "visitorNbaTeam.fullName": "partial"
+     * })
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
@@ -76,14 +108,20 @@ class NbaGame
     private $visitorNbaTeam;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $localScore;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -97,7 +135,9 @@ class NbaGame
     private $nbaStatsLogs;
 
     /**
-     * @Groups({"nbaGame:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="datetime")
      */

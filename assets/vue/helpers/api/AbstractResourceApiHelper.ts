@@ -10,7 +10,7 @@ export default class AbstractResourceApiHelper<T extends AbstractResource> {
         this.baseUri = baseUri
     }
 
-    find (id: number): Promise<AxiosResponse<T>> {
+    find (id: number | string): Promise<AxiosResponse<T>> {
         return axios.get<T>(this.baseUri + '/' + id)
     }
 

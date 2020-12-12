@@ -6,10 +6,10 @@ export default class NbaPlayer extends AbstractResource {
     lastName?: string
     fullName?: string
     position?: string
-    jersey?: string
+    jersey?: number
     isInjured?: string
     nbaTeam?: NbaTeam
-    averageFantasyPoints?: string
-    pastYearFantasyPoints?: string
+    averageFantasyPoints?: number
+    pastYearFantasyPoints?: number
     updatedAt?: string
 }

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\NbaTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +27,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class NbaTeam
 {
     /**
-     * @Groups({"nbaTeam:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
@@ -32,6 +37,9 @@ class NbaTeam
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -39,6 +47,9 @@ class NbaTeam
     private $city;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -46,13 +57,19 @@ class NbaTeam
     private $nickname;
 
     /**
-     * @Groups({"nbaTeam:read", "nbaPlayer:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
+     *
+     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="string", length=255)
      */
     private $fullName;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -60,6 +77,9 @@ class NbaTeam
     private $tricode;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -67,6 +87,9 @@ class NbaTeam
     private $conference;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="string", length=255)
@@ -81,6 +104,8 @@ class NbaTeam
     private $nbaPlayers;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\Column(type="datetime")
