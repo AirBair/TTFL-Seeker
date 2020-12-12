@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <v-card>
+        <v-card class="elevation-10">
             <v-card-title>
                 {{ nbaPlayer.fullName }}
                 <v-spacer />
@@ -22,7 +22,7 @@
             </v-card-text>
         </v-card>
         <v-divider class="my-4"/>
-        <v-card>
+        <v-card class="elevation-10">
             <v-card-title>Last Games</v-card-title>
             <v-card-text>
                 <v-data-table

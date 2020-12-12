@@ -1,5 +1,12 @@
 <template>
     <v-container fluid>
+        <list-filter
+            :initial-filters="filters"
+            :initial-available-filters="availableFilters"
+            :handle-filter="confirmFilters"
+            :handle-reset="resetFilter"
+            class="my-2"
+        />
         <v-data-table
             :headers="dataTableHeaders"
             :items="nbaPlayers"
@@ -10,6 +17,7 @@
                 itemsPerPageOptions: [10, 30, 50, 100]
             }"
             fixed-header
+            class="elevation-10"
         >
             <template v-slot:[`item.lastName`]="{ item }">
                 <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none">
@@ -38,18 +46,29 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import { Location } from 'vue-router/types/router'
+import ListFilter from './snippets/ListFilter.vue'
 import DataTableHeaderInterface from '../models/DataTableHeaderInterface'
 import DataTableOptionsInterface from '../models/DataTableOptionsInterface'
 import { nbaPlayerModule } from '../helpers/store-accessor'
-import NbaPlayer from '../models/api/NbaPlayer'
+import NbaPlayer, { nbaPlayerAvailableFilters, NbaPlayerFiltersParams } from '../models/api/NbaPlayer'
+import { ResourceCollectionFilter } from '../models/api/ResourceCollection'
+import * as QueryString from 'qs'
+import { forEach, forOwn, isString } from 'lodash'
 
-@Component
+@Component({
+    components: {
+        ListFilter
+    }
+})
+
 export default class NbaPlayersList extends Vue {
     @Prop({ type: String, default: '50' }) readonly itemsPerPage!: string
     @Prop({ type: String, default: '1' }) readonly page!: string
     @Prop({ type: String, default: 'averageFantasyPoints' }) readonly sortBy!: string
     @Prop({ type: String, default: 'desc' }) readonly sortOrder!: string
 
+    filters = new NbaPlayerFiltersParams()
+    availableFilters = nbaPlayerAvailableFilters
     dataTableOptions: DataTableOptionsInterface = {
         itemsPerPage: parseInt(this.itemsPerPage),
         page: parseInt(this.page),
@@ -89,21 +108,48 @@ export default class NbaPlayersList extends Vue {
                 itemsPerPage: this.dataTableOptions.itemsPerPage.toString(),
                 page: this.dataTableOptions.page.toString(),
                 sortBy: this.dataTableOptions.sortBy[0],
-                sortOrder: this.dataTableOptions.sortDesc[0] ? 'desc' : 'asc'
+                sortOrder: this.dataTableOptions.sortDesc[0] ? 'desc' : 'asc',
+                filters: QueryString.stringify(this.filters, { encode: false })
             }
         }
         if (JSON.stringify(location.query) !== JSON.stringify(this.$route.query)) {
             this.$router.push(location)
             nbaPlayerModule.findAll({
-                ...this.dataTableOptions
+                ...this.dataTableOptions,
+                ...this.filters
             })
         }
     }
 
     created (): void {
+        this.initFilters()
         nbaPlayerModule.findAll({
-            ...this.dataTableOptions
+            ...this.dataTableOptions,
+            ...this.filters
         })
+    }
+
+    initFilters (): void {
+        if (this.$route.query.filters && isString(this.$route.query.filters)) {
+            this.filters = QueryString.parse(this.$route.query.filters, { depth: false })
+            forOwn(this.filters, (filterValue, filterName: string) => {
+                forEach(this.availableFilters, function (availableFilter: ResourceCollectionFilter) {
+                    if (availableFilter.name === filterName) {
+                        availableFilter.value = filterValue
+                        availableFilter.enable = true
+                    }
+                })
+            })
+        }
+    }
+
+    confirmFilters (): void {
+        this.onDataTableOptionsChange()
+    }
+
+    resetFilter (): void {
+        this.filters = new NbaPlayerFiltersParams()
+        this.onDataTableOptionsChange()
     }
 }
 </script>
