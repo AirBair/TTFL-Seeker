@@ -11,6 +11,11 @@
             }"
             fixed-header
         >
+            <template v-slot:[`item.lastName`]="{ item }">
+                <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none">
+                    {{ item.lastName }}
+                </router-link>
+            </template>
             <template v-slot:[`item.isInjured`]="{ item }">
                 <v-chip v-if="item.isInjured" color="red" dark>
                     <v-icon>mdi-ambulance</v-icon>
