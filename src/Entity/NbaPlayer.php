@@ -132,12 +132,27 @@ class NbaPlayer
 
     /**
      * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
+     * @Groups({"nbaPlayer:read"})
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $isAllowedInExoticLeague;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
      *
      * @Groups({"nbaPlayer:read"})
      *
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    public function __construct()
+    {
+        $this->isAllowedInExoticLeague = true;
+    }
 
     public function __toString(): string
     {
@@ -260,6 +275,18 @@ class NbaPlayer
     public function setPastYearFantasyPoints(?float $pastYearFantasyPoints): self
     {
         $this->pastYearFantasyPoints = $pastYearFantasyPoints;
+
+        return $this;
+    }
+
+    public function getIsAllowedInExoticLeague(): bool
+    {
+        return $this->isAllowedInExoticLeague;
+    }
+
+    public function setIsAllowedInExoticLeague(bool $isAllowedInExoticLeague): self
+    {
+        $this->isAllowedInExoticLeague = $isAllowedInExoticLeague;
 
         return $this;
     }

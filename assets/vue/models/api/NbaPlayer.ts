@@ -11,5 +11,6 @@ export default class NbaPlayer extends AbstractResource {
     nbaTeam?: NbaTeam
     averageFantasyPoints?: number
     pastYearFantasyPoints?: number
+    isAllowedInExoticLeague?: boolean
     updatedAt?: string
 }

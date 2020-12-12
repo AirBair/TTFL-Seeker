@@ -1,9 +1,19 @@
 <template>
     <v-container fluid>
         <v-card>
-            <v-card-title>{{ nbaPlayer.fullName }}</v-card-title>
+            <v-card-title>
+                {{ nbaPlayer.fullName }}
+                <v-spacer />
+                <v-img
+                    v-if="nbaPlayer.isAllowedInExoticLeague"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    max-height="40"
+                    max-width="40"
+                />
+            </v-card-title>
             <v-card-subtitle>
-                {{ nbaPlayer.nbaTeam.fullName }}
+                {{ (nbaPlayer.nbaTeam) ? nbaPlayer.nbaTeam.fullName : 'Free Agent' }}
                 <span v-if="nbaPlayer.position">({{nbaPlayer.position}})</span>
             </v-card-subtitle>
             <v-card-text>

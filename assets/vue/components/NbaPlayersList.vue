@@ -21,6 +21,15 @@
                     <v-icon>mdi-ambulance</v-icon>
                 </v-chip>
             </template>
+            <template v-slot:[`item.isAllowedInExoticLeague`]="{ item }">
+                <v-img
+                    v-if="item.isAllowedInExoticLeague"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    height="30"
+                    width="30"
+                />
+            </template>
         </v-data-table>
     </v-container>
 </template>
@@ -55,7 +64,8 @@ export default class NbaPlayersList extends Vue {
             { text: 'Team', value: 'nbaTeam.fullName' },
             { text: 'Injured ?', value: 'isInjured' },
             { text: 'AVG Fantasy Points', value: 'averageFantasyPoints' },
-            { text: 'Past Year Fantasy Points', value: 'pastYearFantasyPoints' }
+            { text: 'Past Year Fantasy Points', value: 'pastYearFantasyPoints' },
+            { text: 'Allowed in Exotic League ?', value: 'isAllowedInExoticLeague' }
         ]
     }
 
