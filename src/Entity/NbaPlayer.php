@@ -29,7 +29,7 @@ class NbaPlayer
     /**
      * @ApiFilter(OrderFilter::class)
      *
-     * @Groups({"nbaPlayer:read"})
+     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
@@ -60,7 +60,7 @@ class NbaPlayer
      * @ApiFilter(OrderFilter::class)
      * @ApiFilter(SearchFilter::class, strategy="partial")
      *
-     * @Groups({"nbaPlayer:read"})
+     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="string", length=255)
      */
@@ -114,7 +114,7 @@ class NbaPlayer
      * @ApiFilter(OrderFilter::class)
      * @ApiFilter(RangeFilter::class)
      *
-     * @Groups({"nbaPlayer:read"})
+     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="float", nullable=true)
      */

@@ -9,13 +9,25 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
-        <v-list dense nav>
+        <v-list dense nav subheader>
+            <v-subheader>Nba</v-subheader>
             <v-list-item :to="{ name: 'nba_players_list' }">
                 <v-list-item-icon>
                     <v-icon>mdi-account-group</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                     <v-list-item-title>NBA Players</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        <v-list dense nav subheader>
+            <v-subheader>Fantasy</v-subheader>
+            <v-list-item :to="{ name: 'fantasy_users_list' }">
+                <v-list-item-icon>
+                    <v-icon>mdi-account-group</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>Fantasy Users</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </v-list>

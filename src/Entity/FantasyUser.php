@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,6 +28,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FantasyUser implements UserInterface
 {
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"fantasyUser:read"})
      *
      * @ORM\Id
@@ -34,6 +39,9 @@ class FantasyUser implements UserInterface
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
+     *
      * @Groups({"fantasyUser:read"})
      *
      * @ORM\Column(type="string", length=180, unique=true)
@@ -41,6 +49,9 @@ class FantasyUser implements UserInterface
     private $username;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyUser:read"})
      *
      * @ORM\Column(type="integer", nullable=true)
@@ -48,6 +59,12 @@ class FantasyUser implements UserInterface
     private $ttflId;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
+     * @ApiFilter(OrderFilter::class, properties={
+     *     "fantasyTeam": "exact",
+     *     "fantasyTeam.name": "partial"
+     * })
+     *
      * @Groups({"fantasyUser:read"})
      *
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyUsers")
@@ -70,16 +87,14 @@ class FantasyUser implements UserInterface
     private $plainPassword;
 
     /**
-     * @Groups({"fantasyUser:read"})
-     *
      * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
+     * @ORM\OrderBy({"pickedAt": "ASC"})
      */
     private $fantasyPicks;
 
     /**
-     * @Groups({"fantasyUser:read"})
-     *
      * @ORM\OneToMany(targetEntity=FantasyUserRanking::class, mappedBy="fantasyUser", orphanRemoval=true)
+     * @ORM\OrderBy({"rankingAt": "ASC"})
      */
     private $fantasyUserRankings;
 
@@ -276,5 +291,21 @@ class FantasyUser implements UserInterface
     public function eraseCredentials(): void
     {
         // If any sensitive data on the user is stored temporary, clear it here.
+    }
+
+    /**
+     * @Groups({"fantasyUser:read"})
+     */
+    public function getLastFantasyPick(): ?FantasyPick
+    {
+        return ($this->fantasyPicks->count()) ? $this->fantasyPicks->last() : null;
+    }
+
+    /**
+     * @Groups({"fantasyUser:read"})
+     */
+    public function getLastFantasyUserRanking(): ?FantasyUserRanking
+    {
+        return ($this->fantasyUserRankings->count()) ? $this->fantasyUserRankings->last() : null;
     }
 }

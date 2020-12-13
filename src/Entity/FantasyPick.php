@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyPickRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,7 +27,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FantasyPick
 {
     /**
-     * @Groups({"fantasyPick:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +38,9 @@ class FantasyPick
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyPick:read"})
      *
      * @ORM\Column(type="integer")
@@ -38,6 +48,9 @@ class FantasyPick
     private $season;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyPick:read"})
      *
      * @ORM\Column(type="boolean")
@@ -45,13 +58,22 @@ class FantasyPick
     private $isPlayoffs;
 
     /**
-     * @Groups({"fantasyPick:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(DateFilter::class)
+     *
+     * @Groups({"fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="date")
      */
     private $pickedAt;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "fantasyUser": "exact",
+     *     "fantasyUser.username": "partial",
+     * })
+     *
      * @Groups({"fantasyPick:read"})
      *
      * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyPicks")
@@ -60,7 +82,13 @@ class FantasyPick
     private $fantasyUser;
 
     /**
-     * @Groups({"fantasyPick:read"})
+     * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "nbaPlayer": "exact",
+     *     "nbaPlayer.fullName": "partial",
+     * })
+     *
+     * @Groups({"fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
@@ -68,13 +96,18 @@ class FantasyPick
     private $nbaPlayer;
 
     /**
-     * @Groups({"fantasyPick:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"fantasyPick:read"})
      *
      * @ORM\Column(type="datetime")
