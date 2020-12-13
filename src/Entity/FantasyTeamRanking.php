@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyTeamRankingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,6 +27,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FantasyTeamRanking
 {
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Id
@@ -31,6 +38,9 @@ class FantasyTeamRanking
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="integer")
@@ -38,6 +48,9 @@ class FantasyTeamRanking
     private $season;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="boolean")
@@ -45,6 +58,12 @@ class FantasyTeamRanking
     private $isPlayoffs;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "fantasyTeam": "exact",
+     *     "fantasyTeam.name": "partial"
+     * })
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyTeamRankings")
@@ -53,6 +72,9 @@ class FantasyTeamRanking
     private $fantasyTeam;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="integer")
@@ -60,6 +82,9 @@ class FantasyTeamRanking
     private $fantasyPoints;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="integer")
@@ -67,6 +92,9 @@ class FantasyTeamRanking
     private $fantasyRank;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(DateFilter::class)
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="date")
@@ -74,6 +102,8 @@ class FantasyTeamRanking
     private $rankingAt;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"fantasyTeamRanking:read"})
      *
      * @ORM\Column(type="datetime")

@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyUserRankingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,7 +27,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FantasyUserRanking
 {
     /**
-     * @Groups({"fantasyUserRanking:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +38,12 @@ class FantasyUserRanking
     private $id;
 
     /**
+     * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
+     * @ApiFilter(SearchFilter::class, properties={
+     *     "fantasyUser": "exact",
+     *     "fantasyUser.username": "partial"
+     * })
+     *
      * @Groups({"fantasyUserRanking:read"})
      *
      * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyUserRankings")
@@ -39,6 +52,9 @@ class FantasyUserRanking
     private $fantasyUser;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyUserRanking:read"})
      *
      * @ORM\Column(type="integer")
@@ -46,6 +62,9 @@ class FantasyUserRanking
     private $season;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
      * @Groups({"fantasyUserRanking:read"})
      *
      * @ORM\Column(type="boolean")
@@ -53,27 +72,38 @@ class FantasyUserRanking
     private $isPlayoffs;
 
     /**
-     * @Groups({"fantasyUserRanking:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="integer")
      */
     private $fantasyPoints;
 
     /**
-     * @Groups({"fantasyUserRanking:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="integer")
      */
     private $fantasyRank;
 
     /**
-     * @Groups({"fantasyUserRanking:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(DateFilter::class)
+     *
+     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="date")
      */
     private $rankingAt;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     *
      * @Groups({"fantasyUserRanking:read"})
      *
      * @ORM\Column(type="datetime")

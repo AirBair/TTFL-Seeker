@@ -1,6 +1,10 @@
 <template>
     <v-container fluid>
-        <v-card class="elevation-10">
+        <v-skeleton-loader
+            v-if="isLoading"
+            type="card"
+        />
+        <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ nbaPlayer.fullName }}
                 <v-spacer />
@@ -14,11 +18,12 @@
             </v-card-title>
             <v-card-subtitle>
                 {{ (nbaPlayer.nbaTeam) ? nbaPlayer.nbaTeam.fullName : 'Free Agent' }}
-                <span v-if="nbaPlayer.position">({{nbaPlayer.position}})</span>
+                <span v-if="nbaPlayer.position">({{nbaPlayer.position}})</span><br />
+                Average Fantasy Points: <strong>{{ nbaPlayer.averageFantasyPoints }}</strong><br />
+                Past Year Fantasy Points: <strong>{{ nbaPlayer.pastYearFantasyPoints }}</strong>
             </v-card-subtitle>
             <v-card-text>
-                Average Fantasy Points: {{ nbaPlayer.averageFantasyPoints }}<br />
-                Past Year Fantasy Points: {{ nbaPlayer.pastYearFantasyPoints }}
+                <p class="text-center font-italic">Chart of points per match coming soon !</p>
             </v-card-text>
         </v-card>
         <v-divider class="my-4"/>

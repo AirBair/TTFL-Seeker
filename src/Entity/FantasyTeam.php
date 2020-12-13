@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,7 +27,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FantasyTeam
 {
     /**
-     * @Groups({"fantasyTeam:read"})
+     * @ApiFilter(OrderFilter::class)
+     *
+     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -33,7 +38,10 @@ class FantasyTeam
     private $id;
 
     /**
-     * @Groups({"fantasyTeam:read"})
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="partial")
+     *
+     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
      *
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -45,8 +53,6 @@ class FantasyTeam
     private $fantasyTeamRankings;
 
     /**
-     * @Groups({"fantasyTeam:read"})
-     *
      * @ORM\OneToMany(targetEntity=FantasyUser::class, mappedBy="fantasyTeam")
      */
     private $fantasyUsers;
