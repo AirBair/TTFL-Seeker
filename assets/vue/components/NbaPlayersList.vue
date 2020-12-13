@@ -24,6 +24,15 @@
                     {{ item.lastName }}
                 </router-link>
             </template>
+            <template v-slot:[`item.nbaTeam.logoFilePath`]="{ item }">
+                <img
+                    v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
+                    :src="item.nbaTeam.logoFilePath"
+                    alt="Team Logo"
+                    height="50"
+                    width="50"
+                />
+            </template>
             <template v-slot:[`item.isInjured`]="{ item }">
                 <v-chip v-if="item.isInjured" color="red" dark>
                     <v-icon>mdi-ambulance</v-icon>
@@ -34,8 +43,8 @@
                     v-if="item.isAllowedInExoticLeague"
                     :src="require('../../img/exotic-league-logo.jpg').default"
                     alt="Exotic League"
-                    height="30"
-                    width="30"
+                    height="40"
+                    width="40"
                 />
             </template>
         </v-data-table>
@@ -80,6 +89,7 @@ export default class NbaPlayersList extends Vue {
         return [
             { text: 'LastName', value: 'lastName' },
             { text: 'FirstName', value: 'firstName' },
+            { text: '', value: 'nbaTeam.logoFilePath' },
             { text: 'Team', value: 'nbaTeam.fullName' },
             { text: 'Injured ?', value: 'isInjured' },
             { text: 'AVG Fantasy Points', value: 'averageFantasyPoints' },

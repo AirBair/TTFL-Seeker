@@ -39,13 +39,20 @@
                     :footer-props="{
                         itemsPerPageOptions: [10, 30, 50, 100]
                     }"
-                    dense
                     fixed-header
                 >
                     <template v-slot:[`item.nbaGame.gameDay`]="{ item }">
                         {{ new Date(item.nbaGame.gameDay).toLocaleDateString() }}
                     </template>
-                    <template v-slot:[`item.against`]="{ item }">
+                    <template v-slot:[`item.againstNbaTeam.logoFilePath`]="{ item }">
+                        <img
+                            :src="(item.nbaTeam.id === item.nbaGame.localNbaTeam.id) ? item.nbaGame.visitorNbaTeam.logoFilePath : item.nbaGame.localNbaTeam.logoFilePath"
+                            alt="Team Logo"
+                            height="50"
+                            width="50"
+                        />
+                    </template>
+                    <template v-slot:[`item.againstNbaTeam.fullName`]="{ item }">
                         {{ (item.nbaTeam.id === item.nbaGame.localNbaTeam.id) ? item.nbaGame.visitorNbaTeam.fullName : item.nbaGame.localNbaTeam.fullName }}
                     </template>
                     <template v-slot:[`item.isBestPick`]="{ item }">
@@ -81,7 +88,8 @@ export default class NbaPlayerProfile extends Vue {
     get dataTableHeaders (): DataTableHeaderInterface[] {
         return [
             { text: 'Game Day', value: 'nbaGame.gameDay' },
-            { text: 'Against', value: 'against', sortable: false },
+            { text: 'Against', value: 'againstNbaTeam.logoFilePath', sortable: false },
+            { text: '', value: 'againstNbaTeam.fullName', sortable: false },
             { text: 'Fantasy Points', value: 'fantasyPoints' },
             { text: 'Minutes Played', value: 'minutesPlayed' },
             { text: 'Best Pick ?', value: 'isBestPick' }

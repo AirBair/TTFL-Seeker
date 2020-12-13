@@ -33,7 +33,15 @@ Copy the `.env` file to `.env.local` and complete it with required credentials &
 
 `yarn install && yarn build`
 
-### 5 - Protect sensitive files
+### 5 - Grant write access on var & uploads directories to the web user
+
+```
+HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1)
+setfacl -dR -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX var public/uploads
+setfacl -R -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX var public/uploads
+```
+
+### 6 - Protect sensitive files
 
 Since the `.env.local` (and `.env.local.php` if you are in production environment) contains sensitive information, consider protecting it in read/write mode.
 Only the **web user** and **developers** are supposed to be able to access it.

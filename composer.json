@@ -17,7 +17,8 @@
         "symfony/mime": "5.2.*",
         "symfony/monolog-bundle": "^3.6",
         "symfony/webpack-encore-bundle": "^1.6",
-        "symfony/yaml": "5.2.*"
+        "symfony/yaml": "5.2.*",
+        "vich/uploader-bundle": "^1.16"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.13",
