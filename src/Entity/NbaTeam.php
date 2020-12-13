@@ -12,7 +12,9 @@ use App\Repository\NbaTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource(
@@ -23,6 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  *
  * @ORM\Entity(repositoryClass=NbaTeamRepository::class)
+ *
+ * @Vich\Uploadable
  */
 class NbaTeam
 {
@@ -95,6 +99,28 @@ class NbaTeam
      * @ORM\Column(type="string", length=255)
      */
     private $division;
+
+    /**
+     * @Vich\UploadableField(mapping="nba_teams_logos", fileNameProperty="logoFileName")
+     */
+    private $logoFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $logoFileName;
+
+    /**
+     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
+     */
+    private $logoFilePath;
+
+    /**
+     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $primaryColor;
 
     /**
      * @Groups({"nbaTeam:read"})
@@ -204,6 +230,57 @@ class NbaTeam
         $this->division = $division;
 
         return $this;
+    }
+
+    public function setLogoFile(?File $logoFile = null): void
+    {
+        $this->logoFile = $logoFile;
+
+        if (null !== $logoFile) {
+            // It is required that at least one field changes if you are using doctrine, otherwise the event listeners won't be called and the file is lost.
+            $this->setUpdatedAt(new \DateTimeImmutable());
+        }
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    public function setLogoFileName(?string $logoFileName): self
+    {
+        $this->logoFileName = $logoFileName;
+
+        return $this;
+    }
+
+    public function getLogoFileName(): ?string
+    {
+        return $this->logoFileName;
+    }
+
+    public function setLogoFilePath(?string $logoFilePath): self
+    {
+        $this->logoFilePath = $logoFilePath;
+
+        return $this;
+    }
+
+    public function getLogoFilePath(): ?string
+    {
+        return $this->logoFilePath;
+    }
+
+    public function setPrimaryColor(?string $primaryColor): self
+    {
+        $this->primaryColor = $primaryColor;
+
+        return $this;
+    }
+
+    public function getPrimaryColor(): ?string
+    {
+        return $this->primaryColor;
     }
 
     /**

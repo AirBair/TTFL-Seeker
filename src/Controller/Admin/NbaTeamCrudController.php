@@ -10,9 +10,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class NbaTeamCrudController extends AbstractCrudController
 {
@@ -31,20 +34,23 @@ class NbaTeamCrudController extends AbstractCrudController
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->disable(Action::NEW, Action::EDIT, Action::DELETE);
+            ->disable(Action::NEW, Action::DELETE);
     }
 
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->setMaxLength(-1),
-            TextField::new('city'),
-            TextField::new('nickname'),
-            TextField::new('tricode'),
-            TextField::new('conference'),
-            TextField::new('division'),
+            IdField::new('id')->setMaxLength(-1)->setFormTypeOption('disabled', true),
+            TextField::new('city')->setFormTypeOption('disabled', true),
+            TextField::new('nickname')->setFormTypeOption('disabled', true),
+            TextField::new('tricode')->setFormTypeOption('disabled', true),
+            TextField::new('logoFile', 'Logo')->setFormType(VichFileType::class)->onlyOnForms(),
+            ImageField::new('logoFileName', 'Logo')->setBasePath('/uploads/nba-teams-logos')->onlyOnIndex(),
+            ColorField::new('primaryColor'),
+            TextField::new('conference')->setFormTypeOption('disabled', true),
+            TextField::new('division')->setFormTypeOption('disabled', true),
             ArrayField::new('nbaPlayers')->onlyOnDetail(),
-            DateTimeField::new('updatedAt'),
+            DateTimeField::new('updatedAt')->hideOnForm(),
         ];
     }
 }

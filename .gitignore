@@ -24,4 +24,6 @@ yarn-error.log
 
 ###> app ###
 /.idea/
+/public/uploads/nba-teams-logos/
+!/public/uploads/nba-teams-logos/.gitignore
 ###< app ###
