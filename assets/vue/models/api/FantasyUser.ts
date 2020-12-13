@@ -21,7 +21,17 @@ export class FantasyUserFiltersParams {
 
 export const fantasyUserAvailableFilters: ResourceCollectionFilter[] = [{
     name: 'username',
-    label: 'Usernname',
+    label: 'Username',
+    type: ResourceFilterType.String,
+    enable: false
+}, {
+    name: 'ttflId',
+    label: 'TTFL ID',
+    type: ResourceFilterType.String,
+    enable: false
+}, {
+    name: 'fantasyTeam.name',
+    label: 'Fantasy Team',
     type: ResourceFilterType.String,
     enable: false
 }]

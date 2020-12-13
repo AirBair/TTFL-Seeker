@@ -29,7 +29,7 @@ class FantasyTeamRanking
     /**
      * @ApiFilter(OrderFilter::class)
      *
-     * @Groups({"fantasyTeamRanking:read"})
+     * @Groups({"fantasyTeamRanking:read", "fantasyTeam:read"})
      *
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -75,7 +75,7 @@ class FantasyTeamRanking
      * @ApiFilter(OrderFilter::class)
      * @ApiFilter(RangeFilter::class)
      *
-     * @Groups({"fantasyTeamRanking:read"})
+     * @Groups({"fantasyTeamRanking:read", "fantasyTeam:read"})
      *
      * @ORM\Column(type="integer")
      */
@@ -85,7 +85,7 @@ class FantasyTeamRanking
      * @ApiFilter(OrderFilter::class)
      * @ApiFilter(RangeFilter::class)
      *
-     * @Groups({"fantasyTeamRanking:read"})
+     * @Groups({"fantasyTeamRanking:read", "fantasyTeam:read"})
      *
      * @ORM\Column(type="integer")
      */
@@ -95,7 +95,7 @@ class FantasyTeamRanking
      * @ApiFilter(OrderFilter::class)
      * @ApiFilter(DateFilter::class)
      *
-     * @Groups({"fantasyTeamRanking:read"})
+     * @Groups({"fantasyTeamRanking:read", "fantasyTeam:read"})
      *
      * @ORM\Column(type="date")
      */
