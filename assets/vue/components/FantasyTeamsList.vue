@@ -9,8 +9,8 @@
         />
         <v-data-table
             :headers="dataTableHeaders"
-            :items="fantasyUsers"
-            :server-items-length="nbFantasyUsers"
+            :items="fantasyTeams"
+            :server-items-length="nbFantasyTeams"
             :options.sync="dataTableOptions"
             :loading="isLoading"
             :footer-props="{
@@ -19,34 +19,20 @@
             fixed-header
             class="elevation-10"
         >
-            <template v-slot:[`item.username`]="{ item }">
-                <router-link :to="{ name: 'fantasy_user_profile', params: { fantasyUserId: item.id } }" class="text-decoration-none">
-                    {{ item.username }}
+            <template v-slot:[`item.name`]="{ item }">
+                <router-link :to="{ name: 'fantasy_team_profile', params: { fantasyTeamId: item.id } }" class="text-decoration-none">
+                    {{ item.name }}
                 </router-link>
             </template>
-            <template v-slot:[`item.fantasyTeam.name`]="{ item }">
-                <router-link v-if="item.fantasyTeam" :to="{ name: 'fantasy_team_profile', params: { fantasyTeamId: item.fantasyTeam.id } }" class="text-decoration-none">
-                    {{ item.fantasyTeam.name }}
-                </router-link>
-            </template>
-            <template v-slot:[`item.lastFantasyUserRanking.fantasyRank`]="{ item }">
-                <span v-if="item.lastFantasyUserRanking">
-                    {{ item.lastFantasyUserRanking.fantasyRank }}
+            <template v-slot:[`item.lastFantasyTeamRanking.fantasyRank`]="{ item }">
+                <span v-if="item.lastFantasyTeamRanking">
+                    {{ item.lastFantasyTeamRanking.fantasyRank }}
                 </span>
                 <span v-else>-</span>
             </template>
-            <template v-slot:[`item.lastFantasyUserRanking.fantasyPoints`]="{ item }">
-                <span v-if="item.lastFantasyUserRanking">
-                    {{ item.lastFantasyUserRanking.fantasyPoints }} pts
-                </span>
-                <span v-else>-</span>
-            </template>
-            <template v-slot:[`item.lastFantasyPick`]="{ item }">
-                <span v-if="item.lastFantasyPick && item.lastFantasyPick.nbaPlayer">
-                    <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.lastFantasyPick.nbaPlayer.id } }" class="text-decoration-none">
-                        {{ item.lastFantasyPick.nbaPlayer.fullName }}
-                    </router-link>
-                    ({{ item.lastFantasyPick.fantasyPoints }} pts)
+            <template v-slot:[`item.lastFantasyTeamRanking.fantasyPoints`]="{ item }">
+                <span v-if="item.lastFantasyTeamRanking">
+                    {{ item.lastFantasyTeamRanking.fantasyPoints }} pts
                 </span>
                 <span v-else>-</span>
             </template>
@@ -61,8 +47,8 @@ import { Location } from 'vue-router/types/router'
 import ListFilter from './snippets/ListFilter.vue'
 import DataTableHeaderInterface from '../models/DataTableHeaderInterface'
 import DataTableOptionsInterface from '../models/DataTableOptionsInterface'
-import { fantasyUserModule } from '../helpers/store-accessor'
-import FantasyUser, { fantasyUserAvailableFilters, FantasyUserFiltersParams } from '../models/api/FantasyUser'
+import { fantasyTeamModule } from '../helpers/store-accessor'
+import FantasyTeam, { fantasyTeamAvailableFilters, FantasyTeamFiltersParams } from '../models/api/FantasyTeam'
 import { ResourceCollectionFilter } from '../models/api/ResourceCollection'
 import * as QueryString from 'qs'
 import { forEach, forOwn, isString } from 'lodash'
@@ -73,14 +59,14 @@ import { forEach, forOwn, isString } from 'lodash'
     }
 })
 
-export default class FantasyUsersList extends Vue {
+export default class FantasyTeamsList extends Vue {
     @Prop({ type: String, default: '50' }) readonly itemsPerPage!: string
     @Prop({ type: String, default: '1' }) readonly page!: string
     @Prop({ type: String, default: 'username' }) readonly sortBy!: string
     @Prop({ type: String, default: 'asc' }) readonly sortOrder!: string
 
-    filters = new FantasyUserFiltersParams()
-    availableFilters = fantasyUserAvailableFilters
+    filters = new FantasyTeamFiltersParams()
+    availableFilters = fantasyTeamAvailableFilters
     dataTableOptions: DataTableOptionsInterface = {
         itemsPerPage: parseInt(this.itemsPerPage),
         page: parseInt(this.page),
@@ -90,30 +76,28 @@ export default class FantasyUsersList extends Vue {
 
     get dataTableHeaders (): DataTableHeaderInterface[] {
         return [
-            { text: 'Username', value: 'username' },
-            { text: 'Fantasy Team', value: 'fantasyTeam.name' },
-            { text: 'Fantasy Rank', value: 'lastFantasyUserRanking.fantasyRank', sortable: false },
-            { text: 'Fantasy Points', value: 'lastFantasyUserRanking.fantasyPoints', sortable: false },
-            { text: 'Last Pick', value: 'lastFantasyPick', sortable: false }
+            { text: 'Name', value: 'name' },
+            { text: 'Fantasy Rank', value: 'lastFantasyTeamRanking.fantasyRank', sortable: false },
+            { text: 'Fantasy Points', value: 'lastFantasyTeamRanking.fantasyPoints', sortable: false }
         ]
     }
 
     get isLoading (): boolean {
-        return fantasyUserModule.isLoading
+        return fantasyTeamModule.isLoading
     }
 
-    get nbFantasyUsers (): number {
-        return fantasyUserModule.totalItems ?? 0
+    get nbFantasyTeams (): number {
+        return fantasyTeamModule.totalItems ?? 0
     }
 
-    get fantasyUsers (): FantasyUser[] {
-        return fantasyUserModule.items
+    get fantasyTeams (): FantasyTeam[] {
+        return fantasyTeamModule.items
     }
 
     @Watch('dataTableOptions', { deep: true })
     onDataTableOptionsChange (): void {
         const location: Location = {
-            name: 'fantasy_users_list',
+            name: 'fantasy_teams_list',
             query: {
                 itemsPerPage: this.dataTableOptions.itemsPerPage.toString(),
                 page: this.dataTableOptions.page.toString(),
@@ -124,7 +108,7 @@ export default class FantasyUsersList extends Vue {
         }
         if (JSON.stringify(location.query) !== JSON.stringify(this.$route.query)) {
             this.$router.push(location)
-            fantasyUserModule.findAll({
+            fantasyTeamModule.findAll({
                 ...this.dataTableOptions,
                 ...this.filters
             })
@@ -133,7 +117,7 @@ export default class FantasyUsersList extends Vue {
 
     created (): void {
         this.initFilters()
-        fantasyUserModule.findAll({
+        fantasyTeamModule.findAll({
             ...this.dataTableOptions,
             ...this.filters
         })
@@ -158,7 +142,7 @@ export default class FantasyUsersList extends Vue {
     }
 
     resetFilter (): void {
-        this.filters = new FantasyUserFiltersParams()
+        this.filters = new FantasyTeamFiltersParams()
         this.onDataTableOptionsChange()
     }
 }

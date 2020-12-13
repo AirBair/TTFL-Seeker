@@ -49,6 +49,7 @@ class FantasyTeam
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyTeamRanking::class, mappedBy="fantasyTeam", orphanRemoval=true)
+     * @ORM\OrderBy({"rankingAt": "ASC"})
      */
     private $fantasyTeamRankings;
 
@@ -142,5 +143,13 @@ class FantasyTeam
         }
 
         return $this;
+    }
+
+    /**
+     * @Groups({"fantasyTeam:read"})
+     */
+    public function getLastFantasyTeamRanking(): ?FantasyTeamRanking
+    {
+        return ($this->fantasyTeamRankings->count()) ? $this->fantasyTeamRankings->last() : null;
     }
 }

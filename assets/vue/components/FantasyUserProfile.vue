@@ -9,7 +9,10 @@
                 {{ fantasyUser.username }}
             </v-card-title>
             <v-card-subtitle>
-                {{ (fantasyUser.fantasyTeam) ? fantasyUser.fantasyTeam.name : 'Free Agent' }}<br />
+                <router-link v-if="fantasyUser.fantasyTeam" :to="{ name: 'fantasy_team_profile', params: { fantasyTeamId: fantasyUser.fantasyTeam.id } }" class="text-decoration-none">
+                    {{ fantasyUser.fantasyTeam.name }}
+                </router-link>
+                <span v-else>Free Agent</span><br />
                 Fantasy Points: <strong>{{ (fantasyUser.lastFantasyUserRanking) ? fantasyUser.lastFantasyUserRanking.fantasyPoints : '-' }} pts</strong><br />
                 Fantasy Rank: <strong>{{ (fantasyUser.lastFantasyUserRanking) ? fantasyUser.lastFantasyUserRanking.fantasyRank : '-' }}</strong>
             </v-card-subtitle>

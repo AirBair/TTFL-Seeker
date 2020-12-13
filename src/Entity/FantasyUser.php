@@ -60,7 +60,7 @@ class FantasyUser implements UserInterface
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
-     * @ApiFilter(OrderFilter::class, properties={
+     * @ApiFilter(SearchFilter::class, properties={
      *     "fantasyTeam": "exact",
      *     "fantasyTeam.name": "partial"
      * })

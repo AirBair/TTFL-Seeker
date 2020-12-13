@@ -4,6 +4,8 @@ import NbaPlayersList from '../components/NbaPlayersList.vue'
 import NbaPlayerProfile from '../components/NbaPlayerProfile.vue'
 import FantasyUsersList from '../components/FantasyUsersList.vue'
 import FantasyUserProfile from '../components/FantasyUserProfile.vue'
+import FantasyTeamsList from '../components/FantasyTeamsList.vue'
+import FantasyTeamProfile from '../components/FantasyTeamProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -42,6 +44,22 @@ const router = new VueRouter({
         props: true,
         meta: {
             navbarLabel: 'Fantasy User Profile'
+        }
+    }, {
+        path: '/fantasy-teams/list',
+        name: 'fantasy_teams_list',
+        component: FantasyTeamsList,
+        props: (route: Route): unknown => ({ ...route.params, ...route.query }),
+        meta: {
+            navbarLabel: 'Fantasy Teams'
+        }
+    }, {
+        path: '/fantasy-teams/:fantasyTeamId',
+        name: 'fantasy_team_profile',
+        component: FantasyTeamProfile,
+        props: true,
+        meta: {
+            navbarLabel: 'Fantasy Team Profile'
         }
     }]
 })
