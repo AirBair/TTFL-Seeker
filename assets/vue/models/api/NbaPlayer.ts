@@ -73,18 +73,18 @@ export const nbaPlayerAvailableFilters: ResourceCollectionFilter[] = [{
     type: ResourceFilterType.Number,
     enable: false
 }, {
-    name: 'averageFantasyPoints[gte]',
+    name: 'averageFantasyPoints[lte]',
     label: 'AVG Fantasy Points',
     type: ResourceFilterType.Number,
     enable: false
 }, {
     name: 'pastYearFantasyPoints[gte]',
-    label: 'AVG Fantasy Points',
+    label: 'Past Year Fantasy Points',
     type: ResourceFilterType.Number,
     enable: false
 }, {
-    name: 'pastYearFantasyPoints[gte]',
-    label: 'AVG Fantasy Points',
+    name: 'pastYearFantasyPoints[lte]',
+    label: 'Past Year Fantasy Points',
     type: ResourceFilterType.Number,
     enable: false
 }, {
