@@ -9,6 +9,16 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
+        <v-list dense nav>
+            <v-list-item :to="{ name: 'picks_of_the_day' }">
+                <v-list-item-icon>
+                    <v-icon>mdi-crosshairs</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>Picks of the Day</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
         <v-list dense nav subheader>
             <v-subheader>Nba</v-subheader>
             <v-list-item :to="{ name: 'nba_players_list' }">

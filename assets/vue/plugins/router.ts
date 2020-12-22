@@ -6,6 +6,7 @@ import FantasyUsersList from '../components/FantasyUsersList.vue'
 import FantasyUserProfile from '../components/FantasyUserProfile.vue'
 import FantasyTeamsList from '../components/FantasyTeamsList.vue'
 import FantasyTeamProfile from '../components/FantasyTeamProfile.vue'
+import PicksOfTheDay from '../components/PicksOfTheDay.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,14 @@ const router = new VueRouter({
         props: true,
         meta: {
             navbarLabel: 'Nba Player Profile'
+        }
+    }, {
+        path: '/picks-of-the-day',
+        name: 'picks_of_the_day',
+        component: PicksOfTheDay,
+        props: (route: Route): unknown => ({ ...route.params, ...route.query }),
+        meta: {
+            navbarLabel: 'Picks of the Day'
         }
     }, {
         path: '/fantasy-users/list',
