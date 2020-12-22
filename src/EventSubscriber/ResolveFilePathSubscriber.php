@@ -63,7 +63,7 @@ final class ResolveFilePathSubscriber implements EventSubscriberInterface
             if ($entity instanceof NbaTeam) {
                 $entity->setLogoFilePath($this->storage->resolveUri($entity, 'logoFile'));
             }
-            if ($entity instanceof NbaPlayer) {
+            if ($entity instanceof NbaPlayer && null !== $entity->getNbaTeam()) {
                 $entity->getNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getNbaTeam(), 'logoFile'));
             }
             if ($entity instanceof NbaStatsLog) {

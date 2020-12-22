@@ -19,33 +19,41 @@
             fixed-header
             class="elevation-10"
         >
-            <template v-slot:[`item.lastName`]="{ item }">
-                <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none">
-                    {{ item.lastName }}
-                </router-link>
-            </template>
-            <template v-slot:[`item.nbaTeam.logoFilePath`]="{ item }">
-                <img
-                    v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
-                    :src="item.nbaTeam.logoFilePath"
-                    alt="Team Logo"
-                    height="50"
-                    width="50"
-                />
-            </template>
-            <template v-slot:[`item.isInjured`]="{ item }">
-                <v-chip v-if="item.isInjured" color="red" dark>
-                    <v-icon>mdi-ambulance</v-icon>
-                </v-chip>
-            </template>
-            <template v-slot:[`item.isAllowedInExoticLeague`]="{ item }">
-                <v-img
-                    v-if="item.isAllowedInExoticLeague"
-                    :src="require('../../img/exotic-league-logo.jpg').default"
-                    alt="Exotic League"
-                    height="40"
-                    width="40"
-                />
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td>
+                        <img
+                            v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
+                            :src="item.nbaTeam.logoFilePath"
+                            alt="Team Logo"
+                            height="50"
+                            width="50"
+                        />
+                    </td>
+                    <td colspan="2">
+                        <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none text-body-1">
+                            {{ item.lastName }} {{ item.firstName }}
+                        </router-link>
+                        <br />
+                        <span class="text-caption">{{ (item.nbaTeam) ? item.nbaTeam.fullName : 'Free Agent' }}</span>
+                    </td>
+                    <td>
+                        <v-chip v-if="item.isInjured" color="red" dark>
+                            <v-icon>mdi-ambulance</v-icon>
+                        </v-chip>
+                    </td>
+                    <td>{{ item.averageFantasyPoints }}</td>
+                    <td>{{ item.pastYearFantasyPoints }}</td>
+                    <td>
+                        <v-img
+                            v-if="item.isAllowedInExoticLeague"
+                            :src="require('../../img/exotic-league-logo.jpg').default"
+                            alt="Exotic League"
+                            height="40"
+                            width="40"
+                        />
+                    </td>
+                </tr>
             </template>
         </v-data-table>
     </v-container>
@@ -87,10 +95,9 @@ export default class NbaPlayersList extends Vue {
 
     get dataTableHeaders (): DataTableHeaderInterface[] {
         return [
+            { text: 'Team', value: 'nbaTeam.fullName' },
             { text: 'LastName', value: 'lastName' },
             { text: 'FirstName', value: 'firstName' },
-            { text: '', value: 'nbaTeam.logoFilePath' },
-            { text: 'Team', value: 'nbaTeam.fullName' },
             { text: 'Injured ?', value: 'isInjured' },
             { text: 'AVG Fantasy Points', value: 'averageFantasyPoints' },
             { text: 'Past Year Fantasy Points', value: 'pastYearFantasyPoints' },

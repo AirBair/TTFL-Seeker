@@ -18,96 +18,120 @@
             v-if="isNbaGamesLoading"
             type="card"
         />
-        <h3 class="mt-6">
-            {{ nbNbaGames }} Matchs Scheduled
-        </h3>
-        <v-row v-if="!isNbaGamesLoading">
-            <v-col v-for="nbaGame in nbaGames" :key="nbaGame.id" class="col-6">
-                <v-card class="px-2 text-center">
-                    <v-card-text>
-                        <v-row align="center">
-                            <v-col>
-                                <img
-                                    v-if="nbaGame.localNbaTeam && nbaGame.localNbaTeam.logoFilePath"
-                                    :src="nbaGame.localNbaTeam.logoFilePath"
-                                    alt="Team Logo"
-                                    height="70"
-                                    width="70"
-                                />
-                                <h3>{{ nbaGame.localNbaTeam.fullName }}</h3>
-                            </v-col>
-                            <v-col>
-                                <h2>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleTimeString('fr-Fr').substr(0, 5) : ''}}</h2>
-                                <h5>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleDateString('fr-Fr') : ''}}</h5>
-                            </v-col>
-                            <v-col>
-                                <img
-                                    v-if="nbaGame.visitorNbaTeam && nbaGame.visitorNbaTeam.logoFilePath"
-                                    :src="nbaGame.visitorNbaTeam.logoFilePath"
-                                    alt="Team Logo"
-                                    height="70"
-                                    width="70"
-                                />
-                                <h3>{{ nbaGame.visitorNbaTeam.fullName }}</h3>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-        <h3 class="mt-6">
-            Players of the Day
-        </h3>
-        <list-filter
-            v-if="!isNbaPlayersLoading"
-            :initial-filters="filters"
-            :initial-available-filters="availableFilters"
-            :handle-filter="confirmFilters"
-            :handle-reset="resetFilter"
-            class="my-2"
-        />
-        <v-data-table
-            v-if="!isNbaPlayersLoading"
-            :headers="nbaPlayersDataTableHeaders"
-            :items="nbaPlayers"
-            :server-items-length="nbNbaPlayers"
-            :options.sync="dataTableOptions"
-            :loading="isNbaPlayersLoading"
-            :footer-props="{
-                itemsPerPageOptions: [10, 30, 50, 100]
-            }"
-            fixed-header
-            class="elevation-10"
+        <v-alert
+            v-if="!isNbaGamesLoading && !nbNbaGames"
+            class="col-6 offset-3 mt-4 py-4"
+            type="warning"
+            border="top"
+            colored-border
+            elevation="2"
         >
-            <template v-slot:[`item.lastName`]="{ item }">
-                <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none">
-                    {{ item.lastName }}
-                </router-link>
-            </template>
-            <template v-slot:[`item.nbaTeam.logoFilePath`]="{ item }">
-                <img
-                    v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
-                    :src="item.nbaTeam.logoFilePath"
-                    alt="Team Logo"
-                    height="50"
-                    width="50"
-                />
-            </template>
-            <template v-slot:[`item.isInjured`]="{ item }">
-                <v-chip v-if="item.isInjured" color="red" dark>
-                    <v-icon>mdi-ambulance</v-icon>
-                </v-chip>
-            </template>
-            <template v-slot:[`item.isAllowedInExoticLeague`]="{ item }">
-                <v-img
-                    v-if="item.isAllowedInExoticLeague"
-                    :src="require('../../img/exotic-league-logo.jpg').default"
-                    alt="Exotic League"
-                    height="40"
-                    width="40"
-                />
-            </template>
-        </v-data-table>
+            No matchs scheduled for this date !
+        </v-alert>
+        <div v-if="nbNbaGames">
+            <h5 class="mt-6 text-h5 text-center">
+                {{ nbNbaGames }} Matchs Scheduled
+            </h5>
+            <v-row v-if="!isNbaGamesLoading">
+                <v-col v-for="nbaGame in nbaGames" :key="nbaGame.id" class="col-6">
+                    <v-card class="px-2 text-center">
+                        <v-card-text>
+                            <v-row align="center">
+                                <v-col>
+                                    <img
+                                        v-if="nbaGame.localNbaTeam && nbaGame.localNbaTeam.logoFilePath"
+                                        :src="nbaGame.localNbaTeam.logoFilePath"
+                                        alt="Team Logo"
+                                        height="70"
+                                        width="70"
+                                    />
+                                    <h3>{{ nbaGame.localNbaTeam.fullName }}</h3>
+                                </v-col>
+                                <v-col>
+                                    <h2>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleTimeString('fr-Fr').substr(0, 5) : ''}}</h2>
+                                    <h5>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleDateString('fr-Fr') : ''}}</h5>
+                                </v-col>
+                                <v-col>
+                                    <img
+                                        v-if="nbaGame.visitorNbaTeam && nbaGame.visitorNbaTeam.logoFilePath"
+                                        :src="nbaGame.visitorNbaTeam.logoFilePath"
+                                        alt="Team Logo"
+                                        height="70"
+                                        width="70"
+                                    />
+                                    <h3>{{ nbaGame.visitorNbaTeam.fullName }}</h3>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <h5 class="mt-6 mb-2 text-h5 text-center">
+                Players of the Day
+            </h5>
+            <v-skeleton-loader
+                v-if="isNbaPlayersLoading"
+                type="card"
+            />
+            <list-filter
+                v-if="!isNbaPlayersLoading"
+                :initial-filters="filters"
+                :initial-available-filters="availableFilters"
+                :handle-filter="confirmFilters"
+                :handle-reset="resetFilter"
+                class="my-2"
+            />
+            <v-data-table
+                v-if="!isNbaPlayersLoading"
+                :headers="nbaPlayersDataTableHeaders"
+                :items="nbaPlayers"
+                :server-items-length="nbNbaPlayers"
+                :options.sync="dataTableOptions"
+                :loading="isNbaPlayersLoading"
+                :footer-props="{
+                    itemsPerPageOptions: [10, 30, 50, 100]
+                }"
+                fixed-header
+                class="elevation-10"
+            >
+                <template v-slot:item="{ item }">
+                    <tr>
+                        <td>
+                            <img
+                                v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
+                                :src="item.nbaTeam.logoFilePath"
+                                alt="Team Logo"
+                                height="50"
+                                width="50"
+                            />
+                        </td>
+                        <td colspan="2">
+                            <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.id } }" class="text-decoration-none text-body-1">
+                                {{ item.lastName }} {{ item.firstName }}
+                            </router-link>
+                            <br />
+                            <span class="text-caption">{{ (item.nbaTeam) ? item.nbaTeam.fullName : 'Free Agent' }}</span>
+                        </td>
+                        <td>
+                            <v-chip v-if="item.isInjured" color="red" dark>
+                                <v-icon>mdi-ambulance</v-icon>
+                            </v-chip>
+                        </td>
+                        <td>{{ item.averageFantasyPoints }}</td>
+                        <td>{{ item.pastYearFantasyPoints }}</td>
+                        <td>
+                            <v-img
+                                v-if="item.isAllowedInExoticLeague"
+                                :src="require('../../img/exotic-league-logo.jpg').default"
+                                alt="Exotic League"
+                                height="40"
+                                width="40"
+                            />
+                        </td>
+                    </tr>
+                </template>
+            </v-data-table>
+        </div>
     </v-container>
 </template>
 
@@ -150,10 +174,9 @@ export default class PicksOfTheDay extends Vue {
 
     get nbaPlayersDataTableHeaders (): DataTableHeaderInterface[] {
         return [
+            { text: 'Team', value: 'nbaTeam.fullName', sortable: false },
             { text: 'LastName', value: 'lastName' },
             { text: 'FirstName', value: 'firstName' },
-            { text: '', value: 'nbaTeam.logoFilePath' },
-            { text: 'Team', value: 'nbaTeam.fullName' },
             { text: 'Injured ?', value: 'isInjured' },
             { text: 'AVG Fantasy Points', value: 'averageFantasyPoints' },
             { text: 'Past Year Fantasy Points', value: 'pastYearFantasyPoints' },
@@ -231,7 +254,10 @@ export default class PicksOfTheDay extends Vue {
     async loadNbaGames (): Promise<void> {
         await nbaGameModule.findAll({
             'gameDay[after]': this.gameDay,
-            'gameDay[before]': this.gameDay
+            'gameDay[before]': this.gameDay,
+            order: {
+                scheduledAt: 'asc'
+            }
         })
     }
 
