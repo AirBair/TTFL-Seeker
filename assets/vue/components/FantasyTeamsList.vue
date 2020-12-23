@@ -24,17 +24,14 @@
                     {{ item.name }}
                 </router-link>
             </template>
-            <template v-slot:[`item.lastFantasyTeamRanking.fantasyRank`]="{ item }">
-                <span v-if="item.lastFantasyTeamRanking">
-                    {{ item.lastFantasyTeamRanking.fantasyRank }}
-                </span>
-                <span v-else>-</span>
-            </template>
-            <template v-slot:[`item.lastFantasyTeamRanking.fantasyPoints`]="{ item }">
-                <span v-if="item.lastFantasyTeamRanking">
-                    {{ item.lastFantasyTeamRanking.fantasyPoints }} pts
-                </span>
-                <span v-else>-</span>
+            <template v-slot:[`item.isExoticTeam`]="{ item }">
+                <v-img
+                    v-if="item.isExoticTeam"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    height="40"
+                    width="40"
+                />
             </template>
         </v-data-table>
     </v-container>
@@ -77,8 +74,9 @@ export default class FantasyTeamsList extends Vue {
     get dataTableHeaders (): DataTableHeaderInterface[] {
         return [
             { text: 'Name', value: 'name' },
-            { text: 'Fantasy Rank', value: 'lastFantasyTeamRanking.fantasyRank', sortable: false },
-            { text: 'Fantasy Points', value: 'lastFantasyTeamRanking.fantasyPoints', sortable: false }
+            { text: 'Exotic Team ?', value: 'isExoticTeam' },
+            { text: 'Fantasy Rank', value: 'fantasyRank' },
+            { text: 'Fantasy Points', value: 'fantasyPoints' }
         ]
     }
 

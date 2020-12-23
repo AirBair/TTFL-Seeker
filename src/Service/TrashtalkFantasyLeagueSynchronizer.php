@@ -88,7 +88,7 @@ class TrashtalkFantasyLeagueSynchronizer
             $dateAndPoints
         );
         $pickedAt = \DateTime::createFromFormat('d-m-Y', $dateAndPoints[1]);
-        $fantasyPoints = (int) $dateAndPoints[2];
+        $pickFantasyPoints = (int) $dateAndPoints[2];
 
         $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
             $this->nbaSeasonYear,
@@ -102,7 +102,7 @@ class TrashtalkFantasyLeagueSynchronizer
             ->setIsPlayoffs($this->isNbaPlayoffs)
             ->setFantasyUser($fantasyUser)
             ->setPickedAt($pickedAt)
-            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyPoints($pickFantasyPoints)
             ->setNbaPlayer($nbaPlayer);
 
         if (null === $fantasyPick->getId()) {
@@ -116,17 +116,24 @@ class TrashtalkFantasyLeagueSynchronizer
             (new \DateTime())
         ) ?? new FantasyUserRanking();
 
+        $fantasyPoints = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent;
+        $fantasyRank = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent;
+
         $fantasyUserRanking
             ->setSeason($this->nbaSeasonYear)
             ->setIsPlayoffs($this->isNbaPlayoffs)
             ->setFantasyUser($fantasyUser)
             ->setRankingAt(new \DateTime())
-            ->setFantasyPoints((int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent)
-            ->setFantasyRank((int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent);
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
 
         if (null === $fantasyUserRanking->getId()) {
             $this->entityManager->persist($fantasyUserRanking);
         }
+
+        $fantasyUser
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
     }
 
     public function synchronizeFantasyTeams(): int
@@ -153,16 +160,23 @@ class TrashtalkFantasyLeagueSynchronizer
             (new \DateTime())
         ) ?? new FantasyTeamRanking();
 
+        $fantasyPoints = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent;
+        $fantasyRank = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent;
+
         $fantasyTeamRanking
             ->setSeason((int) $_ENV['NBA_YEAR'])
             ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
             ->setFantasyTeam($fantasyTeam)
             ->setRankingAt(new \DateTime())
-            ->setFantasyPoints((int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent)
-            ->setFantasyRank((int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent);
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
 
         if (null === $fantasyTeamRanking->getId()) {
             $this->entityManager->persist($fantasyTeamRanking);
         }
+
+        $fantasyTeam
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
     }
 }

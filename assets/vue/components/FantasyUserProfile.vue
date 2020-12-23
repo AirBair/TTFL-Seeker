@@ -7,14 +7,22 @@
         <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ fantasyUser.username }}
+                <v-spacer />
+                <v-img
+                    v-if="fantasyUser.isExoticUser"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    max-height="40"
+                    max-width="40"
+                />
             </v-card-title>
             <v-card-subtitle>
                 <router-link v-if="fantasyUser.fantasyTeam" :to="{ name: 'fantasy_team_profile', params: { fantasyTeamId: fantasyUser.fantasyTeam.id } }" class="text-decoration-none">
                     {{ fantasyUser.fantasyTeam.name }}
                 </router-link>
                 <span v-else>Free Agent</span><br />
-                Fantasy Points: <strong>{{ (fantasyUser.lastFantasyUserRanking) ? fantasyUser.lastFantasyUserRanking.fantasyPoints : '-' }} pts</strong><br />
-                Fantasy Rank: <strong>{{ (fantasyUser.lastFantasyUserRanking) ? fantasyUser.lastFantasyUserRanking.fantasyRank : '-' }}</strong>
+                Fantasy Points: <strong>{{ fantasyUser.fantasyPoints }} pts</strong><br />
+                Fantasy Rank: <strong>{{ fantasyUser.fantasyRank }}</strong>
             </v-card-subtitle>
             <v-card-text>
                 <p class="text-center font-italic">Chart of points & ranking evolution coming soon !</p>
