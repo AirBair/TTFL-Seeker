@@ -49,6 +49,17 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
+        <v-list dense>
+            <v-list-item href="/admin">
+                <v-list-item-icon>
+                    <v-icon>mdi-lock</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>Administration</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+
     </v-navigation-drawer>
 </template>
 

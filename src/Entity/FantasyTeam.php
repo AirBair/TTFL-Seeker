@@ -6,7 +6,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -48,6 +50,36 @@ class FantasyTeam
     private $name;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
+     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $isExoticTeam;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $fantasyPoints;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $fantasyRank;
+
+    /**
      * @ORM\OneToMany(targetEntity=FantasyTeamRanking::class, mappedBy="fantasyTeam", orphanRemoval=true)
      * @ORM\OrderBy({"rankingAt": "ASC"})
      */
@@ -81,6 +113,42 @@ class FantasyTeam
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIsExoticTeam(): bool
+    {
+        return $this->isExoticTeam;
+    }
+
+    public function setIsExoticTeam(bool $isExoticTeam): self
+    {
+        $this->isExoticTeam = $isExoticTeam;
+
+        return $this;
+    }
+
+    public function getFantasyPoints(): ?int
+    {
+        return $this->fantasyPoints;
+    }
+
+    public function setFantasyPoints(int $fantasyPoints): self
+    {
+        $this->fantasyPoints = $fantasyPoints;
+
+        return $this;
+    }
+
+    public function getFantasyRank(): ?int
+    {
+        return $this->fantasyRank;
+    }
+
+    public function setFantasyRank(int $fantasyRank): self
+    {
+        $this->fantasyRank = $fantasyRank;
 
         return $this;
     }
@@ -143,13 +211,5 @@ class FantasyTeam
         }
 
         return $this;
-    }
-
-    /**
-     * @Groups({"fantasyTeam:read"})
-     */
-    public function getLastFantasyTeamRanking(): ?FantasyTeamRanking
-    {
-        return ($this->fantasyTeamRankings->count()) ? $this->fantasyTeamRankings->last() : null;
     }
 }

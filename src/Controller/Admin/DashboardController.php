@@ -43,6 +43,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
+            MenuItem::linktoRoute('Homepage', 'fa fa-home', 'index', ['vuejsRouting' => '']),
             MenuItem::section('NBA Data'),
             MenuItem::linkToCrud('NBA Teams', 'fa fa-bookmark', NbaTeam::class),
             MenuItem::linkToCrud('NBA Players', 'fa fa-users', NbaPlayer::class),

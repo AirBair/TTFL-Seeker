@@ -7,10 +7,18 @@
         <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ fantasyTeam.name }}
+                <v-spacer />
+                <v-img
+                    v-if="fantasyTeam.isExoticTeam"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    max-height="40"
+                    max-width="40"
+                />
             </v-card-title>
             <v-card-subtitle>
-                Fantasy Points: <strong>{{ (fantasyTeam.lastFantasyTeamRanking) ? fantasyTeam.lastFantasyTeamRanking.fantasyPoints : '-' }} pts</strong><br />
-                Fantasy Rank: <strong>{{ (fantasyTeam.lastFantasyTeamRanking) ? fantasyTeam.lastFantasyTeamRanking.fantasyRank : '-' }}</strong>
+                Fantasy Points: <strong>{{ fantasyTeam.fantasyPoints }} pts</strong><br />
+                Fantasy Rank: <strong>{{ fantasyTeam.fantasyRank }}</strong>
             </v-card-subtitle>
             <v-card-text>
                 <p class="text-center font-italic">Chart of points & ranking evolution coming soon !</p>
@@ -36,18 +44,6 @@
                         <router-link :to="{ name: 'fantasy_user_profile', params: { fantasyUserId: item.id } }" class="text-decoration-none">
                             {{ item.username }}
                         </router-link>
-                    </template>
-                    <template v-slot:[`item.lastFantasyUserRanking.fantasyRank`]="{ item }">
-                        <span v-if="item.lastFantasyUserRanking">
-                            {{ item.lastFantasyUserRanking.fantasyRank }}
-                        </span>
-                        <span v-else>-</span>
-                    </template>
-                    <template v-slot:[`item.lastFantasyUserRanking.fantasyPoints`]="{ item }">
-                        <span v-if="item.lastFantasyUserRanking">
-                            {{ item.lastFantasyUserRanking.fantasyPoints }} pts
-                        </span>
-                        <span v-else>-</span>
                     </template>
                     <template v-slot:[`item.lastFantasyPick`]="{ item }">
                         <span v-if="item.lastFantasyPick && item.lastFantasyPick.nbaPlayer">
@@ -89,8 +85,8 @@ export default class FantasyTeamProfile extends Vue {
         return [
             { text: 'Username', value: 'username' },
             { text: 'Fantasy Team', value: 'fantasyTeam.name' },
-            { text: 'Fantasy Rank', value: 'lastFantasyUserRanking.fantasyRank', sortable: false },
-            { text: 'Fantasy Points', value: 'lastFantasyUserRanking.fantasyPoints', sortable: false },
+            { text: 'Fantasy Rank', value: 'fantasyRank' },
+            { text: 'Fantasy Points', value: 'fantasyPoints' },
             { text: 'Last Pick', value: 'lastFantasyPick', sortable: false }
         ]
     }

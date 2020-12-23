@@ -29,17 +29,14 @@
                     {{ item.fantasyTeam.name }}
                 </router-link>
             </template>
-            <template v-slot:[`item.lastFantasyUserRanking.fantasyRank`]="{ item }">
-                <span v-if="item.lastFantasyUserRanking">
-                    {{ item.lastFantasyUserRanking.fantasyRank }}
-                </span>
-                <span v-else>-</span>
-            </template>
-            <template v-slot:[`item.lastFantasyUserRanking.fantasyPoints`]="{ item }">
-                <span v-if="item.lastFantasyUserRanking">
-                    {{ item.lastFantasyUserRanking.fantasyPoints }} pts
-                </span>
-                <span v-else>-</span>
+            <template v-slot:[`item.isExoticUser`]="{ item }">
+                <v-img
+                    v-if="item.isExoticUser"
+                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    alt="Exotic League"
+                    height="40"
+                    width="40"
+                />
             </template>
             <template v-slot:[`item.lastFantasyPick`]="{ item }">
                 <span v-if="item.lastFantasyPick && item.lastFantasyPick.nbaPlayer">
@@ -92,8 +89,9 @@ export default class FantasyUsersList extends Vue {
         return [
             { text: 'Username', value: 'username' },
             { text: 'Fantasy Team', value: 'fantasyTeam.name' },
-            { text: 'Fantasy Rank', value: 'lastFantasyUserRanking.fantasyRank', sortable: false },
-            { text: 'Fantasy Points', value: 'lastFantasyUserRanking.fantasyPoints', sortable: false },
+            { text: 'Exotic User ?', value: 'isExoticUser' },
+            { text: 'Fantasy Rank', value: 'fantasyRank' },
+            { text: 'Fantasy Points', value: 'fantasyPoints' },
             { text: 'Last Pick', value: 'lastFantasyPick', sortable: false }
         ]
     }

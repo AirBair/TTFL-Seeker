@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
@@ -48,6 +49,9 @@ class FantasyUserCrudController extends AbstractCrudController
             TextField::new('username'),
             IntegerField::new('ttflId'),
             AssociationField::new('fantasyTeam'),
+            BooleanField::new('isExoticUser')->renderAsSwitch(true),
+            IntegerField::new('fantasyRank'),
+            IntegerField::new('fantasyPoints'),
             ArrayField::new('roles'),
             DateTimeField::new('registeredAt')->hideOnForm(),
             DateTimeField::new('lastLoginAt')->onlyOnDetail(),

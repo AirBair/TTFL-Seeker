@@ -6,7 +6,9 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\FantasyUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -72,6 +74,16 @@ class FantasyUser implements UserInterface
     private $fantasyTeam;
 
     /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(BooleanFilter::class)
+     *
+     * @Groups({"fantasyUser:read"})
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $isExoticUser;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -85,6 +97,26 @@ class FantasyUser implements UserInterface
      * Plain password used before encryption. Not persisted in database.
      */
     private $plainPassword;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyUser:read"})
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $fantasyPoints;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(RangeFilter::class)
+     *
+     * @Groups({"fantasyUser:read"})
+     *
+     * @ORM\Column(type="integer")
+     */
+    private $fantasyRank;
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
@@ -160,6 +192,18 @@ class FantasyUser implements UserInterface
         return $this;
     }
 
+    public function getIsExoticUser(): bool
+    {
+        return $this->isExoticUser;
+    }
+
+    public function setIsExoticUser(bool $isExoticUser): self
+    {
+        $this->isExoticUser = $isExoticUser;
+
+        return $this;
+    }
+
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -195,6 +239,30 @@ class FantasyUser implements UserInterface
     public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getFantasyPoints(): ?int
+    {
+        return $this->fantasyPoints;
+    }
+
+    public function setFantasyPoints(int $fantasyPoints): self
+    {
+        $this->fantasyPoints = $fantasyPoints;
+
+        return $this;
+    }
+
+    public function getFantasyRank(): ?int
+    {
+        return $this->fantasyRank;
+    }
+
+    public function setFantasyRank(int $fantasyRank): self
+    {
+        $this->fantasyRank = $fantasyRank;
 
         return $this;
     }
@@ -299,13 +367,5 @@ class FantasyUser implements UserInterface
     public function getLastFantasyPick(): ?FantasyPick
     {
         return ($this->fantasyPicks->count()) ? $this->fantasyPicks->last() : null;
-    }
-
-    /**
-     * @Groups({"fantasyUser:read"})
-     */
-    public function getLastFantasyUserRanking(): ?FantasyUserRanking
-    {
-        return ($this->fantasyUserRankings->count()) ? $this->fantasyUserRankings->last() : null;
     }
 }
