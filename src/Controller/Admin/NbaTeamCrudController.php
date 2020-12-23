@@ -41,6 +41,7 @@ class NbaTeamCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->setMaxLength(-1)->setFormTypeOption('disabled', true),
+            TextField::new('fullName'),
             TextField::new('city')->setFormTypeOption('disabled', true),
             TextField::new('nickname')->setFormTypeOption('disabled', true),
             TextField::new('tricode')->setFormTypeOption('disabled', true),

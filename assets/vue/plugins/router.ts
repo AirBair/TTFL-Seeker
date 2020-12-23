@@ -13,7 +13,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     mode: 'history',
     routes: [{
-        path: '*', redirect: '/nba-players/list'
+        path: '*', redirect: '/picks-of-the-day'
     }, {
         path: '/nba-players/list',
         name: 'nba_players_list',
