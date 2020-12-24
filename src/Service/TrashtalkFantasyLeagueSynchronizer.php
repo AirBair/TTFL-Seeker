@@ -204,7 +204,7 @@ class TrashtalkFantasyLeagueSynchronizer
         $fantasyRank = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(1)')->getNode(0)->textContent;
         $fantasyPoints = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(3)')->getNode(0)->textContent;
         preg_match(
-            '/(.*) \((\d+) pts\)/',
+            '/(.*) \((.*) pts\)/',
             trim($crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(5)')->getNode(0)->textContent),
             $pick
         );
@@ -259,7 +259,7 @@ class TrashtalkFantasyLeagueSynchronizer
             ->setFantasyPoints($fantasyPoints)
             ->setFantasyRank($fantasyRank);
 
-        if ($pickName && $pickFantasyPoints) {
+        if (null !== $pickName && null !== $pickFantasyPoints) {
             $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
                 'fullName' => $pickName,
             ]);
