@@ -12,6 +12,7 @@ use App\Entity\FantasyUserRanking;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaTeam;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
@@ -29,6 +30,11 @@ class TrashtalkFantasyLeagueSynchronizer
     private $entityManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var int
      */
     private $nbaSeasonYear;
@@ -38,11 +44,12 @@ class TrashtalkFantasyLeagueSynchronizer
      */
     private $isNbaPlayoffs;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $synchronizationLogger)
     {
         $this->entityManager = $entityManager;
         $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
+        $this->logger = $synchronizationLogger;
     }
 
     public function getHttpBrowser(): HttpBrowser
@@ -61,13 +68,17 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyUsers(): int
     {
-        $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findAll();
+        $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findBy([
+            'fantasyTeam' => null,
+        ]);
 
         foreach ($fantasyUsers as $fantasyUser) {
             $this->synchronizeFantasyUserRankingAndPick($fantasyUser);
         }
 
         $this->entityManager->flush();
+
+        $this->logger->info(\count($fantasyUsers).' Fantasy Users (Free Agent) have been synchronized.');
 
         return \count($fantasyUsers);
     }
@@ -147,6 +158,8 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $this->entityManager->flush();
 
+        $this->logger->info(\count($fantasyTeams).' Fantasy Teams have been synchronized.');
+
         return \count($fantasyTeams);
     }
 
@@ -191,7 +204,7 @@ class TrashtalkFantasyLeagueSynchronizer
         $fantasyRank = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(1)')->getNode(0)->textContent;
         $fantasyPoints = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(3)')->getNode(0)->textContent;
         preg_match(
-            '/([a-zA-Z\s\-]+) \((\d+) pts\)/',
+            '/(.*) \((\d+) pts\)/',
             trim($crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(5)')->getNode(0)->textContent),
             $pick
         );
@@ -252,6 +265,8 @@ class TrashtalkFantasyLeagueSynchronizer
             ]);
 
             if (null === $nbaPlayer) {
+                $this->logger->info('Nba Player "'.$pickName.'" cannot be found for Fantasy User "'.$fantasyUser->getUsername().'"');
+
                 return;
             }
 

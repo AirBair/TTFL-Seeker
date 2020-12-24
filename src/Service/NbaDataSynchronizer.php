@@ -158,6 +158,10 @@ class NbaDataSynchronizer
     {
         $nbaDataBoxscore = $this->nbaDataProvider->gameBoxScore($nbaGame->getGameDay(), $nbaGame->getId());
 
+        if (!isset($nbaDataBoxscore['hTeam']) || !isset($nbaDataBoxscore['vTeam'])) {
+            return 0;
+        }
+
         $nbaGame
             ->setLocalScore((int) $nbaDataBoxscore['hTeam']['totals']['points'])
             ->setVisitorScore((int) $nbaDataBoxscore['vTeam']['totals']['points']);
