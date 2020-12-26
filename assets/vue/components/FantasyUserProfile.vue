@@ -7,6 +7,10 @@
         <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ fantasyUser.username }}
+                &nbsp;
+                <a :href="'https://fantasy.trashtalk.co/?tpl=halloffame&ttpl='+fantasyUser.ttflId" target="_blank">
+                    <v-icon>mdi-open-in-new</v-icon>
+                </a>
                 <v-spacer />
                 <v-img
                     v-if="fantasyUser.isExoticUser"
