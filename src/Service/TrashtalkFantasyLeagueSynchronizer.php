@@ -269,31 +269,34 @@ class TrashtalkFantasyLeagueSynchronizer
 
                 return;
             }
+        } else {
+            $nbaPlayer = null;
+        }
 
-            $fantasyPick = null;
-            if ($fantasyUser->getId()) {
-                $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
-                    $this->nbaSeasonYear,
-                    $this->isNbaPlayoffs,
-                    $fantasyUser,
-                    $pickedAt
-                );
-            }
-            if (null === $fantasyPick) {
-                $fantasyPick = new FantasyPick();
-            }
+        $fantasyPick = null;
+        if ($fantasyUser->getId()) {
+            $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
+                $this->nbaSeasonYear,
+                $this->isNbaPlayoffs,
+                $fantasyUser,
+                $pickedAt
+            );
+        }
+        if (null === $fantasyPick) {
+            $fantasyPick = new FantasyPick();
+        }
 
-            $fantasyPick
-                ->setSeason($this->nbaSeasonYear)
-                ->setIsPlayoffs($this->isNbaPlayoffs)
-                ->setFantasyUser($fantasyUser)
-                ->setPickedAt($pickedAt)
-                ->setFantasyPoints($pickFantasyPoints)
-                ->setNbaPlayer($nbaPlayer);
+        $fantasyPick
+            ->setSeason($this->nbaSeasonYear)
+            ->setIsPlayoffs($this->isNbaPlayoffs)
+            ->setFantasyUser($fantasyUser)
+            ->setPickedAt($pickedAt)
+            ->setFantasyPoints($pickFantasyPoints ?? 0)
+            ->setNbaPlayer($nbaPlayer)
+            ->setIsNoPick(null === $nbaPlayer);
 
-            if (null === $fantasyPick->getId()) {
-                $this->entityManager->persist($fantasyPick);
-            }
+        if (null === $fantasyPick->getId()) {
+            $this->entityManager->persist($fantasyPick);
         }
     }
 }

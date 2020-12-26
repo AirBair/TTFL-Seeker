@@ -91,9 +91,19 @@ class FantasyPick
      * @Groups({"fantasyPick:read", "fantasyUser:read"})
      *
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $nbaPlayer;
+
+    /**
+     * @ApiFilter(OrderFilter::class)
+     * @ApiFilter(SearchFilter::class, strategy="exact")
+     *
+     * @Groups({"fantasyPick:read", "fantasyUser:read"})
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $isNoPick;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -118,6 +128,7 @@ class FantasyPick
     {
         $this->season = (int) $_ENV['NBA_YEAR'];
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
+        $this->isNoPick = false;
     }
 
     public function __toString(): string
@@ -186,6 +197,18 @@ class FantasyPick
     public function setNbaPlayer(?NbaPlayer $nbaPlayer): self
     {
         $this->nbaPlayer = $nbaPlayer;
+
+        return $this;
+    }
+
+    public function getIsNoPick(): bool
+    {
+        return $this->isNoPick;
+    }
+
+    public function setIsNoPick(bool $isNoPick): self
+    {
+        $this->isNoPick = $isNoPick;
 
         return $this;
     }

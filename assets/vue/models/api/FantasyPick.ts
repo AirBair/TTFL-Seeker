@@ -8,5 +8,6 @@ export default class FantasyPick extends AbstractResource {
     pickedAt?: string
     fantasyUser?: FantasyUser
     nbaPlayer?: NbaPlayer
+    isNoPick?: boolean
     fantasyPoints?: number
 }

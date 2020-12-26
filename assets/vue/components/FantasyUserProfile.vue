@@ -48,9 +48,12 @@
                         {{ new Date(item.pickedAt).toLocaleDateString() }}
                     </template>
                     <template v-slot:[`item.nbaPlayer`]="{ item }">
-                        <router-link :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.nbaPlayer.id } }" class="text-decoration-none">
+                        <router-link v-if="item.nbaPlayer" :to="{ name: 'nba_player_profile', params: { nbaPlayerId: item.nbaPlayer.id } }" class="text-decoration-none">
                             {{ item.nbaPlayer.fullName }}
                         </router-link>
+                    </template>
+                    <template v-slot:[`item.isNoPick`]="{ item }">
+                        <v-icon v-if="item.isNoPick">mdi-alert-circle</v-icon>
                     </template>
                 </v-data-table>
             </v-card-text>
@@ -83,7 +86,8 @@ export default class FantasyUserProfile extends Vue {
         return [
             { text: 'Picked At', value: 'pickedAt' },
             { text: 'Nba Player', value: 'nbaPlayer' },
-            { text: 'Fantasy Points', value: 'fantasyPoints' }
+            { text: 'Fantasy Points', value: 'fantasyPoints' },
+            { text: 'No Pick ?', value: 'isNoPick' }
         ]
     }
 
