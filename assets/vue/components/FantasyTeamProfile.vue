@@ -7,6 +7,10 @@
         <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ fantasyTeam.name }}
+                &nbsp;
+                <a :href="'https://fantasy.trashtalk.co/?tpl=equipe&team='+fantasyTeam.name" target="_blank">
+                    <v-icon>mdi-open-in-new</v-icon>
+                </a>
                 <v-spacer />
                 <v-img
                     v-if="fantasyTeam.isExoticTeam"

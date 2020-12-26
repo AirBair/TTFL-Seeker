@@ -35,6 +35,7 @@ class FantasyPickCrudController extends AbstractCrudController
             AssociationField::new('fantasyUser'),
             AssociationField::new('nbaPlayer'),
             IntegerField::new('fantasyPoints'),
+            BooleanField::new('isNoPick')->renderAsSwitch(false),
             DateTimeField::new('updatedAt')->hideOnForm(),
         ];
     }

@@ -12,7 +12,9 @@ use App\Entity\FantasyUserRanking;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaTeam;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\BrowserKit\HttpBrowser;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
 class TrashtalkFantasyLeagueSynchronizer
@@ -28,6 +30,11 @@ class TrashtalkFantasyLeagueSynchronizer
     private $entityManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var int
      */
     private $nbaSeasonYear;
@@ -37,11 +44,12 @@ class TrashtalkFantasyLeagueSynchronizer
      */
     private $isNbaPlayoffs;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $synchronizationLogger)
     {
         $this->entityManager = $entityManager;
         $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
+        $this->logger = $synchronizationLogger;
     }
 
     public function getHttpBrowser(): HttpBrowser
@@ -60,13 +68,17 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyUsers(): int
     {
-        $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findAll();
+        $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findBy([
+            'fantasyTeam' => null,
+        ]);
 
         foreach ($fantasyUsers as $fantasyUser) {
             $this->synchronizeFantasyUserRankingAndPick($fantasyUser);
         }
 
         $this->entityManager->flush();
+
+        $this->logger->info(\count($fantasyUsers).' Fantasy Users (Free Agent) have been synchronized.');
 
         return \count($fantasyUsers);
     }
@@ -146,6 +158,8 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $this->entityManager->flush();
 
+        $this->logger->info(\count($fantasyTeams).' Fantasy Teams have been synchronized.');
+
         return \count($fantasyTeams);
     }
 
@@ -178,5 +192,111 @@ class TrashtalkFantasyLeagueSynchronizer
         $fantasyTeam
             ->setFantasyPoints($fantasyPoints)
             ->setFantasyRank($fantasyRank);
+
+        for ($playerIndex = 1; $playerIndex <= $this->browser->getCrawler()->filter('#decks tbody tr')->count(); ++$playerIndex) {
+            $this->synchronizeFantasyTeamUserRanking($this->browser->getCrawler(), $playerIndex, $fantasyTeam);
+        }
+    }
+
+    public function synchronizeFantasyTeamUserRanking(Crawler $crawler, int $playerIndex, FantasyTeam $fantasyTeam): void
+    {
+        $username = $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->getNode(0)->textContent;
+        $fantasyRank = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(1)')->getNode(0)->textContent;
+        $fantasyPoints = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(3)')->getNode(0)->textContent;
+        preg_match(
+            '/(.*) \((.*) pts\)/',
+            trim($crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(5)')->getNode(0)->textContent),
+            $pick
+        );
+        $pickName = isset($pick[1]) ? trim($pick[1]) : null;
+        $pickFantasyPoints = isset($pick[2]) ? (int) $pick[2] : null;
+        $pickedAt = new \DateTime('yesterday');
+
+        $fantasyUser = $this->entityManager->getRepository(FantasyUser::class)->findOneBy([
+            'username' => $username,
+        ]);
+        if (null === $fantasyUser) {
+            $ttflId = (int) str_replace(
+                '/?tpl=halloffame&ttpl=',
+                '',
+                $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->attr('href')
+            );
+            $fantasyUser = (new FantasyUser())
+                ->setUsername($username)
+                ->setTtflId($ttflId)
+                ->setFantasyTeam($fantasyTeam)
+                ->setIsExoticUser($fantasyTeam->getIsExoticTeam());
+
+            $this->entityManager->persist($fantasyUser);
+        }
+
+        $fantasyUserRanking = null;
+        if ($fantasyUser->getId()) {
+            $fantasyUserRanking = $this->entityManager->getRepository(FantasyUserRanking::class)->findUniqueByDate(
+                $this->nbaSeasonYear,
+                $this->isNbaPlayoffs,
+                $fantasyUser,
+                (new \DateTime())
+            );
+        }
+        if (null === $fantasyUserRanking) {
+            $fantasyUserRanking = new FantasyUserRanking();
+        }
+
+        $fantasyUserRanking
+            ->setSeason($this->nbaSeasonYear)
+            ->setIsPlayoffs($this->isNbaPlayoffs)
+            ->setFantasyUser($fantasyUser)
+            ->setRankingAt(new \DateTime())
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
+
+        if (null === $fantasyUserRanking->getId()) {
+            $this->entityManager->persist($fantasyUserRanking);
+        }
+
+        $fantasyUser
+            ->setFantasyPoints($fantasyPoints)
+            ->setFantasyRank($fantasyRank);
+
+        if (null !== $pickName && null !== $pickFantasyPoints) {
+            $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
+                'fullName' => $pickName,
+            ]);
+
+            if (null === $nbaPlayer) {
+                $this->logger->info('Nba Player "'.$pickName.'" cannot be found for Fantasy User "'.$fantasyUser->getUsername().'"');
+
+                return;
+            }
+        } else {
+            $nbaPlayer = null;
+        }
+
+        $fantasyPick = null;
+        if ($fantasyUser->getId()) {
+            $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
+                $this->nbaSeasonYear,
+                $this->isNbaPlayoffs,
+                $fantasyUser,
+                $pickedAt
+            );
+        }
+        if (null === $fantasyPick) {
+            $fantasyPick = new FantasyPick();
+        }
+
+        $fantasyPick
+            ->setSeason($this->nbaSeasonYear)
+            ->setIsPlayoffs($this->isNbaPlayoffs)
+            ->setFantasyUser($fantasyUser)
+            ->setPickedAt($pickedAt)
+            ->setFantasyPoints($pickFantasyPoints ?? 0)
+            ->setNbaPlayer($nbaPlayer)
+            ->setIsNoPick(null === $nbaPlayer);
+
+        if (null === $fantasyPick->getId()) {
+            $this->entityManager->persist($fantasyPick);
+        }
     }
 }

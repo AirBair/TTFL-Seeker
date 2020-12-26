@@ -7,6 +7,10 @@
         <v-card class="elevation-10" v-if="!isLoading">
             <v-card-title>
                 {{ nbaPlayer.fullName }}
+                &nbsp;
+                <a :href="'https://www.nba.com/player/'+nbaPlayer.id" target="_blank">
+                    <v-icon>mdi-open-in-new</v-icon>
+                </a>
                 <v-spacer />
                 <v-img
                     v-if="nbaPlayer.isAllowedInExoticLeague"
