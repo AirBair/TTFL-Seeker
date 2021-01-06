@@ -6,7 +6,7 @@
         "@types/qs": "^6.9.5",
         "@typescript-eslint/eslint-plugin": "^4.8.2",
         "@typescript-eslint/parser": "^4.8.2",
-        "axios": "^0.21.0",
+        "axios": "^0.21.1",
         "core-js": "^3.0.0",
         "eslint": "^7.14.0",
         "eslint-config-standard": "^16.0.2",
