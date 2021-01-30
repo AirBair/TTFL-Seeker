@@ -1,7 +1,7 @@
 {
     "devDependencies": {
         "@mdi/font": "^5.8.55",
-        "@symfony/webpack-encore": "^0.33.0",
+        "@symfony/webpack-encore": "^1.0.2",
         "@types/lodash": "^4.14.165",
         "@types/qs": "^6.9.5",
         "@typescript-eslint/eslint-plugin": "^4.8.2",
@@ -13,7 +13,6 @@
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^4.2.1",
-        "eslint-plugin-standard": "^5.0.0",
         "eslint-plugin-vue": "^7.1.0",
         "lodash": "^4.17.20",
         "qs": "^6.9.4",
