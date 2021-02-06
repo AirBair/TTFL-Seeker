@@ -14,7 +14,7 @@
                 <v-spacer />
                 <v-img
                     v-if="fantasyUser.isExoticUser"
-                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    :src="require('../../img/exotic-league-logo.jpg')"
                     alt="Exotic League"
                     max-height="40"
                     max-width="40"
