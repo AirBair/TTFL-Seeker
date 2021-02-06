@@ -1,14 +1,32 @@
 <template>
     <v-container fluid>
-        <v-card class="pb-n2">
+        <v-card class="pb-n2 sticky-card">
             <v-card-text>
                 <v-row no-gutters>
-                    <v-col class="col-2 offset-5 text-center mb-n6">
+                    <v-col class="col-6 text-center mb-n6 px-2">
                         <date-picker-input
                             label="Game Day"
                             :date.sync="gameDay"
                             :dense="true"
                             :outlined="true"
+                        />
+                    </v-col>
+                    <v-col class="col-6 text-center mb-n6 px-2">
+                        <v-autocomplete
+                            label="Show Availability for Fantasy User"
+                            hint="Start Typing to search"
+                            v-model="fantasyUser"
+                            :items="fantasyUsers"
+                            :loading="isFantasyUsersLoading"
+                            :search-input.sync="fantasyUserSearch"
+                            item-text="username"
+                            item-value="@id"
+                            return-object
+                            hide-no-data
+                            hide-selected
+                            dense
+                            outlined
+                            clearable
                         />
                     </v-col>
                 </v-row>
@@ -95,7 +113,7 @@
                 class="elevation-10"
             >
                 <template v-slot:item="{ item }">
-                    <tr>
+                    <tr :class="isPlayerLock(item) ? 'red lighten-3' : ''">
                         <td>
                             <img
                                 v-if="item.nbaTeam && item.nbaTeam.logoFilePath"
@@ -135,20 +153,31 @@
     </v-container>
 </template>
 
+<style scoped>
+.sticky-card {
+    position: sticky;
+    top: 70px;
+    z-index: 10;
+}
+</style>
+
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
-import { nbaGameModule, nbaPlayerModule } from '../helpers/store-accessor'
+import { fantasyPickModule, fantasyUserModule, nbaGameModule, nbaPlayerModule } from '../helpers/store-accessor'
 import NbaGame from '../models/api/NbaGame'
 import DataTableHeaderInterface from '../models/DataTableHeaderInterface'
 import NbaPlayer, { nbaPlayerAvailableFilters, NbaPlayerFiltersParams } from '../models/api/NbaPlayer'
 import DataTableOptionsInterface from '../models/DataTableOptionsInterface'
 import { Location } from 'vue-router/types/router'
 import * as QueryString from 'qs'
-import { forEach, forOwn, isString } from 'lodash'
+import { cloneDeep, forEach, forOwn, isString } from 'lodash'
 import { ResourceCollectionFilter } from '../models/api/ResourceCollection'
 import ListFilter from './snippets/ListFilter.vue'
 import DatePickerInput from './snippets/DatePickerInput.vue'
+import FantasyUser from '../models/api/FantasyUser'
+import * as moment from 'moment'
+import FantasyPick from '../models/api/FantasyPick'
 
 @Component({
     components: {
@@ -163,6 +192,9 @@ export default class PicksOfTheDay extends Vue {
     @Prop({ type: String, default: 'desc' }) readonly sortOrder!: string
 
     gameDay: string = new Date().toISOString().substr(0, 10)
+    fantasyUser: FantasyUser | null = null
+    fantasyUserSearch: string | null = null
+    lockedFantasyPicks: FantasyPick[] = []
     filters = new NbaPlayerFiltersParams()
     availableFilters = nbaPlayerAvailableFilters
     dataTableOptions: DataTableOptionsInterface = {
@@ -222,6 +254,14 @@ export default class PicksOfTheDay extends Vue {
         return nbaPlayerModule.items
     }
 
+    get fantasyUsers (): FantasyUser[] {
+        return fantasyUserModule.items
+    }
+
+    get isFantasyUsersLoading (): boolean {
+        return fantasyUserModule.isLoading
+    }
+
     async created (): Promise<void> {
         await this.loadNbaGames()
         await this.loadNbaPlayers()
@@ -231,6 +271,22 @@ export default class PicksOfTheDay extends Vue {
     async onGameDayChange (): Promise<void> {
         await this.loadNbaGames()
         await this.loadNbaPlayers()
+        await this.loadLockedFantasyPicks()
+    }
+
+    @Watch('fantasyUserSearch', { deep: true })
+    onFantasyUserSearchChange (): void {
+        if (this.fantasyUser?.username !== this.fantasyUserSearch && this.fantasyUserSearch != null) {
+            fantasyUserModule.findAll({
+                username: this.fantasyUserSearch,
+                order: { username: 'asc' }
+            })
+        }
+    }
+
+    @Watch('fantasyUser', { deep: true })
+    async onFantasyUserChange (): Promise<void> {
+        await this.loadLockedFantasyPicks()
     }
 
     @Watch('dataTableOptions', { deep: true })
@@ -271,6 +327,25 @@ export default class PicksOfTheDay extends Vue {
         } else {
             nbaPlayerModule.clearItems()
         }
+    }
+
+    async loadLockedFantasyPicks (): Promise<void> {
+        this.lockedFantasyPicks = []
+        if (this.fantasyUser) {
+            const fantasyPicks = await fantasyPickModule.findAll({
+                fantasyUser: this.fantasyUser?.['@id'],
+                'pickedAt[strictly_after]': moment(this.gameDay, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD')
+            })
+            if (fantasyPicks) {
+                this.lockedFantasyPicks = cloneDeep(fantasyPicks['hydra:member'])
+            }
+        }
+    }
+
+    isPlayerLock (nbaPlayer: NbaPlayer): boolean {
+        return (this.lockedFantasyPicks.find(
+            item => item.nbaPlayer && item.nbaPlayer['@id'] === nbaPlayer['@id']
+        ) !== undefined)
     }
 
     initFilters (): void {
