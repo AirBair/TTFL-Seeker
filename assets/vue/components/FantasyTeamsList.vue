@@ -27,7 +27,7 @@
             <template v-slot:[`item.isExoticTeam`]="{ item }">
                 <v-img
                     v-if="item.isExoticTeam"
-                    :src="require('../../img/exotic-league-logo.jpg').default"
+                    :src="require('../../img/exotic-league-logo.jpg')"
                     alt="Exotic League"
                     height="40"
                     width="40"
