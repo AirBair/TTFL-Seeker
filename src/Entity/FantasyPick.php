@@ -71,6 +71,7 @@ class FantasyPick
      * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
      * @ApiFilter(SearchFilter::class, properties={
      *     "fantasyUser": "exact",
+     *     "fantasyUser.fantasyTeam": "exact",
      *     "fantasyUser.username": "partial",
      * })
      *
