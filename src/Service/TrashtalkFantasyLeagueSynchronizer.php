@@ -165,7 +165,7 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyTeamRanking(FantasyTeam $fantasyTeam): void
     {
-        $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=equipe&team='.$fantasyTeam->getName());
+        $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=equipe&team='.urlencode($fantasyTeam->getName()));
 
         $fantasyTeamRanking = $this->entityManager->getRepository(FantasyTeamRanking::class)->findUniqueByDate(
             $this->nbaSeasonYear,
