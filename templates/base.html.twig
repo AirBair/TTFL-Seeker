@@ -13,6 +13,10 @@
         <div id="app"></div>
     {% endblock %}
     {% block javascripts %}
+        <script>
+            window.nbaYear = {{ nbaYear }}
+            window.isNbaPlayoffs = {{ isNbaPlayoffs ? 'true' : 'false' }}
+        </script>
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
     </body>

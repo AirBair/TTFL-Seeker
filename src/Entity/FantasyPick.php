@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
@@ -49,7 +50,7 @@ class FantasyPick
 
     /**
      * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
+     * @ApiFilter(BooleanFilter::class)
      *
      * @Groups({"fantasyPick:read"})
      *

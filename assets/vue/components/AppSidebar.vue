@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app :mini-variant="!isOpenSidebarDrawer" dark>
+    <v-navigation-drawer app v-model="isOpenSidebarDrawer" dark style="z-index: 100">
         <v-list>
             <v-list-item>
                 <v-list-item-content>
@@ -59,7 +59,12 @@
                 </v-list-item-content>
             </v-list-item>
         </v-list>
-
+        <template v-slot:append>
+            <p class="text-center overline amber--text">NBA API Year: {{ nbaYear }}</p>
+            <div class="py-2 grey lighten-3" v-if="isNbaPlayoffs">
+                <v-img :src="require('../../img/logo-nba-playoffs.png')" />
+            </div>
+        </template>
     </v-navigation-drawer>
 </template>
 
@@ -76,6 +81,18 @@ export default class AppSidebar extends Vue {
 
     get isOpenSidebarDrawer (): boolean {
         return appModule.isOpenSidebarDrawer
+    }
+
+    set isOpenSidebarDrawer (isOpenSidebarDrawer: boolean) {
+        appModule.setIsOpenSidebarDrawer(isOpenSidebarDrawer)
+    }
+
+    get nbaYear (): number {
+        return appModule.nbaYear
+    }
+
+    get isNbaPlayoffs (): boolean {
+        return appModule.isNbaPlayoffs
     }
 }
 </script>
