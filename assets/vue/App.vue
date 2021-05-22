@@ -14,6 +14,7 @@ import { Component } from 'vue-property-decorator'
 import AppNavbar from './components/AppNavbar.vue'
 import AppSidebar from './components/AppSidebar.vue'
 import NbaPlayersList from './components/NbaPlayersList.vue'
+import { appModule } from './helpers/store-accessor'
 
 @Component({
     components: {
@@ -23,5 +24,9 @@ import NbaPlayersList from './components/NbaPlayersList.vue'
     }
 })
 export default class App extends Vue {
+    created (): void {
+        appModule.setNbaYear(window.nbaYear)
+        appModule.setIsNbaPlayoff(window.isNbaPlayoffs)
+    }
 }
 </script>

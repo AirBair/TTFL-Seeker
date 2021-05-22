@@ -15,6 +15,9 @@ class AppController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('base.html.twig');
+        return $this->render('base.html.twig', [
+            'nbaYear' => $_ENV['NBA_YEAR'],
+            'isNbaPlayoffs' => $_ENV['NBA_PLAYOFFS'],
+        ]);
     }
 }

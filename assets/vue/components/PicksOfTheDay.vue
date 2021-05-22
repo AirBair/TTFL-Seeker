@@ -168,7 +168,7 @@
                             <span v-if="fantasyTeam">
                                 {{ nbAvailableInTeam(item) }}
                             </span>
-                            <span v-else-if="fantasyUser">
+                            <span v-else-if="fantasyUser && !isNbaPlayoffs">
                                 {{ nbDaysLockedForUser(item) }}
                             </span>
                         </td>
@@ -191,6 +191,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import {
+    appModule,
     fantasyPickModule,
     fantasyTeamModule,
     fantasyUserModule,
@@ -253,6 +254,10 @@ export default class PicksOfTheDay extends Vue {
         ]
     }
 
+    get isNbaPlayoffs (): boolean {
+        return appModule.isNbaPlayoffs
+    }
+
     get isNbaGamesLoading (): boolean {
         return nbaGameModule.isLoading
     }
@@ -311,7 +316,7 @@ export default class PicksOfTheDay extends Vue {
         let extraLabel = ''
         if (this.fantasyTeam) {
             extraLabel = 'Available for ' + this.fantasyTeam.name
-        } else if (this.fantasyUser) {
+        } else if (this.fantasyUser && !this.isNbaPlayoffs) {
             extraLabel = 'Days left for ' + this.fantasyUser.username
         }
 
@@ -406,7 +411,11 @@ export default class PicksOfTheDay extends Vue {
         if (this.fantasyTeam) {
             const fantasyPicks = await fantasyPickModule.findAll({
                 'fantasyUser.fantasyTeam': this.fantasyTeam?.['@id'],
-                'pickedAt[strictly_after]': moment(this.gameDay, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
+                season: appModule.nbaYear,
+                isPlayoffs: this.isNbaPlayoffs,
+                'pickedAt[strictly_after]': this.isNbaPlayoffs
+                    ? undefined
+                    : moment(this.gameDay, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
                 order: {
                     pickedAt: 'desc'
                 },
@@ -423,7 +432,11 @@ export default class PicksOfTheDay extends Vue {
         if (this.fantasyUser) {
             const fantasyPicks = await fantasyPickModule.findAll({
                 fantasyUser: this.fantasyUser?.['@id'],
-                'pickedAt[strictly_after]': moment(this.gameDay, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
+                season: appModule.nbaYear,
+                isPlayoffs: this.isNbaPlayoffs,
+                'pickedAt[strictly_after]': this.isNbaPlayoffs
+                    ? undefined
+                    : moment(this.gameDay, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
                 order: {
                     pickedAt: 'desc'
                 },
@@ -450,7 +463,9 @@ export default class PicksOfTheDay extends Vue {
         let ndDaysLockedForUser = 0
         const lockedPick = this.lockedUserFantasyPicks.find(item => item.nbaPlayer && item.nbaPlayer['@id'] === nbaPlayer['@id'])
         if (lockedPick !== undefined) {
-            ndDaysLockedForUser = 30 - moment(this.gameDay, 'YYYY-MM-DD').diff(moment(lockedPick.pickedAt, 'YYYY-MM-DD'), 'days')
+            ndDaysLockedForUser = this.isNbaPlayoffs
+                ? Number.MAX_SAFE_INTEGER
+                : 30 - moment(this.gameDay, 'YYYY-MM-DD').diff(moment(lockedPick.pickedAt, 'YYYY-MM-DD'), 'days')
         }
 
         return ndDaysLockedForUser
