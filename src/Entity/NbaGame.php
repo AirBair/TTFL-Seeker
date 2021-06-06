@@ -130,7 +130,7 @@ class NbaGame
     /**
      * @Groups({"nbaGame:read"})
      *
-     * @ORM\OneToMany(targetEntity=NbaStatsLog::class, mappedBy="nbaGame", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=NbaStatsLog::class, mappedBy="nbaGame", cascade={"remove"}, orphanRemoval=true)
      */
     private $nbaStatsLogs;
 
