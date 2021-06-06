@@ -32,8 +32,7 @@ class NbaPlayerCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
-            ->disable(Action::NEW, Action::DELETE);
+            ->remove(Crud::PAGE_INDEX, Action::EDIT);
     }
 
     public function configureFields(string $pageName): iterable
