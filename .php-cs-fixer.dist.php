@@ -12,14 +12,14 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('vendor')
     ->exclude('translations');
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@DoctrineAnnotation' => true,
-        '@PHPUnit60Migration:risky' => true,
-        '@PHP71Migration:risky' => true,
+        '@PHPUnit84Migration:risky' => true,
+        '@PHP80Migration:risky' => true,
         'array_syntax' => ['syntax' => 'short'],
         'no_useless_else' => true,
         'no_useless_return' => true,

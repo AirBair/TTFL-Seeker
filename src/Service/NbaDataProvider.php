@@ -12,8 +12,8 @@ use JasonRoman\NbaApi\Request\Data\Prod\Teams\TeamsRequest;
 
 class NbaDataProvider
 {
-    const NBA_REGULAR_SEASON_STAGE = 2;
-    const NBA_PLAYOFFS_STAGE = 4;
+    public const NBA_REGULAR_SEASON_STAGE = 2;
+    public const NBA_PLAYOFFS_STAGE = 4;
 
     /**
      * @var NbaApiClient
@@ -48,9 +48,7 @@ class NbaDataProvider
         } catch (\Exception $e) {
         }
 
-        return array_filter($results['league']['standard'] ?? [], function ($team) {
-            return true === $team['isNBAFranchise'];
-        });
+        return array_filter($results['league']['standard'] ?? [], fn ($team) => true === $team['isNBAFranchise']);
     }
 
     public function getPlayersList(): array
@@ -78,9 +76,7 @@ class NbaDataProvider
         } catch (\Exception $e) {
         }
 
-        return array_filter($results['league']['standard'] ?? [], function ($game) {
-            return $this->nbaSeasonStage === $game['seasonStageId'];
-        });
+        return array_filter($results['league']['standard'] ?? [], fn ($game) => $this->nbaSeasonStage === $game['seasonStageId']);
     }
 
     public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId)
