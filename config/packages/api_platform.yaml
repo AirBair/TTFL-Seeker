@@ -6,7 +6,6 @@ api_platform:
     swagger:
         versions: [3]
     path_segment_name_generator: api_platform.path_segment_name_generator.dash
-    collection:
-        pagination:
-            client_enabled: true
-            client_items_per_page: true
+    defaults:
+        pagination_client_enabled: true
+        pagination_client_items_per_page: true
