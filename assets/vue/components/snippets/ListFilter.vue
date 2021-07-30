@@ -159,35 +159,35 @@ import { ResourceFilterType } from '../../models/api/ResourceFilterType'
 
 @Component
 export default class ListFilter extends Vue {
-  @Prop(Function) readonly handleReset!: () => void
-  @Prop(Function) readonly handleFilter!: () => void
-  @PropSync('initialFilters', Object) filters!: Record<string, undefined | string | number | boolean>
-  @PropSync('initialAvailableFilters', Array) availableFilters!: ResourceCollectionFilter[]
+    @Prop(Function) readonly handleReset!: () => void
+    @Prop(Function) readonly handleFilter!: () => void
+    @PropSync('initialFilters', Object) filters!: Record<string, undefined | string | number | boolean>
+    @PropSync('initialAvailableFilters', Array) availableFilters!: ResourceCollectionFilter[]
 
-  enumFilterType = ResourceFilterType
+    enumFilterType = ResourceFilterType
 
-  get enabledFilters (): ResourceCollectionFilter[] {
-      return this.availableFilters.filter(filter => filter.enable)
-  }
+    get enabledFilters (): ResourceCollectionFilter[] {
+        return this.availableFilters.filter(filter => filter.enable)
+    }
 
-  get disableFilters (): ResourceCollectionFilter[] {
-      return this.availableFilters.filter(filter => !filter.enable)
-  }
+    get disableFilters (): ResourceCollectionFilter[] {
+        return this.availableFilters.filter(filter => !filter.enable)
+    }
 
-  toggleFilter (filterName: string): void {
-      // Empty value from toggled filter to ensure that no unwanted closed filters remain.
-      if (has(this.filters, filterName)) {
-          set(this.filters, filterName, undefined)
-      }
-      this.availableFilters.forEach(function (filter: ResourceCollectionFilter) {
-          if (filter.name === filterName) {
-              filter.enable = !filter.enable
-              filter.value = undefined
-          }
-      }, { filterName })
-      if (this.enabledFilters.length === 0) {
-          this.handleReset()
-      }
-  }
+    toggleFilter (filterName: string): void {
+        // Empty value from toggled filter to ensure that no unwanted closed filters remain.
+        if (has(this.filters, filterName)) {
+            set(this.filters, filterName, undefined)
+        }
+        this.availableFilters.forEach(function (filter: ResourceCollectionFilter) {
+            if (filter.name === filterName) {
+                filter.enable = !filter.enable
+                filter.value = undefined
+            }
+        }, { filterName })
+        if (this.enabledFilters.length === 0) {
+            this.handleReset()
+        }
+    }
 }
 </script>
