@@ -38,7 +38,7 @@ class NbaTeam
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
-    private $id;
+    private ?string $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -48,7 +48,7 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $city;
+    private ?string $city = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -58,7 +58,7 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $nickname;
+    private ?string $nickname = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -68,7 +68,7 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $fullName;
+    private ?string $fullName = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -78,7 +78,7 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $tricode;
+    private ?string $tricode = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -88,7 +88,7 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $conference;
+    private ?string $conference = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -98,36 +98,36 @@ class NbaTeam
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $division;
+    private ?string $division = null;
 
     /**
      * @Vich\UploadableField(mapping="nba_teams_logos", fileNameProperty="logoFileName")
      */
-    private $logoFile;
+    private ?File $logoFile = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $logoFileName;
+    private ?string $logoFileName = null;
 
     /**
      * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
      */
-    private $logoFilePath;
+    private ?string $logoFilePath = null;
 
     /**
      * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $primaryColor;
+    private ?string $primaryColor = null;
 
     /**
      * @Groups({"nbaTeam:read"})
      *
      * @ORM\OneToMany(targetEntity=NbaPlayer::class, mappedBy="nbaTeam")
      */
-    private $nbaPlayers;
+    private Collection $nbaPlayers;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -136,7 +136,7 @@ class NbaTeam
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -145,7 +145,7 @@ class NbaTeam
 
     public function __toString(): string
     {
-        return (string) ($this->getCity().' '.$this->getNickname());
+        return $this->getCity().' '.$this->getNickname();
     }
 
     public function getId(): ?string
@@ -283,9 +283,6 @@ class NbaTeam
         return $this->primaryColor;
     }
 
-    /**
-     * @return Collection|NbaPlayer[]
-     */
     public function getNbaPlayers(): Collection
     {
         return $this->nbaPlayers;

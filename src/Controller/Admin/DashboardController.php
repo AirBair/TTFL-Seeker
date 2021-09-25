@@ -24,14 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    /**
-     * @var AdminUrlGenerator
-     */
-    private $adminUrlGenerator;
-
-    public function __construct(AdminUrlGenerator $adminUrlGenerator)
-    {
-        $this->adminUrlGenerator = $adminUrlGenerator;
+    public function __construct(
+        private AdminUrlGenerator $adminUrlGenerator
+    ) {
     }
 
     /**

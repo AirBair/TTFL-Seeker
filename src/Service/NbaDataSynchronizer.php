@@ -8,37 +8,18 @@ use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Entity\NbaTeam;
+use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class NbaDataSynchronizer
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var NbaDataProvider
-     */
-    private $nbaDataProvider;
-
-    /**
-     * @var FantasyPointsCalculator
-     */
-    private $fantasyPointsCalculator;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(EntityManagerInterface $em, NbaDataProvider $nbaDataProvider, FantasyPointsCalculator $fantasyPointsCalculator, LoggerInterface $synchronizationLogger)
-    {
-        $this->em = $em;
-        $this->nbaDataProvider = $nbaDataProvider;
-        $this->fantasyPointsCalculator = $fantasyPointsCalculator;
-        $this->logger = $synchronizationLogger;
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private NbaDataProvider $nbaDataProvider,
+        private FantasyPointsCalculator $fantasyPointsCalculator,
+        private LoggerInterface $synchronizationLogger
+    ) {
     }
 
     public function synchronizeTeams(): int
@@ -46,11 +27,11 @@ class NbaDataSynchronizer
         $nbaDataTeams = $this->nbaDataProvider->getTeamsList();
 
         foreach ($nbaDataTeams as $nbaDataTeam) {
-            $team = $this->em->getRepository(NbaTeam::class)->find($nbaDataTeam['teamId']);
+            $team = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataTeam['teamId']);
 
             if (null === $team) {
                 $team = (new NbaTeam())->setId($nbaDataTeam['teamId']);
-                $this->em->persist($team);
+                $this->entityManager->persist($team);
             }
 
             $team
@@ -62,9 +43,9 @@ class NbaDataSynchronizer
                 ->setDivision($nbaDataTeam['divName']);
         }
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
-        $this->logger->info(\count($nbaDataTeams).' NBA Teams have been synchronized');
+        $this->synchronizationLogger->info(\count($nbaDataTeams).' NBA Teams have been synchronized');
 
         return \count($nbaDataTeams);
     }
@@ -74,13 +55,13 @@ class NbaDataSynchronizer
         $nbaDataPlayers = $this->nbaDataProvider->getPlayersList();
 
         foreach ($nbaDataPlayers as $nbaDataPlayer) {
-            $player = $this->em->getRepository(NbaPlayer::class)->find($nbaDataPlayer['personId']);
+            $player = $this->entityManager->getRepository(NbaPlayer::class)->find($nbaDataPlayer['personId']);
 
             if (null === $player) {
                 $player = (new NbaPlayer())
                     ->setId($nbaDataPlayer['personId'])
                     ->setIsInjured(false);
-                $this->em->persist($player);
+                $this->entityManager->persist($player);
             }
 
             $player
@@ -89,13 +70,12 @@ class NbaDataSynchronizer
                 ->setFullName($nbaDataPlayer['firstName'].' '.$nbaDataPlayer['lastName'])
                 ->setPosition($nbaDataPlayer['pos'])
                 ->setJersey($nbaDataPlayer['jersey'])
-                ->setNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataPlayer['teamId']))
-            ;
+                ->setNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataPlayer['teamId']));
         }
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
-        $this->logger->info(\count($nbaDataPlayers).' NBA Players have been synchronized');
+        $this->synchronizationLogger->info(\count($nbaDataPlayers).' NBA Players have been synchronized');
 
         return \count($nbaDataPlayers);
     }
@@ -105,35 +85,34 @@ class NbaDataSynchronizer
         $nbaDataGames = $this->nbaDataProvider->getGamesList();
 
         foreach ($nbaDataGames as $nbaDataGame) {
-            $game = $this->em->getRepository(NbaGame::class)->find($nbaDataGame['gameId']);
+            $game = $this->entityManager->getRepository(NbaGame::class)->find($nbaDataGame['gameId']);
 
             if (null === $game) {
                 $game = (new NbaGame())->setId($nbaDataGame['gameId']);
-                $this->em->persist($game);
+                $this->entityManager->persist($game);
             }
 
             $game
                 ->setSeason((int) ($_ENV['NBA_YEAR']))
                 ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
-                ->setLocalNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
-                ->setVisitorNbaTeam($this->em->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
+                ->setLocalNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
+                ->setVisitorNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
                 ->setGameDay(new \DateTime($nbaDataGame['startDateEastern']))
                 ->setScheduledAt(new \DateTime($nbaDataGame['startTimeUTC']))
                 ->setLocalScore(('' === $nbaDataGame['hTeam']['score']) ? null : (int) $nbaDataGame['hTeam']['score'])
-                ->setVisitorScore(('' === $nbaDataGame['vTeam']['score']) ? null : (int) $nbaDataGame['vTeam']['score'])
-            ;
+                ->setVisitorScore(('' === $nbaDataGame['vTeam']['score']) ? null : (int) $nbaDataGame['vTeam']['score']);
         }
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
-        $this->logger->info(\count($nbaDataGames).' NBA Games have been synchronized');
+        $this->synchronizationLogger->info(\count($nbaDataGames).' NBA Games have been synchronized');
 
         return \count($nbaDataGames);
     }
 
     public function synchronizeBoxscores(\DateTime $day): array
     {
-        $nbaGames = $this->em->getRepository(NbaGame::class)->findBy(['gameDay' => $day]);
+        $nbaGames = $this->entityManager->getRepository(NbaGame::class)->findBy(['gameDay' => $day]);
 
         $nbaActivePlayers = 0;
 
@@ -141,11 +120,11 @@ class NbaDataSynchronizer
             $nbaActivePlayers += $this->synchronizeGameBoxscore($nbaGame);
         }
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
         $bestFantasyScore = $this->markBestPick($day);
 
-        $this->logger->info(\count($nbaGames).' NBA Games boxscores with '.$nbaActivePlayers.' active NBA Players have been synchronized for the date of '.$day->format('d/m/Y').'. Best fantasy score is '.$bestFantasyScore.' points.');
+        $this->synchronizationLogger->info(\count($nbaGames).' NBA Games boxscores with '.$nbaActivePlayers.' active NBA Players have been synchronized for the date of '.$day->format('d/m/Y').'. Best fantasy score is '.$bestFantasyScore.' points.');
 
         return [
             'games' => \count($nbaGames),
@@ -168,18 +147,17 @@ class NbaDataSynchronizer
 
         $winningTeam = ($nbaGame->getLocalScore() > $nbaGame->getVisitorScore()) ?
             $nbaGame->getLocalNbaTeam() :
-            $nbaGame->getVisitorNbaTeam()
-        ;
+            $nbaGame->getVisitorNbaTeam();
 
         foreach ($nbaDataBoxscore['activePlayers'] as $activePlayer) {
-            $nbaPlayer = $this->em->getRepository(NbaPlayer::class)->find($activePlayer['personId']);
-            $nbaTeam = $this->em->getRepository(NbaTeam::class)->find($activePlayer['teamId']);
+            $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->find($activePlayer['personId']);
+            $nbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($activePlayer['teamId']);
 
             if (null === $nbaPlayer) {
                 continue;
             }
 
-            $nbaStatsLog = $this->em->getRepository(NbaStatsLog::class)->findOneBy([
+            $nbaStatsLog = $this->entityManager->getRepository(NbaStatsLog::class)->findOneBy([
                 'nbaPlayer' => $nbaPlayer,
                 'nbaGame' => $nbaGame,
             ]);
@@ -190,7 +168,7 @@ class NbaDataSynchronizer
                     ->setNbaGame($nbaGame)
                     ->setNbaTeam($nbaTeam);
 
-                $this->em->persist($nbaStatsLog);
+                $this->entityManager->persist($nbaStatsLog);
             }
 
             $nbaStatsLog
@@ -218,7 +196,8 @@ class NbaDataSynchronizer
 
     public function markBestPick(\DateTime $day): int
     {
-        $nbaStatsLogRepository = $this->em->getRepository(NbaStatsLog::class);
+        /** @var NbaStatsLogRepository $nbaStatsLogRepository */
+        $nbaStatsLogRepository = $this->entityManager->getRepository(NbaStatsLog::class);
 
         $bestFantasyScore = $nbaStatsLogRepository->getBestFantasyScore($day);
 
@@ -228,7 +207,7 @@ class NbaDataSynchronizer
             $bestPick->setIsBestPick(true);
         }
 
-        $this->em->flush();
+        $this->entityManager->flush();
 
         return $bestFantasyScore;
     }

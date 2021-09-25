@@ -36,7 +36,7 @@ class FantasyPick
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -46,7 +46,7 @@ class FantasyPick
      *
      * @ORM\Column(type="integer")
      */
-    private $season;
+    private int $season;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -56,7 +56,7 @@ class FantasyPick
      *
      * @ORM\Column(type="boolean")
      */
-    private $isPlayoffs;
+    private bool $isPlayoffs;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -66,7 +66,7 @@ class FantasyPick
      *
      * @ORM\Column(type="date")
      */
-    private $pickedAt;
+    private ?\DateTimeInterface $pickedAt = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
@@ -81,7 +81,7 @@ class FantasyPick
      * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyPicks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fantasyUser;
+    private ?FantasyUser $fantasyUser = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
@@ -95,7 +95,7 @@ class FantasyPick
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=true)
      */
-    private $nbaPlayer;
+    private ?NbaPlayer $nbaPlayer = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -105,7 +105,7 @@ class FantasyPick
      *
      * @ORM\Column(type="boolean")
      */
-    private $isNoPick;
+    private bool $isNoPick = false;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -115,7 +115,7 @@ class FantasyPick
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyPoints;
+    private ?int $fantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -124,18 +124,17 @@ class FantasyPick
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
         $this->season = (int) $_ENV['NBA_YEAR'];
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
-        $this->isNoPick = false;
     }
 
     public function __toString(): string
     {
-        return (string) ($this->fantasyUser.' - '.$this->pickedAt->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts');
+        return $this->fantasyUser.' - '.$this->pickedAt->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts';
     }
 
     public function getId(): ?int

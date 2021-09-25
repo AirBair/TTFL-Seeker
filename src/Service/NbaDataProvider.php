@@ -15,20 +15,9 @@ class NbaDataProvider
     public const NBA_REGULAR_SEASON_STAGE = 2;
     public const NBA_PLAYOFFS_STAGE = 4;
 
-    /**
-     * @var NbaApiClient
-     */
-    private $nbaApiClient;
-
-    /**
-     * @var int
-     */
-    private $nbaSeasonYear;
-
-    /**
-     * @var int
-     */
-    private $nbaSeasonStage;
+    private NbaApiClient $nbaApiClient;
+    private int $nbaSeasonYear;
+    private int $nbaSeasonStage;
 
     public function __construct()
     {
@@ -65,7 +54,7 @@ class NbaDataProvider
         return $results['league']['standard'] ?? [];
     }
 
-    public function getGamesList()
+    public function getGamesList(): array
     {
         $request = LeagueScheduleRequest::fromArray([
             'year' => $this->nbaSeasonYear,
@@ -79,7 +68,7 @@ class NbaDataProvider
         return array_filter($results['league']['standard'] ?? [], fn ($game) => $this->nbaSeasonStage === $game['seasonStageId']);
     }
 
-    public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId)
+    public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId): array
     {
         $request = BoxscoreRequest::fromArray([
             'gameDate' => $gameDate,

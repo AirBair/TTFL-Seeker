@@ -11,6 +11,9 @@ use App\Entity\FantasyUser;
 use App\Entity\FantasyUserRanking;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaTeam;
+use App\Repository\FantasyPickRepository;
+use App\Repository\FantasyTeamRankingRepository;
+use App\Repository\FantasyUserRankingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\BrowserKit\HttpBrowser;
@@ -19,37 +22,16 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class TrashtalkFantasyLeagueSynchronizer
 {
-    /**
-     * @var HttpBrowser
-     */
-    private $browser;
+    private ?HttpBrowser $browser = null;
+    private int $nbaSeasonYear;
+    private bool $isNbaPlayoffs;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var int
-     */
-    private $nbaSeasonYear;
-
-    /**
-     * @var bool
-     */
-    private $isNbaPlayoffs;
-
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $synchronizationLogger)
-    {
-        $this->entityManager = $entityManager;
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private LoggerInterface $synchronizationLogger
+    ) {
         $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
-        $this->logger = $synchronizationLogger;
     }
 
     public function getHttpBrowser(): HttpBrowser
@@ -78,7 +60,7 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $this->entityManager->flush();
 
-        $this->logger->info(\count($fantasyUsers).' Fantasy Users (Free Agent) have been synchronized.');
+        $this->synchronizationLogger->info(\count($fantasyUsers).' Fantasy Users (Free Agent) have been synchronized.');
 
         return \count($fantasyUsers);
     }
@@ -102,7 +84,9 @@ class TrashtalkFantasyLeagueSynchronizer
         $pickedAt = \DateTime::createFromFormat('d-m-Y', $dateAndPoints[1]);
         $pickFantasyPoints = (int) $dateAndPoints[2];
 
-        $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
+        /** @var FantasyPickRepository $fantasyPickRepository */
+        $fantasyPickRepository = $this->entityManager->getRepository(FantasyPick::class);
+        $fantasyPick = $fantasyPickRepository->findUniqueByDate(
             $this->nbaSeasonYear,
             $this->isNbaPlayoffs,
             $fantasyUser,
@@ -121,7 +105,9 @@ class TrashtalkFantasyLeagueSynchronizer
             $this->entityManager->persist($fantasyPick);
         }
 
-        $fantasyUserRanking = $this->entityManager->getRepository(FantasyUserRanking::class)->findUniqueByDate(
+        /** @var FantasyUserRankingRepository $fantasyUserRankingRepository */
+        $fantasyUserRankingRepository = $this->entityManager->getRepository(FantasyUserRanking::class);
+        $fantasyUserRanking = $fantasyUserRankingRepository->findUniqueByDate(
             $this->nbaSeasonYear,
             $this->isNbaPlayoffs,
             $fantasyUser,
@@ -158,7 +144,7 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $this->entityManager->flush();
 
-        $this->logger->info(\count($fantasyTeams).' Fantasy Teams have been synchronized.');
+        $this->synchronizationLogger->info(\count($fantasyTeams).' Fantasy Teams have been synchronized.');
 
         return \count($fantasyTeams);
     }
@@ -167,7 +153,9 @@ class TrashtalkFantasyLeagueSynchronizer
     {
         $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=equipe&team='.urlencode($fantasyTeam->getName()));
 
-        $fantasyTeamRanking = $this->entityManager->getRepository(FantasyTeamRanking::class)->findUniqueByDate(
+        /** @var FantasyTeamRankingRepository $fantasyTeamRankingRepository */
+        $fantasyTeamRankingRepository = $this->entityManager->getRepository(FantasyTeamRanking::class);
+        $fantasyTeamRanking = $fantasyTeamRankingRepository->findUniqueByDate(
             $this->nbaSeasonYear,
             $this->isNbaPlayoffs,
             $fantasyTeam,
@@ -232,7 +220,9 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $fantasyUserRanking = null;
         if ($fantasyUser->getId()) {
-            $fantasyUserRanking = $this->entityManager->getRepository(FantasyUserRanking::class)->findUniqueByDate(
+            /** @var FantasyUserRankingRepository $fantasyUserRankingRepository */
+            $fantasyUserRankingRepository = $this->entityManager->getRepository(FantasyUserRanking::class);
+            $fantasyUserRanking = $fantasyUserRankingRepository->findUniqueByDate(
                 $this->nbaSeasonYear,
                 $this->isNbaPlayoffs,
                 $fantasyUser,
@@ -265,7 +255,7 @@ class TrashtalkFantasyLeagueSynchronizer
             ]);
 
             if (null === $nbaPlayer) {
-                $this->logger->info('Nba Player "'.$pickName.'" cannot be found for Fantasy User "'.$fantasyUser->getUsername().'"');
+                $this->synchronizationLogger->info('Nba Player "'.$pickName.'" cannot be found for Fantasy User "'.$fantasyUser->getUsername().'"');
 
                 return;
             }
@@ -275,7 +265,9 @@ class TrashtalkFantasyLeagueSynchronizer
 
         $fantasyPick = null;
         if ($fantasyUser->getId()) {
-            $fantasyPick = $this->entityManager->getRepository(FantasyPick::class)->findUniqueByDate(
+            /** @var FantasyPickRepository $fantasyPickRepository */
+            $fantasyPickRepository = $this->entityManager->getRepository(FantasyPick::class);
+            $fantasyPick = $fantasyPickRepository->findUniqueByDate(
                 $this->nbaSeasonYear,
                 $this->isNbaPlayoffs,
                 $fantasyUser,

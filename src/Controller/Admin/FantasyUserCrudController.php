@@ -27,10 +27,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class FantasyUserCrudController extends AbstractCrudController
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public static function getEntityFqcn(): string
     {
