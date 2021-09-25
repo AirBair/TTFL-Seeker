@@ -13,10 +13,12 @@ use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Entity\NbaTeam;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,13 +26,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     /**
+     * @var AdminUrlGenerator
+     */
+    private $adminUrlGenerator;
+
+    public function __construct(AdminUrlGenerator $adminUrlGenerator)
+    {
+        $this->adminUrlGenerator = $adminUrlGenerator;
+    }
+
+    /**
      * @Route("/admin", name="admin")
      */
     public function index(): Response
     {
-        $routeBuilder = $this->get(CrudUrlGenerator::class)->build();
+        $url = $this->adminUrlGenerator
+            ->setController(NbaTeamCrudController::class)
+            ->setAction(Action::INDEX)
+            ->generateUrl();
 
-        return $this->redirect($routeBuilder->setController(NbaTeamCrudController::class)->generateUrl());
+        return $this->redirect($url);
     }
 
     public function configureDashboard(): Dashboard
