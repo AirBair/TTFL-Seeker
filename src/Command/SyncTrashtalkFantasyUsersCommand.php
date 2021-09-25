@@ -14,15 +14,9 @@ class SyncTrashtalkFantasyUsersCommand extends Command
 {
     protected static $defaultName = 'app:sync-ttfl-users';
 
-    /**
-     * @var TrashtalkFantasyLeagueSynchronizer
-     */
-    private $trashtalkFantasyLeagueSynchronizer;
-
-    public function __construct(TrashtalkFantasyLeagueSynchronizer $trashtalkFantasyLeagueSynchronizer)
-    {
-        $this->trashtalkFantasyLeagueSynchronizer = $trashtalkFantasyLeagueSynchronizer;
-
+    public function __construct(
+        private TrashtalkFantasyLeagueSynchronizer $trashtalkFantasyLeagueSynchronizer
+    ) {
         parent::__construct();
     }
 

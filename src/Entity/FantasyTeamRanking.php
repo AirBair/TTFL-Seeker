@@ -35,7 +35,7 @@ class FantasyTeamRanking
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -45,7 +45,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="integer")
      */
-    private $season;
+    private int $season;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -55,7 +55,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="boolean")
      */
-    private $isPlayoffs;
+    private bool $isPlayoffs;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
@@ -69,7 +69,7 @@ class FantasyTeamRanking
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyTeamRankings")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $fantasyTeam;
+    private ?FantasyTeam $fantasyTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -79,7 +79,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyPoints;
+    private ?int $fantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -89,7 +89,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyRank;
+    private ?int $fantasyRank = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -99,7 +99,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="date")
      */
-    private $rankingAt;
+    private ?\DateTimeInterface $rankingAt = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -108,7 +108,7 @@ class FantasyTeamRanking
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -118,7 +118,7 @@ class FantasyTeamRanking
 
     public function __toString(): string
     {
-        return (string) ($this->fantasyTeam.' - '.$this->rankingAt->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th');
+        return $this->fantasyTeam.' - '.$this->rankingAt->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th';
     }
 
     public function getId(): ?int

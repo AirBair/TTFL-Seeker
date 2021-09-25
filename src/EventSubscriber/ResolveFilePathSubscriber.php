@@ -18,14 +18,9 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 
 final class ResolveFilePathSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var StorageInterface
-     */
-    private $storage;
-
-    public function __construct(StorageInterface $storage)
-    {
-        $this->storage = $storage;
+    public function __construct(
+        private StorageInterface $storage
+    ) {
     }
 
     public static function getSubscribedEvents(): array

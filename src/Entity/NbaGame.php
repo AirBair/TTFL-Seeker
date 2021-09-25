@@ -37,7 +37,7 @@ class NbaGame
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
-    private $id;
+    private ?string $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -47,7 +47,7 @@ class NbaGame
      *
      * @ORM\Column(type="integer")
      */
-    private $season;
+    private int $season;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -57,7 +57,7 @@ class NbaGame
      *
      * @ORM\Column(type="boolean")
      */
-    private $isPlayoffs;
+    private bool $isPlayoffs;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -67,7 +67,7 @@ class NbaGame
      *
      * @ORM\Column(type="date")
      */
-    private $gameDay;
+    private ?\DateTimeInterface $gameDay = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -77,7 +77,7 @@ class NbaGame
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $scheduledAt;
+    private ?\DateTimeInterface $scheduledAt = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -91,7 +91,7 @@ class NbaGame
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $localNbaTeam;
+    private ?NbaTeam $localNbaTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -105,7 +105,7 @@ class NbaGame
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $visitorNbaTeam;
+    private ?NbaTeam $visitorNbaTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -115,7 +115,7 @@ class NbaGame
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $localScore;
+    private ?int $localScore = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -125,14 +125,14 @@ class NbaGame
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $visitorScore;
+    private ?int $visitorScore = null;
 
     /**
      * @Groups({"nbaGame:read"})
      *
      * @ORM\OneToMany(targetEntity=NbaStatsLog::class, mappedBy="nbaGame", cascade={"remove"}, orphanRemoval=true)
      */
-    private $nbaStatsLogs;
+    private Collection $nbaStatsLogs;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -141,7 +141,7 @@ class NbaGame
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -152,7 +152,7 @@ class NbaGame
 
     public function __toString(): string
     {
-        return (string) ($this->gameDay->format('d/m/Y').' - '.$this->localNbaTeam->getTricode().' vs '.$this->visitorNbaTeam->getTricode());
+        return $this->gameDay->format('d/m/Y').' - '.$this->localNbaTeam->getTricode().' vs '.$this->visitorNbaTeam->getTricode();
     }
 
     public function getId(): ?string
@@ -263,9 +263,6 @@ class NbaGame
         return $this;
     }
 
-    /**
-     * @return Collection|NbaStatsLog[]
-     */
     public function getNbaStatsLogs(): Collection
     {
         return $this->nbaStatsLogs;

@@ -34,7 +34,7 @@ class NbaPlayer
      * @ORM\Id
      * @ORM\Column(type="string", length=255)
      */
-    private $id;
+    private ?string $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -44,7 +44,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $firstName;
+    private ?string $firstName = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -54,7 +54,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $lastName;
+    private ?string $lastName = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -64,7 +64,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $fullName;
+    private ?string $fullName = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -74,7 +74,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $position;
+    private ?string $position = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -85,7 +85,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $jersey;
+    private ?string $jersey = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -95,7 +95,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="boolean")
      */
-    private $isInjured;
+    private bool $isInjured = false;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"nbaTeam.fullName"})
@@ -108,7 +108,7 @@ class NbaPlayer
      *
      * @ORM\ManyToOne(targetEntity=NbaTeam::class, inversedBy="nbaPlayers")
      */
-    private $nbaTeam;
+    private ?NbaTeam $nbaTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -118,7 +118,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $averageFantasyPoints;
+    private ?float $averageFantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -128,7 +128,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $pastYearFantasyPoints;
+    private ?float $pastYearFantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -138,7 +138,7 @@ class NbaPlayer
      *
      * @ORM\Column(type="boolean")
      */
-    private $isAllowedInExoticLeague;
+    private bool $isAllowedInExoticLeague = false;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -147,16 +147,11 @@ class NbaPlayer
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
-
-    public function __construct()
-    {
-        $this->isAllowedInExoticLeague = true;
-    }
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __toString(): string
     {
-        return (string) ($this->lastName.' '.$this->firstName);
+        return $this->lastName.' '.$this->firstName;
     }
 
     public function getId(): ?string

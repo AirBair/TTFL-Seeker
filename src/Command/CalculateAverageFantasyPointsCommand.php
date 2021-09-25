@@ -16,15 +16,9 @@ class CalculateAverageFantasyPointsCommand extends Command
 {
     protected static $defaultName = 'app:calculate-avg-fantasy-points';
 
-    /**
-     * @var FantasyPointsCalculator
-     */
-    private $fantasyPointsCalculator;
-
-    public function __construct(FantasyPointsCalculator $fantasyPointsCalculator)
-    {
-        $this->fantasyPointsCalculator = $fantasyPointsCalculator;
-
+    public function __construct(
+        private FantasyPointsCalculator $fantasyPointsCalculator
+    ) {
         parent::__construct();
     }
 

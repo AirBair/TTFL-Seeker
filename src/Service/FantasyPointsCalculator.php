@@ -6,14 +6,12 @@ namespace App\Service;
 
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
+use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FantasyPointsCalculator
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /** @required */
     public function setEntityManager(EntityManagerInterface $entityManager): void
@@ -46,6 +44,7 @@ class FantasyPointsCalculator
     {
         $players = $this->entityManager->getRepository(NbaPlayer::class)->findAll();
 
+        /** @var NbaStatsLogRepository $nbaStatsLogRepository */
         $nbaStatsLogRepository = $this->entityManager->getRepository(NbaStatsLog::class);
         foreach ($players as $player) {
             $avgFantasyPoints = $nbaStatsLogRepository->getAvgFantasyPointsOfNbaPlayerOnSeason($player, $season);

@@ -14,14 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class NbaApiController extends AbstractController
 {
-    /**
-     * @var NbaDataProvider
-     */
-    private $nbaDataProvider;
-
-    public function __construct(NbaDataProvider $nbaDataProvider)
-    {
-        $this->nbaDataProvider = $nbaDataProvider;
+    public function __construct(
+        private NbaDataProvider $nbaDataProvider
+    ) {
     }
 
     /**
@@ -45,7 +40,7 @@ class NbaApiController extends AbstractController
      */
     public function games(): JsonResponse
     {
-        return $this->json($this->nbaDataProvider->getRegularSeasonGamesList());
+        return $this->json($this->nbaDataProvider->getGamesList());
     }
 
     /**

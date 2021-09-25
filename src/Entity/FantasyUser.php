@@ -38,7 +38,7 @@ class FantasyUser implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -48,7 +48,7 @@ class FantasyUser implements UserInterface
      *
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $username;
+    private ?string $username = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -58,7 +58,7 @@ class FantasyUser implements UserInterface
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $ttflId;
+    private ?int $ttflId = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
@@ -71,7 +71,7 @@ class FantasyUser implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyUsers")
      */
-    private $fantasyTeam;
+    private ?FantasyTeam $fantasyTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -81,22 +81,22 @@ class FantasyUser implements UserInterface
      *
      * @ORM\Column(type="boolean")
      */
-    private $isExoticUser;
+    private bool $isExoticUser = false;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $password;
+    private ?string $password = null;
 
     /**
      * Plain password used before encryption. Not persisted in database.
      */
-    private $plainPassword;
+    private ?string $plainPassword = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -106,7 +106,7 @@ class FantasyUser implements UserInterface
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyPoints;
+    private ?int $fantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -116,29 +116,29 @@ class FantasyUser implements UserInterface
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyRank;
+    private ?int $fantasyRank = null;
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
      * @ORM\OrderBy({"pickedAt": "ASC"})
      */
-    private $fantasyPicks;
+    private Collection $fantasyPicks;
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyUserRanking::class, mappedBy="fantasyUser", orphanRemoval=true)
      * @ORM\OrderBy({"rankingAt": "ASC"})
      */
-    private $fantasyUserRankings;
+    private Collection $fantasyUserRankings;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $registeredAt;
+    private ?\DateTimeInterface $registeredAt = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastLoginAt;
+    private ?\DateTimeInterface $lastLoginAt = null;
 
     public function __construct()
     {
@@ -267,9 +267,6 @@ class FantasyUser implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|FantasyPick[]
-     */
     public function getFantasyPicks(): Collection
     {
         return $this->fantasyPicks;
@@ -297,9 +294,6 @@ class FantasyUser implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|FantasyUserRanking[]
-     */
     public function getFantasyUserRankings(): Collection
     {
         return $this->fantasyUserRankings;

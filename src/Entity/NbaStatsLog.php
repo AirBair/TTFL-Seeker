@@ -36,7 +36,7 @@ class NbaStatsLog
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"nbaGame.gameDay"})
@@ -49,7 +49,7 @@ class NbaStatsLog
      * @ORM\ManyToOne(targetEntity=NbaGame::class, inversedBy="nbaStatsLogs")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $nbaGame;
+    private ?NbaGame $nbaGame = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={
@@ -69,7 +69,7 @@ class NbaStatsLog
      * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $nbaPlayer;
+    private ?NbaPlayer $nbaPlayer = null;
 
     /**
      * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
@@ -83,7 +83,7 @@ class NbaStatsLog
      * @ORM\ManyToOne(targetEntity=NbaTeam::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $nbaTeam;
+    private ?NbaTeam $nbaTeam = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -93,7 +93,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $points;
+    private ?int $points = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -103,7 +103,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $assists;
+    private ?int $assists = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -113,7 +113,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $rebounds;
+    private ?int $rebounds = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -123,7 +123,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $steals;
+    private ?int $steals = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -133,7 +133,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $blocks;
+    private ?int $blocks = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -143,7 +143,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $turnovers;
+    private ?int $turnovers = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -153,7 +153,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $fieldGoals;
+    private ?int $fieldGoals = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -163,7 +163,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $fieldGoalsAttempts;
+    private ?int $fieldGoalsAttempts = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -173,7 +173,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $threePointsFieldGoals;
+    private ?int $threePointsFieldGoals = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -183,7 +183,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $threePointsFieldGoalsAttempts;
+    private ?int $threePointsFieldGoalsAttempts = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -193,7 +193,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $freeThrows;
+    private ?int $freeThrows = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -203,7 +203,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $freeThrowsAttempts;
+    private ?int $freeThrowsAttempts = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -213,7 +213,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $minutesPlayed;
+    private ?int $minutesPlayed = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -223,7 +223,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="boolean")
      */
-    private $hasWon;
+    private bool $hasWon = false;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -233,7 +233,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyPoints;
+    private ?int $fantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -243,7 +243,7 @@ class NbaStatsLog
      *
      * @ORM\Column(type="boolean")
      */
-    private $isBestPick;
+    private bool $isBestPick = false;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -252,11 +252,11 @@ class NbaStatsLog
      *
      * @ORM\Column(type="datetime")
      */
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __toString(): string
     {
-        return (string) ($this->nbaPlayer.' - '.$this->fantasyPoints.'pts');
+        return $this->nbaPlayer.' - '.$this->fantasyPoints.'pts';
     }
 
     public function getId(): ?int

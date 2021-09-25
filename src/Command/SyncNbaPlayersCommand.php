@@ -14,15 +14,9 @@ class SyncNbaPlayersCommand extends Command
 {
     protected static $defaultName = 'app:sync-nba-players';
 
-    /**
-     * @var NbaDataSynchronizer
-     */
-    private $nbaDataSynchronizer;
-
-    public function __construct(NbaDataSynchronizer $nbaDataSynchronizer)
-    {
-        $this->nbaDataSynchronizer = $nbaDataSynchronizer;
-
+    public function __construct(
+        private NbaDataSynchronizer $nbaDataSynchronizer
+    ) {
         parent::__construct();
     }
 

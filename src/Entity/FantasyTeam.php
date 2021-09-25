@@ -37,7 +37,7 @@ class FantasyTeam
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -47,7 +47,7 @@ class FantasyTeam
      *
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -57,7 +57,7 @@ class FantasyTeam
      *
      * @ORM\Column(type="boolean")
      */
-    private $isExoticTeam;
+    private bool $isExoticTeam = false;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -67,7 +67,7 @@ class FantasyTeam
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyPoints;
+    private ?int $fantasyPoints = null;
 
     /**
      * @ApiFilter(OrderFilter::class)
@@ -77,22 +77,23 @@ class FantasyTeam
      *
      * @ORM\Column(type="integer")
      */
-    private $fantasyRank;
+    private ?int $fantasyRank = null;
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyTeamRanking::class, mappedBy="fantasyTeam", orphanRemoval=true)
      * @ORM\OrderBy({"rankingAt": "ASC"})
      */
-    private $fantasyTeamRankings;
+    private Collection $fantasyTeamRankings;
 
     /**
      * @ORM\OneToMany(targetEntity=FantasyUser::class, mappedBy="fantasyTeam")
      */
-    private $fantasyUsers;
+    private Collection $fantasyUsers;
 
     public function __construct()
     {
         $this->fantasyTeamRankings = new ArrayCollection();
+        $this->fantasyUsers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -153,9 +154,6 @@ class FantasyTeam
         return $this;
     }
 
-    /**
-     * @return Collection|FantasyTeamRanking[]
-     */
     public function getFantasyTeamRankings(): Collection
     {
         return $this->fantasyTeamRankings;
@@ -183,9 +181,6 @@ class FantasyTeam
         return $this;
     }
 
-    /**
-     * @return Collection|FantasyUser[]
-     */
     public function getFantasyUsers(): Collection
     {
         return $this->fantasyUsers;
