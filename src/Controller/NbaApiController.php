@@ -9,9 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/nba-api", name="nba_api_")
- */
+#[Route(path: '/nba-api', name: 'nba_api_')]
 class NbaApiController extends AbstractController
 {
     public function __construct(
@@ -19,33 +17,25 @@ class NbaApiController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/teams", name="teams")
-     */
+    #[Route(path: '/teams', name: 'teams')]
     public function teams(): JsonResponse
     {
         return $this->json($this->nbaDataProvider->getTeamsList());
     }
 
-    /**
-     * @Route("/players", name="players")
-     */
+    #[Route(path: '/players', name: 'players')]
     public function players(): JsonResponse
     {
         return $this->json($this->nbaDataProvider->getPlayersList());
     }
 
-    /**
-     * @Route("/games", name="games")
-     */
+    #[Route(path: '/games', name: 'games')]
     public function games(): JsonResponse
     {
         return $this->json($this->nbaDataProvider->getGamesList());
     }
 
-    /**
-     * @Route("/boxscore/{gameDate}/{gameId}", name="boxscore")
-     */
+    #[Route(path: '/boxscore/{gameDate}/{gameId}', name: 'boxscore')]
     public function boxscore(\DateTime $gameDate, string $gameId): JsonResponse
     {
         return $this->json($this->nbaDataProvider->gameBoxScore($gameDate, $gameId));

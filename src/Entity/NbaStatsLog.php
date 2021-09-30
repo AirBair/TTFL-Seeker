@@ -15,243 +15,125 @@ use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"nbaStatsLog:read"}},
- *     denormalizationContext={"groups": {"nbaStatsLog:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=NbaStatsLogRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['nbaStatsLog:write']],
+    normalizationContext: ['groups' => ['nbaStatsLog:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'nbaGame.gameDay', 'nbaPlayer.lastName', 'nbaPlayer.fullName', 'nbaPlayer.averageFantasyPoints', 'nbaPlayer.fullName',
+    'points', 'assists', 'rebounds', 'steals', 'blocks', 'turnovers', 'fieldGoals', 'fieldGoalsAttempts', 'threePointsFieldGoals', 'threePointsFieldGoalsAttempts', 'freeThrows', 'freeThrowsAttempts', 'minutesPlayed',
+    'hasWon', 'fantasyPoints', 'isBestPick', 'updatedAt',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'nbaGame.season' => 'exact',
+    'nbaPlayer' => 'exact',
+    'nbaPlayer.fullName' => 'partial',
+    'nbaPlayer.nbaTeam' => 'exact',
+    'nbaPlayer.nbaTeam.fullName' => 'partial',
+    'nbaTeam' => 'exact',
+    'nbaTeam.fullName' => 'partial',
+])]
+#[ApiFilter(RangeFilter::class, properties: [
+    'points', 'assists', 'rebounds', 'steals', 'blocks', 'turnovers', 'fieldGoals', 'fieldGoalsAttempts', 'threePointsFieldGoals', 'threePointsFieldGoalsAttempts', 'freeThrows', 'freeThrowsAttempts', 'minutesPlayed', 'fantasyPoints',
+])]
+#[ApiFilter(DateFilter::class, properties: [
+    'nbaGame.gameDay',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'nbaGame.isPlayoffs', 'hasWon', 'isBestPick',
+])]
+#[ORM\Entity(repositoryClass: NbaStatsLogRepository::class)]
 class NbaStatsLog
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"nbaGame.gameDay"})
-     * @ApiFilter(DateFilter::class, properties={"nbaGame.gameDay"})
-     * @ApiFilter(SearchFilter::class, properties={"nbaGame.season": "exact"})
-     * @ApiFilter(BooleanFilter::class, properties={"nbaGame.isPlayoffs": "exact"})
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=NbaGame::class, inversedBy="nbaStatsLogs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\ManyToOne(targetEntity: NbaGame::class, inversedBy: 'nbaStatsLogs')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?NbaGame $nbaGame = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={
-     *     "nbaPlayer.lastName",
-     *     "nbaPlayer.fullName",
-     *     "nbaPlayer.averageFantasyPoints"
-     * })
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "nbaPlayer": "exact",
-     *     "nbaPlayer.fullName": "partial",
-     *     "nbaPlayer.nbaTeam": "exact",
-     *     "nbaPlayer.nbaTeam.fullName": "partial"
-     * })
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\ManyToOne(targetEntity: NbaPlayer::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?NbaPlayer $nbaPlayer = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "nbaTeam": "exact",
-     *     "nbaTeam.fullName": "partial"
-     * })
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=NbaTeam::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\ManyToOne(targetEntity: NbaTeam::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private ?NbaTeam $nbaTeam = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $points = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $assists = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $rebounds = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $steals = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $blocks = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $turnovers = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fieldGoals = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fieldGoalsAttempts = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $threePointsFieldGoals = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $threePointsFieldGoalsAttempts = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $freeThrows = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $freeThrowsAttempts = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $minutesPlayed = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $hasWon = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isBestPick = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['nbaStatsLog:read'])]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __toString(): string
