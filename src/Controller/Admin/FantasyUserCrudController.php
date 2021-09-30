@@ -23,11 +23,11 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class FantasyUserCrudController extends AbstractCrudController
 {
-    private UserPasswordEncoderInterface $passwordEncoder;
+    private UserPasswordHasherInterface $passwordHasher;
 
     public static function getEntityFqcn(): string
     {
@@ -85,9 +85,9 @@ class FantasyUserCrudController extends AbstractCrudController
     /**
      * @required
      */
-    public function setEncoder(UserPasswordEncoderInterface $passwordEncoder): void
+    public function setEncoder(UserPasswordHasherInterface $passwordHasher): void
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder): void
@@ -96,7 +96,7 @@ class FantasyUserCrudController extends AbstractCrudController
             /** @var FantasyUser $user */
             $user = $event->getData();
             if ($user->getPlainPassword()) {
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+                $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPlainPassword()));
             }
         });
     }
