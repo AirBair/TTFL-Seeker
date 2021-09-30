@@ -14,6 +14,7 @@ use App\Repository\FantasyUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -27,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass=FantasyUserRepository::class)
  */
-class FantasyUser implements UserInterface
+class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ApiFilter(OrderFilter::class)
@@ -204,6 +205,9 @@ class FantasyUser implements UserInterface
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -345,14 +349,30 @@ class FantasyUser implements UserInterface
         return $this;
     }
 
-    public function getSalt(): void
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        // Not needed when using the "bcrypt" algorithm.
+        return (string) $this->username;
     }
 
+    /**
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
     public function eraseCredentials(): void
     {
-        // If any sensitive data on the user is stored temporary, clear it here.
+        $this->plainPassword = null;
     }
 
     /**
