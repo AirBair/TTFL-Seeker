@@ -16,78 +16,54 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"fantasyTeam:read"}},
- *     denormalizationContext={"groups": {"fantasyTeam:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=FantasyTeamRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['fantasyTeam:write']],
+    normalizationContext: ['groups' => ['fantasyTeam:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'name', 'isExoticTeam', 'fantasyPoints', 'fantasyRank',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'name' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'isExoticTeam',
+])]
+#[ApiFilter(RangeFilter::class, properties: [
+    'fantasyPoints', 'fantasyRank',
+])]
+#[ORM\Entity(repositoryClass: FantasyTeamRepository::class)]
 class FantasyTeam
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $name = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isExoticTeam = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyTeam:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=FantasyTeamRanking::class, mappedBy="fantasyTeam", orphanRemoval=true)
-     * @ORM\OrderBy({"rankingAt": "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyTeamRanking::class, orphanRemoval: true)]
+    #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyTeamRankings;
 
-    /**
-     * @ORM\OneToMany(targetEntity=FantasyUser::class, mappedBy="fantasyTeam")
-     */
+    #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyUser::class)]
     private Collection $fantasyUsers;
 
     public function __construct()

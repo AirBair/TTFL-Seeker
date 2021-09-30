@@ -8,12 +8,13 @@ use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class FantasyPointsCalculator
 {
     private EntityManagerInterface $entityManager;
 
-    /** @required */
+    #[Required]
     public function setEntityManager(EntityManagerInterface $entityManager): void
     {
         $this->entityManager = $entityManager;

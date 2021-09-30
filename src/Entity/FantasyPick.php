@@ -15,115 +15,69 @@ use App\Repository\FantasyPickRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"fantasyPick:read"}},
- *     denormalizationContext={"groups": {"fantasyPick:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=FantasyPickRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['fantasyPick:write']],
+    normalizationContext: ['groups' => ['fantasyPick:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'season', 'isPlayoffs', 'pickedAt', 'fantasy.username', 'nbaPlayer.fullName', 'isNoPick', 'fantasyPoints', 'updatedAt',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'season' => 'exact',
+    'fantasyUser' => 'exact',
+    'fantasyUser.fantasyTeam' => 'exact',
+    'fantasyUser.username' => 'partial',
+    'nbaPlayer' => 'exact',
+    'nbaPlayer.fullName' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'isPlayoffs', 'isNoPick',
+])]
+#[ApiFilter(DateFilter::class, properties: ['pickedAt'])]
+#[ApiFilter(RangeFilter::class, properties: ['fantasyPoints'])]
+#[ORM\Entity(repositoryClass: FantasyPickRepository::class)]
 class FantasyPick
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"fantasyPick:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyPick:read'])]
+    #[ORM\Column(type: 'integer')]
     private int $season;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"fantasyPick:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['fantasyPick:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isPlayoffs;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(DateFilter::class)
-     *
-     * @Groups({"fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="date")
-     */
+    #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $pickedAt = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "fantasyUser": "exact",
-     *     "fantasyUser.fantasyTeam": "exact",
-     *     "fantasyUser.username": "partial",
-     * })
-     *
-     * @Groups({"fantasyPick:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyPicks")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Groups(['fantasyPick:read'])]
+    #[ORM\ManyToOne(targetEntity: FantasyUser::class, inversedBy: 'fantasyPicks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?FantasyUser $fantasyUser = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"nbaPlayer.fullName"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "nbaPlayer": "exact",
-     *     "nbaPlayer.fullName": "partial",
-     * })
-     *
-     * @Groups({"fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=NbaPlayer::class)
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\ManyToOne(targetEntity: NbaPlayer::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?NbaPlayer $nbaPlayer = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isNoPick = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyPick:read"})
-     *
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['fantasyPick:read'])]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()

@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class FantasyUserCrudController extends AbstractCrudController
 {
@@ -82,9 +83,7 @@ class FantasyUserCrudController extends AbstractCrudController
         return $formBuilder;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setEncoder(UserPasswordHasherInterface $passwordHasher): void
     {
         $this->passwordHasher = $passwordHasher;

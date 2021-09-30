@@ -14,139 +14,80 @@ use App\Repository\NbaPlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"nbaPlayer:read"}},
- *     denormalizationContext={"groups": {"nbaPlayer:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=NbaPlayerRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['nbaPlayer:write']],
+    normalizationContext: ['groups' => ['nbaPlayer:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'firstName', 'lastName', 'fullName', 'position', 'jersey', 'isInjured', 'nbaTeam.fullName', 'averageFantasyPoints', 'pastYearFantasyPoints', 'isAllowedInExoticLeague', 'updatedAt',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'firstName' => 'partial',
+    'lastName' => 'partial',
+    'fullName' => 'partial',
+    'position' => 'exact',
+    'jersey' => 'exact',
+    'nbaTeam' => 'exact',
+    'nbaTeam.fullName' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'isInjured', 'isAllowedInExoticLeague',
+])]
+#[ApiFilter(RangeFilter::class, properties: [
+    'averageFantasyPoints', 'pastYearFantasyPoints',
+])]
+#[ORM\Entity(repositoryClass: NbaPlayerRepository::class)]
 class NbaPlayer
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read', 'fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $firstName = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $lastName = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read', 'fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $fullName = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $position = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"nbaPlayer:read"})
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $jersey = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isInjured = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"nbaTeam.fullName"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "nbaTeam": "exact",
-     *     "nbaTeam.fullName": "partial"
-     * })
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=NbaTeam::class, inversedBy="nbaPlayers")
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\ManyToOne(targetEntity: NbaTeam::class, inversedBy: 'nbaPlayers')]
     private ?NbaTeam $nbaTeam = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaPlayer:read", "fantasyPick:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[Groups(['nbaPlayer:read', 'fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $averageFantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="float", nullable=true)
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'float', nullable: true)]
     private ?float $pastYearFantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isAllowedInExoticLeague = false;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaPlayer:read"})
-     *
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['nbaPlayer:read'])]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __toString(): string

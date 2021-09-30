@@ -18,80 +18,56 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"fantasyUser:read"}},
- *     denormalizationContext={"groups": {"fantasyUser:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=FantasyUserRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['fantasyUser:write']],
+    normalizationContext: ['groups' => ['fantasyUser:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'username', 'ttflId', 'fantasyTeam.name', 'isExoticUser', 'fantasyPoints', 'fantasyRank',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'username' => 'partial',
+    'ttflId' => 'exact',
+    'fantasyTeam' => 'exact',
+    'fantasyTeam.name' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'isExoticUser',
+])]
+#[ApiFilter(RangeFilter::class, properties: [
+    'fantasyPoints', 'fantasyRank',
+])]
+#[ORM\Entity(repositoryClass: FantasyUserRepository::class)]
 class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $username = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $ttflId = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"fantasyTeam.name"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "fantasyTeam": "exact",
-     *     "fantasyTeam.name": "partial"
-     * })
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=FantasyTeam::class, inversedBy="fantasyUsers")
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\ManyToOne(targetEntity: FantasyTeam::class, inversedBy: 'fantasyUsers')]
     private ?FantasyTeam $fantasyTeam = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(BooleanFilter::class)
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isExoticUser = false;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $password = null;
 
     /**
@@ -99,46 +75,26 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private ?string $plainPassword = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity=FantasyPick::class, mappedBy="fantasyUser", orphanRemoval=true)
-     * @ORM\OrderBy({"pickedAt": "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyPick::class, orphanRemoval: true)]
+    #[ORM\OrderBy(value: ['pickedAt' => 'ASC'])]
     private Collection $fantasyPicks;
 
-    /**
-     * @ORM\OneToMany(targetEntity=FantasyUserRanking::class, mappedBy="fantasyUser", orphanRemoval=true)
-     * @ORM\OrderBy({"rankingAt": "ASC"})
-     */
+    #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyUserRanking::class, orphanRemoval: true)]
+    #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyUserRankings;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $registeredAt = null;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $lastLoginAt = null;
 
     public function __construct()

@@ -17,125 +17,77 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ApiResource(
- *     normalizationContext={"groups": {"nbaTeam:read"}},
- *     denormalizationContext={"groups": {"nbaTeam:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=NbaTeamRepository::class)
- *
  * @Vich\Uploadable
  */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['nbaTeam:write']],
+    normalizationContext: ['groups' => ['nbaTeam:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'city', 'nickname', 'fullName', 'tricode', 'conference', 'division', 'updatedAt',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'city' => 'partial',
+    'nickname' => 'partial',
+    'fullName' => 'partial',
+    'tricode' => 'exact',
+    'conference' => 'exact',
+    'division' => 'exact',
+])]
+#[ORM\Entity(repositoryClass: NbaTeamRepository::class)]
 class NbaTeam
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read', 'nbaPlayer:read', 'nbaGame:read', 'nbaStatsLog:read'])]
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $city = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $nickname = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
-     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read', 'nbaPlayer:read', 'nbaGame:read', 'nbaStatsLog:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $fullName = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $tricode = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $conference = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="string", length=255)
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $division = null;
 
     /**
      * @Vich\UploadableField(mapping="nba_teams_logos", fileNameProperty="logoFileName")
      */
     private ?File $logoFile = null;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $logoFileName = null;
 
-    /**
-     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
-     */
+    #[Groups(['nbaTeam:read', 'nbaPlayer:read', 'nbaGame:read', 'nbaStatsLog:read'])]
     private ?string $logoFilePath = null;
 
-    /**
-     * @Groups({"nbaTeam:read", "nbaPlayer:read", "nbaGame:read", "nbaStatsLog:read"})
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[Groups(['nbaTeam:read', 'nbaPlayer:read', 'nbaGame:read', 'nbaStatsLog:read'])]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $primaryColor = null;
 
-    /**
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\OneToMany(targetEntity=NbaPlayer::class, mappedBy="nbaTeam")
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\OneToMany(mappedBy: 'nbaTeam', targetEntity: NbaPlayer::class)]
     private Collection $nbaPlayers;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"nbaTeam:read"})
-     *
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['nbaTeam:read'])]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()

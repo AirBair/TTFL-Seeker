@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
@@ -14,100 +15,67 @@ use App\Repository\FantasyUserRankingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * @ApiResource(
- *     normalizationContext={"groups": {"fantasyUserRanking:read"}},
- *     denormalizationContext={"groups": {"fantasyUserRanking:write"}},
- *     collectionOperations={"get"},
- *     itemOperations={"get"}
- * )
- *
- * @ORM\Entity(repositoryClass=FantasyUserRankingRepository::class)
- */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get'],
+    denormalizationContext: ['groups' => ['fantasyUserRanking:write']],
+    normalizationContext: ['groups' => ['fantasyUserRanking:read']]
+)]
+#[ApiFilter(OrderFilter::class, properties: [
+    'id', 'season', 'isPlayoffs', 'fantasyUser.username', 'fantasyPoints', 'fantasyRank', 'rankingAt', 'updatedAt',
+])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'season' => 'exact',
+    'fantasyUser' => 'exact',
+    'fantasyUser.name' => 'partial',
+])]
+#[ApiFilter(BooleanFilter::class, properties: [
+    'isPlayoffs',
+])]
+#[ApiFilter(RangeFilter::class, properties: [
+    'fantasyPoints', 'fantasyRank',
+])]
+#[ApiFilter(DateFilter::class, properties: [
+    'rankingAt',
+])]
+#[ORM\Entity(repositoryClass: FantasyUserRankingRepository::class)]
 class FantasyUserRanking
 {
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUserRanking:read', 'fantasyUser:read'])]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class, properties={"fantasyUser.username"})
-     * @ApiFilter(SearchFilter::class, properties={
-     *     "fantasyUser": "exact",
-     *     "fantasyUser.username": "partial"
-     * })
-     *
-     * @Groups({"fantasyUserRanking:read"})
-     *
-     * @ORM\ManyToOne(targetEntity=FantasyUser::class, inversedBy="fantasyUserRankings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[Groups(['fantasyUserRanking:read'])]
+    #[ORM\ManyToOne(targetEntity: FantasyUser::class, inversedBy: 'fantasyUserRankings')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?FantasyUser $fantasyUser = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"fantasyUserRanking:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUserRanking:read'])]
+    #[ORM\Column(type: 'integer')]
     private int $season;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(SearchFilter::class, strategy="exact")
-     *
-     * @Groups({"fantasyUserRanking:read"})
-     *
-     * @ORM\Column(type="boolean")
-     */
+    #[Groups(['fantasyUserRanking:read'])]
+    #[ORM\Column(type: 'boolean')]
     private bool $isPlayoffs;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
-     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
-     */
+    #[Groups(['fantasyUserRanking:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
     /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(RangeFilter::class)
-     *
      * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     * @ApiFilter(DateFilter::class)
-     *
-     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
-     *
-     * @ORM\Column(type="date")
-     */
+    #[Groups(['fantasyUserRanking:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $rankingAt = null;
 
-    /**
-     * @ApiFilter(OrderFilter::class)
-     *
-     * @Groups({"fantasyUserRanking:read"})
-     *
-     * @ORM\Column(type="datetime")
-     */
+    #[Groups(['fantasyUserRanking:read'])]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
