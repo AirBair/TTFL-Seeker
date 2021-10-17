@@ -48,6 +48,7 @@ class FantasyUserCrudController extends AbstractCrudController
             IntegerField::new('ttflId'),
             AssociationField::new('fantasyTeam'),
             BooleanField::new('isExoticUser')->renderAsSwitch(true),
+            BooleanField::new('isSynchronizationActive')->renderAsSwitch(true),
             IntegerField::new('fantasyRank'),
             IntegerField::new('fantasyPoints'),
             ArrayField::new('roles'),

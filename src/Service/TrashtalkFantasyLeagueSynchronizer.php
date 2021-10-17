@@ -52,6 +52,7 @@ class TrashtalkFantasyLeagueSynchronizer
     {
         $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findBy([
             'fantasyTeam' => null,
+            'isSynchronizationActive' => true,
         ]);
 
         foreach ($fantasyUsers as $fantasyUser) {
@@ -136,7 +137,9 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyTeams(): int
     {
-        $fantasyTeams = $this->entityManager->getRepository(FantasyTeam::class)->findAll();
+        $fantasyTeams = $this->entityManager->getRepository(FantasyTeam::class)->findBy([
+            'isSynchronizationActive' => true,
+        ]);
 
         foreach ($fantasyTeams as $fantasyTeam) {
             $this->synchronizeFantasyTeamRanking($fantasyTeam);

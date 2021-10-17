@@ -124,7 +124,8 @@ export default class FantasyUsersList extends Vue {
             this.$router.push(location)
             fantasyUserModule.findAll({
                 ...this.dataTableOptions,
-                ...this.filters
+                ...this.filters,
+                isSynchronizationActive: true
             })
         }
     }
@@ -133,7 +134,8 @@ export default class FantasyUsersList extends Vue {
         this.initFilters()
         fantasyUserModule.findAll({
             ...this.dataTableOptions,
-            ...this.filters
+            ...this.filters,
+            isSynchronizationActive: true
         })
     }
 

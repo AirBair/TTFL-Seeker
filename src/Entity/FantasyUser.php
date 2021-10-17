@@ -34,7 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'fantasyTeam.name' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: [
-    'isExoticUser',
+    'isExoticUser', 'isSynchronizationActive',
 ])]
 #[ApiFilter(RangeFilter::class, properties: [
     'fantasyPoints', 'fantasyRank',
@@ -74,6 +74,10 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
      * Plain password used before encryption. Not persisted in database.
      */
     private ?string $plainPassword = null;
+
+    #[Groups(['fantasyUser:read'])]
+    #[ORM\Column(type: 'boolean')]
+    private bool $isSynchronizationActive = true;
 
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'integer')]
@@ -199,6 +203,18 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getIsSynchronizationActive(): bool
+    {
+        return $this->isSynchronizationActive;
+    }
+
+    public function setIsSynchronizationActive(bool $isSynchronizationActive): self
+    {
+        $this->isSynchronizationActive = $isSynchronizationActive;
 
         return $this;
     }

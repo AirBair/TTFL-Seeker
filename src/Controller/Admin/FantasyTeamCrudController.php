@@ -30,6 +30,7 @@ class FantasyTeamCrudController extends AbstractCrudController
         return [
             TextField::new('name'),
             BooleanField::new('isExoticTeam')->renderAsSwitch(true),
+            BooleanField::new('isSynchronizationActive')->renderAsSwitch(true),
             IntegerField::new('fantasyRank'),
             IntegerField::new('fantasyPoints'),
             ArrayField::new('fantasyUsers')->hideOnForm(),

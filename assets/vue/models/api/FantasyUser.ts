@@ -9,6 +9,7 @@ export default class FantasyUser extends AbstractResource {
     ttflId?: number
     fantasyTeam?: FantasyTeam
     isExoticUser?: boolean
+    isSynchronizationActive?: boolean
     fantasyPoints?: number
     fantasyRank?: number
     lastFantasyPick?: FantasyPick
