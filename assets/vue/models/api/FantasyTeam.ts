@@ -5,6 +5,7 @@ import { ResourceFilterType } from './ResourceFilterType'
 export default class FantasyTeam extends AbstractResource {
     name?: string
     isExoticTeam?: boolean
+    isSynchronizationActive?: boolean
     fantasyPoints?: number
     fantasyRank?: number
 }

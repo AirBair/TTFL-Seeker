@@ -108,7 +108,8 @@ export default class FantasyTeamsList extends Vue {
             this.$router.push(location)
             fantasyTeamModule.findAll({
                 ...this.dataTableOptions,
-                ...this.filters
+                ...this.filters,
+                isSynchronizationActive: true
             })
         }
     }
@@ -117,7 +118,8 @@ export default class FantasyTeamsList extends Vue {
         this.initFilters()
         fantasyTeamModule.findAll({
             ...this.dataTableOptions,
-            ...this.filters
+            ...this.filters,
+            isSynchronizationActive: true
         })
     }
 

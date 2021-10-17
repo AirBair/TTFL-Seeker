@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'name' => 'partial',
 ])]
 #[ApiFilter(BooleanFilter::class, properties: [
-    'isExoticTeam',
+    'isExoticTeam', 'isSynchronizationActive',
 ])]
 #[ApiFilter(RangeFilter::class, properties: [
     'fantasyPoints', 'fantasyRank',
@@ -50,6 +50,10 @@ class FantasyTeam
     #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
     #[ORM\Column(type: 'boolean')]
     private bool $isExoticTeam = false;
+
+    #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'boolean')]
+    private bool $isSynchronizationActive = true;
 
     #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
     #[ORM\Column(type: 'integer')]
@@ -102,6 +106,18 @@ class FantasyTeam
     public function setIsExoticTeam(bool $isExoticTeam): self
     {
         $this->isExoticTeam = $isExoticTeam;
+
+        return $this;
+    }
+
+    public function getIsSynchronizationActive(): bool
+    {
+        return $this->isSynchronizationActive;
+    }
+
+    public function setIsSynchronizationActive(bool $isSynchronizationActive): self
+    {
+        $this->isSynchronizationActive = $isSynchronizationActive;
 
         return $this;
     }
