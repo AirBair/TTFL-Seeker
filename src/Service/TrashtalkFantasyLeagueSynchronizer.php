@@ -9,6 +9,7 @@ use App\Entity\FantasyTeam;
 use App\Entity\FantasyTeamRanking;
 use App\Entity\FantasyUser;
 use App\Entity\FantasyUserRanking;
+use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaTeam;
 use App\Repository\FantasyPickRepository;
@@ -48,8 +49,19 @@ class TrashtalkFantasyLeagueSynchronizer
         return $this->browser;
     }
 
+    public function wasAnActiveNight(): bool
+    {
+        $nbaGames = $this->entityManager->getRepository(NbaGame::class)->findBy(['gameDay' => new \DateTime('yesterday')]);
+
+        return \count($nbaGames) > 0;
+    }
+
     public function synchronizeFantasyUsers(): int
     {
+        if (false === $this->wasAnActiveNight()) {
+            return 0;
+        }
+
         $fantasyUsers = $this->entityManager->getRepository(FantasyUser::class)->findBy([
             'fantasyTeam' => null,
             'isSynchronizationActive' => true,
@@ -137,6 +149,10 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyTeams(): int
     {
+        if (false === $this->wasAnActiveNight()) {
+            return 0;
+        }
+
         $fantasyTeams = $this->entityManager->getRepository(FantasyTeam::class)->findBy([
             'isSynchronizationActive' => true,
         ]);
