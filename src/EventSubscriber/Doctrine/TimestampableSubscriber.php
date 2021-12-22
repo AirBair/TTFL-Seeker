@@ -41,7 +41,7 @@ class TimestampableSubscriber implements EventSubscriber
     {
         foreach ($methods as $method) {
             if (method_exists($entity, $method)) {
-                $entity->$method(new \DateTimeImmutable());
+                $entity->{$method}(new \DateTimeImmutable());
             }
         }
 

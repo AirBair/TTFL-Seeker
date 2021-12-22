@@ -1,6 +1,6 @@
 name: CI/CD
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
     php:
@@ -28,7 +28,7 @@ jobs:
                 path: vendor
                 key: composer-${{ hashFiles('**/composer.lock') }}
             - run: composer install
-            - run: php-cs-fixer fix --dry-run --diff
+            - run: php vendor/bin/php-cs-fixer fix --dry-run --diff
             - run: php bin/phpunit
     yarn:
         runs-on: ubuntu-latest
