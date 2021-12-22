@@ -18,7 +18,7 @@ class FantasyTeamRankingRepository extends ServiceEntityRepository
 
     public function findUniqueByDate(int $nbaSeasonYear, bool $isPlayoffs, FantasyTeam $fantasyTeam, \DateTime $rankingAt): ?FantasyTeamRanking
     {
-        return $this->createQueryBuilder('ftr')
+        $result = $this->createQueryBuilder('ftr')
             ->select('ftr')
             ->where('ftr.season = :season')
             ->andWhere('ftr.isPlayoffs = :isPlayoffs')
@@ -30,5 +30,7 @@ class FantasyTeamRankingRepository extends ServiceEntityRepository
             ->setParameter('rankingAt', $rankingAt->format('Y-m-d'))
             ->getQuery()
             ->getOneOrNullResult();
+
+        return ($result instanceof FantasyTeamRanking) ? $result : null;
     }
 }

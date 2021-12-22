@@ -34,8 +34,12 @@ class CalculateAverageFantasyPointsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        if (null !== $input->getArgument('season') && !is_numeric($input->getArgument('season'))) {
+            return Command::FAILURE;
+        }
+
         $season = (null === $input->getArgument('season')) ? (int) $_ENV['NBA_YEAR'] : (int) $input->getArgument('season');
-        $isForPastYear = $input->getOption('pastYear') ?? true;
+        $isForPastYear = !\is_bool($input->getOption('pastYear')) || $input->getOption('pastYear');
 
         $result = $this->fantasyPointsCalculator->calculateNbaPlayersAverageFantasyPoints($season, $isForPastYear);
 

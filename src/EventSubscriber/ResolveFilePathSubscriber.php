@@ -67,13 +67,13 @@ final class ResolveFilePathSubscriber implements EventSubscriberInterface
                 $entity->getNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getNbaTeam(), 'logoFile'));
             }
             if ($entity instanceof NbaStatsLog) {
-                $entity->getNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getNbaTeam(), 'logoFile'));
-                $entity->getNbaGame()->getLocalNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getNbaGame()->getLocalNbaTeam(), 'logoFile'));
-                $entity->getNbaGame()->getVisitorNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getNbaGame()->getVisitorNbaTeam(), 'logoFile'));
+                $entity->getNbaTeam()?->setLogoFilePath($this->storage->resolveUri($entity->getNbaTeam(), 'logoFile'));
+                $entity->getNbaGame()?->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($entity->getNbaGame()?->getLocalNbaTeam(), 'logoFile'));
+                $entity->getNbaGame()?->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($entity->getNbaGame()?->getVisitorNbaTeam(), 'logoFile'));
             }
             if ($entity instanceof NbaGame) {
-                $entity->getLocalNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getLocalNbaTeam(), 'logoFile'));
-                $entity->getVisitorNbaTeam()->setLogoFilePath($this->storage->resolveUri($entity->getVisitorNbaTeam(), 'logoFile'));
+                $entity->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($entity->getLocalNbaTeam(), 'logoFile'));
+                $entity->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($entity->getVisitorNbaTeam(), 'logoFile'));
             }
         }
     }

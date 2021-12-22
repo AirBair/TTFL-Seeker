@@ -18,18 +18,23 @@ class NbaStatsLogRepository extends ServiceEntityRepository
 
     public function getBestFantasyScore(\DateTime $day): int
     {
-        return (int) $this->createQueryBuilder('nsl')
+        $result = $this->createQueryBuilder('nsl')
             ->select('MAX(nsl.fantasyPoints)')
             ->leftJoin('nsl.nbaGame', 'ng')
             ->where('ng.gameDay = :gameDay')
             ->setParameter('gameDay', $day)
             ->getQuery()
             ->getSingleScalarResult();
+
+        return (is_numeric($result)) ? (int) $result : 0;
     }
 
+    /**
+     * @return array<NbaStatsLog>
+     */
     public function findByGameDayAndFantasyPoints(\DateTime $day, int $fantasyPoints): array
     {
-        return $this->createQueryBuilder('nsl')
+        $result = $this->createQueryBuilder('nsl')
             ->select('nsl')
             ->leftJoin('nsl.nbaGame', 'ng')
             ->where('ng.gameDay = :gameDay')
@@ -38,11 +43,13 @@ class NbaStatsLogRepository extends ServiceEntityRepository
             ->setParameter('fantasyPoints', $fantasyPoints)
             ->getQuery()
             ->getResult();
+
+        return (\is_array($result)) ? $result : [];
     }
 
     public function getAvgFantasyPointsOfNbaPlayerOnSeason(NbaPlayer $nbaPlayer, int $season): float
     {
-        return (float) $this->getEntityManager()
+        $result = $this->getEntityManager()
             ->createQuery('
                 SELECT AVG(nsl.fantasyPoints)
                 FROM '.NbaStatsLog::class.' nsl
@@ -56,5 +63,7 @@ class NbaStatsLogRepository extends ServiceEntityRepository
             ->setParameter('nbaPlayer', $nbaPlayer)
             ->setParameter('season', $season)
             ->getSingleScalarResult();
+
+        return (is_numeric($result)) ? (float) $result : 0.0;
     }
 }

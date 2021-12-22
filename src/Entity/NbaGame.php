@@ -101,7 +101,7 @@ class NbaGame
 
     public function __toString(): string
     {
-        return $this->gameDay->format('d/m/Y').' - '.$this->localNbaTeam->getTricode().' vs '.$this->visitorNbaTeam->getTricode();
+        return $this->gameDay?->format('d/m/Y').' - '.$this->localNbaTeam?->getTricode().' vs '.$this->visitorNbaTeam?->getTricode();
     }
 
     public function getId(): ?string

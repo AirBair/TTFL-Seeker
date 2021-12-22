@@ -26,60 +26,116 @@ class NbaDataProvider
         $this->nbaSeasonStage = ($_ENV['NBA_PLAYOFFS']) ? self::NBA_PLAYOFFS_STAGE : self::NBA_REGULAR_SEASON_STAGE;
     }
 
+    /**
+     * @return array<array{
+     *     city: string,
+     *     confName: string,
+     *     tricode: string,
+     *     divName: string,
+     *     nickname: string,
+     *     teamId: string,
+     * }>
+     */
     public function getTeamsList(): array
     {
-        $request = TeamsRequest::fromArray([
-            'year' => $this->nbaSeasonYear,
-        ]);
+        $request = new TeamsRequest();
+        $request->year = $this->nbaSeasonYear;
 
         try {
             $results = $this->nbaApiClient->request($request)->getArrayFromJson();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
-        return array_filter($results['league']['standard'] ?? [], fn ($team) => true === $team['isNBAFranchise']);
+        return array_filter($results['league']['standard'] ?? [], fn ($team) => true === $team['isNBAFranchise']) ?? [];
     }
 
+    /**
+     * @return array<array{
+     *     firstName: string,
+     *     lastName: string,
+     *     personId: string,
+     *     teamId: string,
+     *     jersey: string,
+     *     pos: string
+     * }>
+     */
     public function getPlayersList(): array
     {
-        $request = LeagueRosterPlayersRequest::fromArray([
-            'year' => $this->nbaSeasonYear,
-        ]);
+        $request = new LeagueRosterPlayersRequest();
+        $request->year = $this->nbaSeasonYear;
 
         try {
             $results = $this->nbaApiClient->request($request)->getArrayFromJson();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         return $results['league']['standard'] ?? [];
     }
 
+    /**
+     * @return array<array{
+     *     gameId: string,
+     *     startDateEastern: string,
+     *     startTimeUTC: string,
+     *     hTeam: array{teamId: string, score: string},
+     *     vTeam: array{teamId: string, score: string}
+     * }>
+     */
     public function getGamesList(): array
     {
-        $request = LeagueScheduleRequest::fromArray([
-            'year' => $this->nbaSeasonYear,
-        ]);
+        $request = new LeagueScheduleRequest();
+        $request->year = $this->nbaSeasonYear;
 
         try {
             $results = $this->nbaApiClient->request($request)->getArrayFromJson();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         return array_filter($results['league']['standard'] ?? [], fn ($game) => $this->nbaSeasonStage === $game['seasonStageId']);
     }
 
-    public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId): array
+    /**
+     * @return null|array{
+     *     vTeam: array{
+     *         totals: array{
+     *             points: string
+     *         }
+     *      },
+     *     hTeam: array{
+     *         totals: array{
+     *             points: string
+     *         }
+     *      },
+     *     activePlayers: array<array{
+     *         personId: string,
+     *         teamId: string,
+     *         points: string,
+     *         min: string,
+     *         fgm: string,
+     *         fga: string,
+     *         tpm: string,
+     *         tpa: string,
+     *         ftm: string,
+     *         fta: string,
+     *         totReb: string,
+     *         assists: string,
+     *         steals: string,
+     *         turnovers: string,
+     *         blocks: string
+     *     }>
+     * }
+     */
+    public function gameBoxScore(\DateTimeInterface $gameDate, string $gameId): ?array
     {
-        $request = BoxscoreRequest::fromArray([
-            'gameDate' => $gameDate,
-            'gameId' => $gameId,
-        ]);
+        $request = new BoxscoreRequest();
+        $request->gameDate = \DateTime::createFromInterface($gameDate);
+        $request->gameId = $gameId;
 
         try {
             $results = $this->nbaApiClient->request($request)->getArrayFromJson();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
-        return $results['stats'] ?? [];
+        return $results['stats'] ?? null;
     }
 }

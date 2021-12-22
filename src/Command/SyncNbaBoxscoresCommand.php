@@ -32,6 +32,10 @@ class SyncNbaBoxscoresCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        if (null !== $input->getArgument('day') && !\is_string($input->getArgument('day'))) {
+            return Command::FAILURE;
+        }
+
         $day = (null === $input->getArgument('day')) ? new \DateTime('yesterday') : new \DateTime($input->getArgument('day'));
 
         $result = $this->nbaDataSynchronizer->synchronizeBoxscores($day);

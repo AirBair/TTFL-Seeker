@@ -81,20 +81,27 @@ class TrashtalkFantasyLeagueSynchronizer
     public function synchronizeFantasyUserRankingAndPick(FantasyUser $fantasyUser): void
     {
         $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=halloffame&ttpl='.$fantasyUser->getTtflId());
+        $crawler = $this->browser?->getCrawler();
+        if (!$crawler instanceof Crawler) {
+            return;
+        }
 
         $nbaTeam = $this->entityManager->getRepository(NbaTeam::class)->findOneBy([
-            'fullName' => $this->browser->getCrawler()->filter('#decks li:nth-child(1) div.list-maillot div.poptip')->attr('tip'),
+            'fullName' => $crawler->filter('#decks li:nth-child(1) div.list-maillot div.poptip')->attr('tip'),
         ]);
         $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
             'nbaTeam' => $nbaTeam,
-            'fullName' => $this->browser->getCrawler()->filter('#decks li:nth-child(1) div.media-body h4.media-heading')->getNode(0)->textContent,
+            'fullName' => $crawler->filter('#decks li:nth-child(1) div.media-body h4.media-heading')->getNode(0)?->textContent,
         ]);
         preg_match(
             '/Le ([0-9]{2}-[0-9]{2}-[0-9]{4}) pour ([0-9]+) pts/',
-            trim($this->browser->getCrawler()->filter('#decks li:nth-child(1) div.media-body small')->getNode(0)->textContent),
+            trim((string) $crawler->filter('#decks li:nth-child(1) div.media-body small')->getNode(0)?->textContent),
             $dateAndPoints
         );
         $pickedAt = \DateTime::createFromFormat('d-m-Y', $dateAndPoints[1]);
+        if (false === $pickedAt) {
+            return;
+        }
         $pickFantasyPoints = (int) $dateAndPoints[2];
 
         /** @var FantasyPickRepository $fantasyPickRepository */
@@ -127,8 +134,8 @@ class TrashtalkFantasyLeagueSynchronizer
             (new \DateTime())
         ) ?? new FantasyUserRanking();
 
-        $fantasyPoints = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent;
-        $fantasyRank = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent;
+        $fantasyPoints = (int) $crawler->filter('.profile-stat-count')->getNode(0)?->textContent;
+        $fantasyRank = (int) $crawler->filter('.profile-stat-count')->getNode(1)?->textContent;
 
         $fantasyUserRanking
             ->setSeason($this->nbaSeasonYear)
@@ -170,7 +177,11 @@ class TrashtalkFantasyLeagueSynchronizer
 
     public function synchronizeFantasyTeamRanking(FantasyTeam $fantasyTeam): void
     {
-        $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=equipe&team='.urlencode($fantasyTeam->getName()));
+        $this->getHttpBrowser()->request('GET', 'https://fantasy.trashtalk.co/?tpl=equipe&team='.urlencode((string) $fantasyTeam->getName()));
+        $crawler = $this->browser?->getCrawler();
+        if (!$crawler instanceof Crawler) {
+            return;
+        }
 
         /** @var FantasyTeamRankingRepository $fantasyTeamRankingRepository */
         $fantasyTeamRankingRepository = $this->entityManager->getRepository(FantasyTeamRanking::class);
@@ -181,8 +192,8 @@ class TrashtalkFantasyLeagueSynchronizer
             (new \DateTime())
         ) ?? new FantasyTeamRanking();
 
-        $fantasyPoints = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(0)->textContent;
-        $fantasyRank = (int) $this->browser->getCrawler()->filter('.profile-stat-count')->getNode(1)->textContent;
+        $fantasyPoints = (int) $crawler->filter('.profile-stat-count')->getNode(0)?->textContent;
+        $fantasyRank = (int) $crawler->filter('.profile-stat-count')->getNode(1)?->textContent;
 
         $fantasyTeamRanking
             ->setSeason((int) $_ENV['NBA_YEAR'])
@@ -200,19 +211,19 @@ class TrashtalkFantasyLeagueSynchronizer
             ->setFantasyPoints($fantasyPoints)
             ->setFantasyRank($fantasyRank);
 
-        for ($playerIndex = 1; $playerIndex <= $this->browser->getCrawler()->filter('#decks tbody tr')->count(); ++$playerIndex) {
-            $this->synchronizeFantasyTeamUserRanking($this->browser->getCrawler(), $playerIndex, $fantasyTeam);
+        for ($playerIndex = 1; $playerIndex <= $crawler->filter('#decks tbody tr')->count(); ++$playerIndex) {
+            $this->synchronizeFantasyTeamUserRanking($crawler, $playerIndex, $fantasyTeam);
         }
     }
 
     public function synchronizeFantasyTeamUserRanking(Crawler $crawler, int $playerIndex, FantasyTeam $fantasyTeam): void
     {
-        $username = $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->getNode(0)->textContent;
-        $fantasyRank = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(1)')->getNode(0)->textContent;
-        $fantasyPoints = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(3)')->getNode(0)->textContent;
+        $username = (string) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->getNode(0)?->textContent;
+        $fantasyRank = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(1)')->getNode(0)?->textContent;
+        $fantasyPoints = (int) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(3)')->getNode(0)?->textContent;
         preg_match(
             '/(.*) \((.*) pts\)/',
-            trim($crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(5)')->getNode(0)->textContent),
+            trim((string) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(5)')->getNode(0)?->textContent),
             $pick
         );
         $pickName = isset($pick[1]) ? trim($pick[1]) : null;
@@ -226,7 +237,7 @@ class TrashtalkFantasyLeagueSynchronizer
             $ttflId = (int) str_replace(
                 '/?tpl=halloffame&ttpl=',
                 '',
-                $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->attr('href')
+                (string) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->attr('href')
             );
             $fantasyUser = (new FantasyUser())
                 ->setUsername($username)

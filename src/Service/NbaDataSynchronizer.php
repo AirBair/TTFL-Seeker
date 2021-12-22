@@ -110,6 +110,9 @@ class NbaDataSynchronizer
         return \count($nbaDataGames);
     }
 
+    /**
+     * @return array{games: int, activePlayers: int, bestFantasyScore: int}
+     */
     public function synchronizeBoxscores(\DateTime $day): array
     {
         $nbaGames = $this->entityManager->getRepository(NbaGame::class)->findBy(['gameDay' => $day]);
@@ -135,9 +138,12 @@ class NbaDataSynchronizer
 
     public function synchronizeGameBoxscore(NbaGame $nbaGame): int
     {
+        if (null === $nbaGame->getGameDay() || null === $nbaGame->getId()) {
+            return 0;
+        }
         $nbaDataBoxscore = $this->nbaDataProvider->gameBoxScore($nbaGame->getGameDay(), $nbaGame->getId());
 
-        if (!isset($nbaDataBoxscore['hTeam']) || !isset($nbaDataBoxscore['vTeam'])) {
+        if (null === $nbaDataBoxscore) {
             return 0;
         }
 
@@ -185,7 +191,7 @@ class NbaDataSynchronizer
                 ->setFreeThrows((int) $activePlayer['ftm'])
                 ->setFreeThrowsAttempts((int) $activePlayer['fta'])
                 ->setMinutesPlayed(('' !== $activePlayer['min']) ? (int) (explode(':', $activePlayer['min'])[0]) : 0)
-                ->setHasWon((int) $activePlayer['teamId'] === $winningTeam->getId())
+                ->setHasWon((string) $activePlayer['teamId'] === $winningTeam?->getId())
                 ->setIsBestPick(false);
 
             $nbaStatsLog->setFantasyPoints($this->fantasyPointsCalculator->calculatePlayerGameFantasyPoints($nbaStatsLog));
