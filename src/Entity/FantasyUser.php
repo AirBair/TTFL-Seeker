@@ -64,6 +64,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isExoticUser = false;
 
+    /** @var array<string> */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -176,6 +177,9 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param array<string> $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

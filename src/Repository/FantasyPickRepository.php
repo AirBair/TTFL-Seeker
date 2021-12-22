@@ -18,7 +18,7 @@ class FantasyPickRepository extends ServiceEntityRepository
 
     public function findUniqueByDate(int $nbaSeasonYear, bool $isPlayoffs, FantasyUser $fantasyUser, \DateTime $rankingAt): ?FantasyPick
     {
-        return $this->createQueryBuilder('fp')
+        $result = $this->createQueryBuilder('fp')
             ->select('fp')
             ->where('fp.season = :season')
             ->andWhere('fp.isPlayoffs = :isPlayoffs')
@@ -30,5 +30,7 @@ class FantasyPickRepository extends ServiceEntityRepository
             ->setParameter('pickedAt', $rankingAt->format('Y-m-d'))
             ->getQuery()
             ->getOneOrNullResult();
+
+        return ($result instanceof FantasyPick) ? $result : null;
     }
 }

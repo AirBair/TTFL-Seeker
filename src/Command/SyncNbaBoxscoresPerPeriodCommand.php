@@ -24,11 +24,15 @@ class SyncNbaBoxscoresPerPeriodCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (!\is_string($input->getArgument('beginningDay')) || !\is_string($input->getArgument('endingDay'))) {
+            return Command::INVALID;
+        }
+
         $currentDay = new \DateTime($input->getArgument('beginningDay'));
         $endingDay = new \DateTime($input->getArgument('endingDay'));
 
         while ($currentDay <= $endingDay) {
-            $this->getApplication()->find(SyncNbaBoxscoresCommand::getDefaultName())->run(new ArrayInput([
+            $this->getApplication()?->find((string) SyncNbaBoxscoresCommand::getDefaultName())->run(new ArrayInput([
                 'day' => $currentDay->format('Y-m-d'),
             ]), $output);
             $currentDay->modify('+1 day');

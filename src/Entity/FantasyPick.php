@@ -88,7 +88,7 @@ class FantasyPick
 
     public function __toString(): string
     {
-        return $this->fantasyUser.' - '.$this->pickedAt->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts';
+        return $this->fantasyUser.' - '.$this->pickedAt?->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts';
     }
 
     public function getId(): ?int

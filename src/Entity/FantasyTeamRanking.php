@@ -84,7 +84,7 @@ class FantasyTeamRanking
 
     public function __toString(): string
     {
-        return $this->fantasyTeam.' - '.$this->rankingAt->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th';
+        return $this->fantasyTeam.' - '.$this->rankingAt?->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th';
     }
 
     public function getId(): ?int

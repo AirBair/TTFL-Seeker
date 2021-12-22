@@ -37,7 +37,10 @@ class TimestampableSubscriber implements EventSubscriber
         ]);
     }
 
-    public function generateTimestampableAttributes($entity, array $methods)
+    /**
+     * @param array<string> $methods
+     */
+    public function generateTimestampableAttributes(object $entity, array $methods): object
     {
         foreach ($methods as $method) {
             if (method_exists($entity, $method)) {
