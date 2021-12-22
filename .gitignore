@@ -21,6 +21,11 @@ yarn-error.log
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
 ###> app ###
 /.idea/
 /public/uploads/nba-teams-logos/

@@ -23,6 +23,9 @@ final class ResolveFilePathSubscriber implements EventSubscriberInterface
     ) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -39,12 +42,14 @@ final class ResolveFilePathSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!($attributes = RequestAttributesExtractor::extractAttributes($request)) || (
-                !is_a($attributes['resource_class'], NbaTeam::class, true) &&
-                !is_a($attributes['resource_class'], NbaPlayer::class, true) &&
-                !is_a($attributes['resource_class'], NbaGame::class, true) &&
-                !is_a($attributes['resource_class'], NbaStatsLog::class, true)
-            )) {
+        if (!($attributes = RequestAttributesExtractor::extractAttributes($request))
+            || (
+                !is_a($attributes['resource_class'], NbaTeam::class, true)
+                && !is_a($attributes['resource_class'], NbaPlayer::class, true)
+                && !is_a($attributes['resource_class'], NbaGame::class, true)
+                && !is_a($attributes['resource_class'], NbaStatsLog::class, true)
+            )
+        ) {
             return;
         }
 

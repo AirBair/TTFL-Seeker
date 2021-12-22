@@ -15,19 +15,11 @@ $finder = PhpCsFixer\Finder::create()
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
-        '@Symfony' => true,
-        '@Symfony:risky' => true,
+        '@PhpCsFixer' => true,
+        '@PhpCsFixer:risky' => true,
         '@DoctrineAnnotation' => true,
         '@PHPUnit84Migration:risky' => true,
         '@PHP80Migration:risky' => true,
-        'array_syntax' => ['syntax' => 'short'],
-        'no_useless_else' => true,
-        'no_useless_return' => true,
-        'ordered_class_elements' => true,
-        'ordered_imports' => true,
-        'phpdoc_add_missing_param_annotation' => true,
-        'phpdoc_order' => true,
-        'strict_comparison' => true,
+        'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     ])
-    ->setCacheFile(__DIR__.'/var/.php_cs.cache')
     ->setFinder($finder);
