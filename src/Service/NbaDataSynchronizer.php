@@ -27,6 +27,7 @@ class NbaDataSynchronizer
         $nbaDataTeams = $this->nbaDataProvider->getTeamsList();
 
         foreach ($nbaDataTeams as $nbaDataTeam) {
+            /** @var ?NbaTeam $team */
             $team = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataTeam['teamId']);
 
             if (null === $team) {
@@ -55,6 +56,7 @@ class NbaDataSynchronizer
         $nbaDataPlayers = $this->nbaDataProvider->getPlayersList();
 
         foreach ($nbaDataPlayers as $nbaDataPlayer) {
+            /** @var ?NbaPlayer $player */
             $player = $this->entityManager->getRepository(NbaPlayer::class)->find($nbaDataPlayer['personId']);
 
             if (null === $player) {
@@ -64,13 +66,16 @@ class NbaDataSynchronizer
                 $this->entityManager->persist($player);
             }
 
+            /** @var ?NbaTeam $nbaTeam */
+            $nbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataPlayer['teamId']);
+
             $player
                 ->setLastname($nbaDataPlayer['lastName'])
                 ->setFirstname($nbaDataPlayer['firstName'])
                 ->setFullName($nbaDataPlayer['firstName'].' '.$nbaDataPlayer['lastName'])
                 ->setPosition($nbaDataPlayer['pos'])
                 ->setJersey($nbaDataPlayer['jersey'])
-                ->setNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataPlayer['teamId']));
+                ->setNbaTeam($nbaTeam);
         }
 
         $this->entityManager->flush();
@@ -85,6 +90,7 @@ class NbaDataSynchronizer
         $nbaDataGames = $this->nbaDataProvider->getGamesList();
 
         foreach ($nbaDataGames as $nbaDataGame) {
+            /** @var ?NbaGame $game */
             $game = $this->entityManager->getRepository(NbaGame::class)->find($nbaDataGame['gameId']);
 
             if (null === $game) {
@@ -92,11 +98,17 @@ class NbaDataSynchronizer
                 $this->entityManager->persist($game);
             }
 
+            /** @var ?NbaTeam $localNbaTeam */
+            $localNbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']);
+
+            /** @var ?NbaTeam $visitorNbaTeam */
+            $visitorNbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']);
+
             $game
                 ->setSeason((int) ($_ENV['NBA_YEAR']))
                 ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
-                ->setLocalNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['hTeam']['teamId']))
-                ->setVisitorNbaTeam($this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']))
+                ->setLocalNbaTeam($localNbaTeam)
+                ->setVisitorNbaTeam($visitorNbaTeam)
                 ->setGameDay(new \DateTime($nbaDataGame['startDateEastern']))
                 ->setScheduledAt(new \DateTime($nbaDataGame['startTimeUTC']))
                 ->setLocalScore(('' === $nbaDataGame['hTeam']['score']) ? null : (int) $nbaDataGame['hTeam']['score'])
@@ -119,6 +131,7 @@ class NbaDataSynchronizer
 
         $nbaActivePlayers = 0;
 
+        /** @var NbaGame $nbaGame */
         foreach ($nbaGames as $nbaGame) {
             $nbaActivePlayers += $this->synchronizeGameBoxscore($nbaGame);
         }
@@ -156,13 +169,17 @@ class NbaDataSynchronizer
             $nbaGame->getVisitorNbaTeam();
 
         foreach ($nbaDataBoxscore['activePlayers'] as $activePlayer) {
+            /** @var ?NbaPlayer $nbaPlayer */
             $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->find($activePlayer['personId']);
+
+            /** @var ?NbaTeam $nbaTeam */
             $nbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($activePlayer['teamId']);
 
             if (null === $nbaPlayer) {
                 continue;
             }
 
+            /** @var ?NbaStatsLog $nbaStatsLog */
             $nbaStatsLog = $this->entityManager->getRepository(NbaStatsLog::class)->findOneBy([
                 'nbaPlayer' => $nbaPlayer,
                 'nbaGame' => $nbaGame,
