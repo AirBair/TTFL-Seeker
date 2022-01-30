@@ -67,6 +67,7 @@ class TrashtalkFantasyLeagueSynchronizer
             'isSynchronizationActive' => true,
         ]);
 
+        /** @var FantasyUser $fantasyUser */
         foreach ($fantasyUsers as $fantasyUser) {
             $this->synchronizeFantasyUserRankingAndPick($fantasyUser);
         }
@@ -86,9 +87,12 @@ class TrashtalkFantasyLeagueSynchronizer
             return;
         }
 
+        /** @var ?NbaTeam $nbaTeam */
         $nbaTeam = $this->entityManager->getRepository(NbaTeam::class)->findOneBy([
             'fullName' => $crawler->filter('#decks li:nth-child(1) div.list-maillot div.poptip')->attr('tip'),
         ]);
+
+        /** @var ?NbaPlayer $nbaPlayer */
         $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
             'nbaTeam' => $nbaTeam,
             'fullName' => $crawler->filter('#decks li:nth-child(1) div.media-body h4.media-heading')->getNode(0)?->textContent,
@@ -164,6 +168,7 @@ class TrashtalkFantasyLeagueSynchronizer
             'isSynchronizationActive' => true,
         ]);
 
+        /** @var FantasyTeam $fantasyTeam */
         foreach ($fantasyTeams as $fantasyTeam) {
             $this->synchronizeFantasyTeamRanking($fantasyTeam);
         }
@@ -230,6 +235,7 @@ class TrashtalkFantasyLeagueSynchronizer
         $pickFantasyPoints = isset($pick[2]) ? (int) $pick[2] : null;
         $pickedAt = new \DateTime('yesterday');
 
+        /** @var ?FantasyUser $fantasyUser */
         $fantasyUser = $this->entityManager->getRepository(FantasyUser::class)->findOneBy([
             'username' => $username,
         ]);
@@ -280,6 +286,7 @@ class TrashtalkFantasyLeagueSynchronizer
             ->setFantasyRank($fantasyRank);
 
         if (null !== $pickName && null !== $pickFantasyPoints) {
+            /** @var ?NbaPlayer $nbaPlayer */
             $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
                 'fullName' => $pickName,
             ]);

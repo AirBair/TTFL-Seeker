@@ -47,6 +47,8 @@ class FantasyPointsCalculator
 
         /** @var NbaStatsLogRepository $nbaStatsLogRepository */
         $nbaStatsLogRepository = $this->entityManager->getRepository(NbaStatsLog::class);
+
+        /** @var NbaPlayer $player */
         foreach ($players as $player) {
             $avgFantasyPoints = $nbaStatsLogRepository->getAvgFantasyPointsOfNbaPlayerOnSeason($player, $season);
 
