@@ -76,6 +76,10 @@ class NbaDataSynchronizer
                 ->setPosition($nbaDataPlayer['pos'])
                 ->setJersey($nbaDataPlayer['jersey'])
                 ->setNbaTeam($nbaTeam);
+
+            if (null === $player->getFullNameInTtfl() || '' === $player->getFullNameInTtfl()) {
+                $player->setFullNameInTtfl((string) $player->getFullName());
+            }
         }
 
         $this->entityManager->flush();
