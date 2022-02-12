@@ -58,6 +58,10 @@ class NbaPlayer
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $fullName = null;
 
+    #[Groups(['nbaPlayer:read', 'fantasyPick:read', 'fantasyUser:read'])]
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $fullNameInTtfl = null;
+
     #[Groups(['nbaPlayer:read'])]
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $position = null;
@@ -139,6 +143,18 @@ class NbaPlayer
     public function setFullName(string $fullName): self
     {
         $this->fullName = $fullName;
+
+        return $this;
+    }
+
+    public function getFullNameInTtfl(): ?string
+    {
+        return $this->fullNameInTtfl;
+    }
+
+    public function setFullNameInTtfl(string $fullNameInTtfl): self
+    {
+        $this->fullNameInTtfl = $fullNameInTtfl;
 
         return $this;
     }

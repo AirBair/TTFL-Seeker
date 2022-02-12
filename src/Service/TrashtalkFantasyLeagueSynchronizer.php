@@ -95,7 +95,7 @@ class TrashtalkFantasyLeagueSynchronizer
         /** @var ?NbaPlayer $nbaPlayer */
         $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
             'nbaTeam' => $nbaTeam,
-            'fullName' => $crawler->filter('#decks li:nth-child(1) div.media-body h4.media-heading')->getNode(0)?->textContent,
+            'fullNameInTtfl' => $crawler->filter('#decks li:nth-child(1) div.media-body h4.media-heading')->getNode(0)?->textContent,
         ]);
         preg_match(
             '/Le ([0-9]{2}-[0-9]{2}-[0-9]{4}) pour ([0-9]+) pts/',
@@ -288,7 +288,7 @@ class TrashtalkFantasyLeagueSynchronizer
         if (null !== $pickName && null !== $pickFantasyPoints) {
             /** @var ?NbaPlayer $nbaPlayer */
             $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->findOneBy([
-                'fullName' => $pickName,
+                'fullNameInTtfl' => $pickName,
             ]);
 
             if (null === $nbaPlayer) {
