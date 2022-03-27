@@ -88,10 +88,16 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 
+    /**
+     * @var Collection<int, FantasyPick>
+     */
     #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyPick::class, orphanRemoval: true)]
     #[ORM\OrderBy(value: ['pickedAt' => 'ASC'])]
     private Collection $fantasyPicks;
 
+    /**
+     * @var Collection<int, FantasyUserRanking>
+     */
     #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyUserRanking::class, orphanRemoval: true)]
     #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyUserRankings;
@@ -247,6 +253,9 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, FantasyPick>
+     */
     public function getFantasyPicks(): Collection
     {
         return $this->fantasyPicks;
@@ -274,6 +283,9 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, FantasyUserRanking>
+     */
     public function getFantasyUserRankings(): Collection
     {
         return $this->fantasyUserRankings;
@@ -356,6 +368,6 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getLastFantasyPick(): ?FantasyPick
     {
-        return ($this->fantasyPicks->count()) ? $this->fantasyPicks->last() : null;
+        return $this->fantasyPicks->last() ?: null;
     }
 }
