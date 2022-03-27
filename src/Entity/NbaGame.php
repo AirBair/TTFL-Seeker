@@ -84,6 +84,9 @@ class NbaGame
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $visitorScore = null;
 
+    /**
+     * @var Collection<int, NbaStatsLog>
+     */
     #[Groups(['nbaGame:read'])]
     #[ORM\OneToMany(mappedBy: 'nbaGame', targetEntity: NbaStatsLog::class, cascade: ['remove'], orphanRemoval: true)]
     private Collection $nbaStatsLogs;
@@ -212,6 +215,9 @@ class NbaGame
         return $this;
     }
 
+    /**
+     * @return Collection<int, NbaStatsLog>
+     */
     public function getNbaStatsLogs(): Collection
     {
         return $this->nbaStatsLogs;

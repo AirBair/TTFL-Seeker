@@ -63,10 +63,16 @@ class FantasyTeam
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 
+    /**
+     * @var Collection<int, FantasyTeamRanking>
+     */
     #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyTeamRanking::class, orphanRemoval: true)]
     #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyTeamRankings;
 
+    /**
+     * @var Collection<int, FantasyUser>
+     */
     #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyUser::class)]
     private Collection $fantasyUsers;
 
@@ -146,6 +152,9 @@ class FantasyTeam
         return $this;
     }
 
+    /**
+     * @return Collection<int, FantasyTeamRanking>
+     */
     public function getFantasyTeamRankings(): Collection
     {
         return $this->fantasyTeamRankings;
@@ -173,6 +182,9 @@ class FantasyTeam
         return $this;
     }
 
+    /**
+     * @return Collection<int, FantasyUser>
+     */
     public function getFantasyUsers(): Collection
     {
         return $this->fantasyUsers;

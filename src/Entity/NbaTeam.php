@@ -82,6 +82,9 @@ class NbaTeam
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $primaryColor = null;
 
+    /**
+     * @var Collection<int, NbaPlayer>
+     */
     #[Groups(['nbaTeam:read'])]
     #[ORM\OneToMany(mappedBy: 'nbaTeam', targetEntity: NbaPlayer::class)]
     private Collection $nbaPlayers;
@@ -235,6 +238,9 @@ class NbaTeam
         return $this->primaryColor;
     }
 
+    /**
+     * @return Collection<int, NbaPlayer>
+     */
     public function getNbaPlayers(): Collection
     {
         return $this->nbaPlayers;
