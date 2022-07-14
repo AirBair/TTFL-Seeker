@@ -8,6 +8,9 @@ use App\Entity\NbaTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @template-extends ServiceEntityRepository<NbaTeam>
+ */
 class NbaTeamRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

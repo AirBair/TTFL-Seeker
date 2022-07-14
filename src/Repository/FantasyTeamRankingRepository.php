@@ -9,6 +9,9 @@ use App\Entity\FantasyTeamRanking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @template-extends ServiceEntityRepository<FantasyTeamRanking>
+ */
 class FantasyTeamRankingRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

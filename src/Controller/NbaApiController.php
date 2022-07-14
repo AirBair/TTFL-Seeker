@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class NbaApiController extends AbstractController
 {
     public function __construct(
-        private NbaDataProvider $nbaDataProvider
+        private readonly NbaDataProvider $nbaDataProvider
     ) {
     }
 

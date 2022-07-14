@@ -28,8 +28,8 @@ class TrashtalkFantasyLeagueSynchronizer
     private bool $isNbaPlayoffs;
 
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private LoggerInterface $synchronizationLogger
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LoggerInterface $synchronizationLogger
     ) {
         $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
@@ -135,7 +135,7 @@ class TrashtalkFantasyLeagueSynchronizer
             $this->nbaSeasonYear,
             $this->isNbaPlayoffs,
             $fantasyUser,
-            (new \DateTime())
+            new \DateTime()
         ) ?? new FantasyUserRanking();
 
         $fantasyPoints = (int) $crawler->filter('.profile-stat-count')->getNode(0)?->textContent;
@@ -194,7 +194,7 @@ class TrashtalkFantasyLeagueSynchronizer
             $this->nbaSeasonYear,
             $this->isNbaPlayoffs,
             $fantasyTeam,
-            (new \DateTime())
+            new \DateTime()
         ) ?? new FantasyTeamRanking();
 
         $fantasyPoints = (int) $crawler->filter('.profile-stat-count')->getNode(0)?->textContent;
@@ -262,7 +262,7 @@ class TrashtalkFantasyLeagueSynchronizer
                 $this->nbaSeasonYear,
                 $this->isNbaPlayoffs,
                 $fantasyUser,
-                (new \DateTime())
+                new \DateTime()
             );
         }
         if (null === $fantasyUserRanking) {

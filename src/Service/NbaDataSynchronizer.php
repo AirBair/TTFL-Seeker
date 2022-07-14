@@ -15,10 +15,10 @@ use Psr\Log\LoggerInterface;
 class NbaDataSynchronizer
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private NbaDataProvider $nbaDataProvider,
-        private FantasyPointsCalculator $fantasyPointsCalculator,
-        private LoggerInterface $synchronizationLogger
+        private readonly EntityManagerInterface $entityManager,
+        private readonly NbaDataProvider $nbaDataProvider,
+        private readonly FantasyPointsCalculator $fantasyPointsCalculator,
+        private readonly LoggerInterface $synchronizationLogger
     ) {
     }
 
@@ -109,7 +109,7 @@ class NbaDataSynchronizer
             $visitorNbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']);
 
             $game
-                ->setSeason((int) ($_ENV['NBA_YEAR']))
+                ->setSeason((int) $_ENV['NBA_YEAR'])
                 ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
                 ->setLocalNbaTeam($localNbaTeam)
                 ->setVisitorNbaTeam($visitorNbaTeam)

@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:sync-nba-boxscores-per-period',
+    description: 'Synchronize boxscores (teams & players stats) on a given period from NBA API to the local database.',
+)]
 class SyncNbaBoxscoresPerPeriodCommand extends Command
 {
-    protected static $defaultName = 'app:sync-nba-boxscores-per-period';
-
     protected function configure(): void
     {
         $this
-            ->setDescription('Synchronize boxscores (teams & players stats) on a given period from NBA API to the local database.')
             ->addArgument('beginningDay', InputArgument::REQUIRED, 'Beginning day of the games under the format Y-m-d')
             ->addArgument('endingDay', InputArgument::REQUIRED, 'Ending day of the games under the format Y-m-d');
     }

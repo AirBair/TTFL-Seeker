@@ -9,6 +9,9 @@ use App\Entity\NbaStatsLog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @template-extends ServiceEntityRepository<NbaStatsLog>
+ */
 class NbaStatsLogRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)

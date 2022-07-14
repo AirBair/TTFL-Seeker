@@ -8,6 +8,9 @@ use App\Entity\FantasyTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @template-extends ServiceEntityRepository<FantasyTeam>
+ */
 class FantasyTeamRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
