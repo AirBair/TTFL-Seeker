@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber\Doctrine;
 
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-class TimestampableSubscriber implements EventSubscriber
+class TimestampableSubscriber implements EventSubscriberInterface
 {
     public function getSubscribedEvents(): array
     {

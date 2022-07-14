@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Service\FantasyPointsCalculator;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,12 +13,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:calculate-avg-fantasy-points',
+    description: 'Calculate average fantasy points of nba players.',
+)]
 class CalculateAverageFantasyPointsCommand extends Command
 {
-    protected static $defaultName = 'app:calculate-avg-fantasy-points';
-
     public function __construct(
-        private FantasyPointsCalculator $fantasyPointsCalculator
+        private readonly FantasyPointsCalculator $fantasyPointsCalculator
     ) {
         parent::__construct();
     }
@@ -25,7 +28,6 @@ class CalculateAverageFantasyPointsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Calculate average fantasy points of nba players.')
             ->addArgument('season', InputArgument::OPTIONAL, 'Season year. Default: '.$_ENV['NBA_YEAR'])
             ->addOption('pastYear', null, InputOption::VALUE_OPTIONAL, 'Save as average on past year ?', false);
     }

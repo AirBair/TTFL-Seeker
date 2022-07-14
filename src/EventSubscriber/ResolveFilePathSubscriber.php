@@ -19,7 +19,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 final class ResolveFilePathSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private StorageInterface $storage
+        private readonly StorageInterface $storage
     ) {
     }
 

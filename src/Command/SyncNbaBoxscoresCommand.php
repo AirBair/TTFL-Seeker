@@ -5,27 +5,28 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Service\NbaDataSynchronizer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:sync-nba-boxscores',
+    description: 'Synchronize boxscores (teams & players stats) rom NBA API to the local database.',
+)]
 class SyncNbaBoxscoresCommand extends Command
 {
-    protected static $defaultName = 'app:sync-nba-boxscores';
-
     public function __construct(
-        private NbaDataSynchronizer $nbaDataSynchronizer
+        private readonly NbaDataSynchronizer $nbaDataSynchronizer
     ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setDescription('Synchronize boxscores (teams & players stats) rom NBA API to the local database.')
-            ->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yersteday)');
+        $this->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yersteday)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

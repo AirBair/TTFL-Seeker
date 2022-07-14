@@ -20,8 +20,5 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Doctrine Subscribers
-    App\EventSubscriber\Doctrine\:
-        resource: '../src/EventSubscriber/Doctrine'
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
