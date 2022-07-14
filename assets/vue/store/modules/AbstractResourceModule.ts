@@ -3,7 +3,7 @@ import { Module } from 'vuex'
 import ResourceCollection from '../../models/api/ResourceCollection'
 import AbstractResource from '../../models/api/AbstractResource'
 import AbstractResourceApiHelper from '../../helpers/api/AbstractResourceApiHelper'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
 export interface AbstractResourceState<T> {
     isLoading: boolean;
@@ -59,7 +59,7 @@ export default class AbstractApiResourceModule<T extends AbstractResource> exten
             response = await this.apiHelper.find(id)
             this.context.commit('fetchItemSuccess', response.data)
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response && error.response.data['hydra:description']) {
+            if (error instanceof AxiosError && error.response && error.response.data['hydra:description']) {
                 this.context.commit('fetchItemError', error.response.data['hydra:description'])
             } else {
                 this.context.commit('fetchItemError', error)
@@ -79,7 +79,7 @@ export default class AbstractApiResourceModule<T extends AbstractResource> exten
             item = (response.data['hydra:member'] && response.data['hydra:member'][0]) ? response.data['hydra:member'][0] : null
             this.context.commit('fetchItemSuccess', item)
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response && error.response.data['hydra:description']) {
+            if (error instanceof AxiosError && error.response && error.response.data['hydra:description']) {
                 this.context.commit('fetchItemError', error.response.data['hydra:description'])
             } else {
                 this.context.commit('fetchItemError', error)
@@ -123,7 +123,7 @@ export default class AbstractApiResourceModule<T extends AbstractResource> exten
             response = await this.apiHelper.findAll(params)
             this.context.commit('fetchItemsSuccess', response.data)
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response && error.response.data['hydra:description']) {
+            if (error instanceof AxiosError && error.response && error.response.data['hydra:description']) {
                 this.context.commit('fetchItemsError', error.response.data['hydra:description'])
             } else {
                 this.context.commit('fetchItemsError', error)
