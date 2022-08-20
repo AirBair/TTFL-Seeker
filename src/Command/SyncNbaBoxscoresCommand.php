@@ -26,7 +26,7 @@ class SyncNbaBoxscoresCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yersteday)');
+        $this->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yesterday)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

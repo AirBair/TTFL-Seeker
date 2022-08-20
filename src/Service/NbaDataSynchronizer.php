@@ -228,7 +228,6 @@ class NbaDataSynchronizer
 
         $bestFantasyScore = $nbaStatsLogRepository->getBestFantasyScore($day);
 
-        /** @var NbaStatsLog[] $bestPicks */
         $bestPicks = $nbaStatsLogRepository->findByGameDayAndFantasyPoints($day, $bestFantasyScore);
         foreach ($bestPicks as $bestPick) {
             $bestPick->setIsBestPick(true);

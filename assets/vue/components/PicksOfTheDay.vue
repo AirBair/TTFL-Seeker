@@ -62,11 +62,11 @@
             colored-border
             elevation="2"
         >
-            No matchs scheduled for this date !
+            No games scheduled for this date !
         </v-alert>
         <div v-if="nbNbaGames">
             <h5 class="mt-6 text-h5 text-center">
-                {{ nbNbaGames }} Matchs Scheduled
+                {{ nbNbaGames }} Games Scheduled
             </h5>
             <v-row v-if="!isNbaGamesLoading">
                 <v-col v-for="nbaGame in nbaGames" :key="nbaGame.id" class="col-6">
@@ -84,7 +84,7 @@
                                     <h3>{{ nbaGame.localNbaTeam.fullName }}</h3>
                                 </v-col>
                                 <v-col>
-                                    <h2>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleTimeString('fr-Fr').substr(0, 5) : ''}}</h2>
+                                    <h2>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleTimeString('fr-Fr').substring(0, 5) : ''}}</h2>
                                     <h5>{{ nbaGame.scheduledAt ? new Date(nbaGame.scheduledAt).toLocaleDateString('fr-Fr') : ''}}</h5>
                                 </v-col>
                                 <v-col>
@@ -225,7 +225,7 @@ export default class PicksOfTheDay extends Vue {
     @Prop({ type: String, default: 'averageFantasyPoints' }) readonly sortBy!: string
     @Prop({ type: String, default: 'desc' }) readonly sortOrder!: string
 
-    gameDay: string = new Date().toISOString().substr(0, 10)
+    gameDay: string = new Date().toISOString().substring(0, 10)
     fantasyTeam: FantasyTeam | null = null
     fantasyTeamSearch: string | null = null
     fantasyUser: FantasyUser | null = null
@@ -324,6 +324,7 @@ export default class PicksOfTheDay extends Vue {
     }
 
     async created (): Promise<void> {
+        this.initFilters()
         await this.loadNbaGames()
         await this.loadNbaPlayers()
     }

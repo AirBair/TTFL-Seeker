@@ -64,9 +64,7 @@ class FantasyUserRanking
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
 
-    /**
-     * @Groups({"fantasyUserRanking:read", "fantasyUser:read"})
-     */
+    #[Groups(['fantasyUserRanking:read', 'fantasyUser:read'])]
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
 

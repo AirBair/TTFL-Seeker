@@ -1,6 +1,7 @@
 vich_uploader:
     db_driver: orm
-
+    metadata:
+        type: attribute
     mappings:
         nba_teams_logos:
             uri_prefix: /uploads/nba-teams-logos

@@ -37,10 +37,10 @@ class NbaPlayerCrudController extends AbstractCrudController
             TextField::new('position')->setFormTypeOption('disabled', true),
             TextField::new('jersey')->setFormTypeOption('disabled', true),
             AssociationField::new('nbaTeam'),
-            BooleanField::new('isInjured')->renderAsSwitch(true),
+            BooleanField::new('isInjured')->renderAsSwitch(),
             NumberField::new('averageFantasyPoints')->setFormTypeOption('disabled', true),
             NumberField::new('pastYearFantasyPoints')->setFormTypeOption('disabled', true),
-            BooleanField::new('isAllowedInExoticLeague')->renderAsSwitch(true),
+            BooleanField::new('isAllowedInExoticLeague')->renderAsSwitch(),
             DateTimeField::new('updatedAt')->setFormTypeOption('disabled', true),
         ];
     }
