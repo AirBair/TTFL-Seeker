@@ -16,9 +16,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
 #[ApiResource(
     collectionOperations: ['get'],
     itemOperations: ['get'],
@@ -28,6 +25,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiFilter(OrderFilter::class, properties: [
     'id', 'city', 'nickname', 'fullName', 'tricode', 'conference', 'division', 'updatedAt',
 ])]
+#[Vich\Uploadable]
 #[ApiFilter(SearchFilter::class, properties: [
     'city' => 'partial',
     'nickname' => 'partial',
@@ -68,10 +66,9 @@ class NbaTeam
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $division = null;
 
-    /**
-     * @Vich\UploadableField(mapping="nba_teams_logos", fileNameProperty="logoFileName")
-     */
+    #[Vich\UploadableField(mapping: 'nba_teams_logos', fileNameProperty: 'logoFileName')]
     private ?File $logoFile = null;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $logoFileName = null;
 
