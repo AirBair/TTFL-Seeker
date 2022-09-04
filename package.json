@@ -1,7 +1,7 @@
 {
     "devDependencies": {
-        "@mdi/font": "^6.1.95",
-        "@symfony/webpack-encore": "^1.7.0",
+        "@mdi/font": "^7.0.96",
+        "@symfony/webpack-encore": "^3.1.0",
         "@types/lodash": "^4.14.165",
         "@types/qs": "^6.9.5",
         "@typescript-eslint/eslint-plugin": "^5.5.0",
@@ -19,7 +19,7 @@
         "qs": "^6.9.4",
         "regenerator-runtime": "^0.13.2",
         "sass": "~1.32",
-        "sass-loader": "^12.1.0",
+        "sass-loader": "^13.0.2",
         "ts-loader": "^9.2.3",
         "typescript": "^4.1.2",
         "vue": "^2.6.12",
@@ -27,7 +27,6 @@
         "vue-loader": "^15.9.5",
         "vue-property-decorator": "^9.1.2",
         "vue-router": "^3.4.9",
-        "vue-template-compiler": "^2.6.12",
         "vuetify": "^2.3.19",
         "vuetify-loader": "^1.6.0",
         "vuex": "^3.6.0",
