@@ -3,8 +3,6 @@ api_platform:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
         json: ['application/merge-patch+json']
-    swagger:
-        versions: [3]
     path_segment_name_generator: api_platform.path_segment_name_generator.dash
     defaults:
         pagination_client_enabled: true

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\NbaTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,10 +19,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ApiResource(
-    collectionOperations: ['get'],
-    itemOperations: ['get'],
-    denormalizationContext: ['groups' => ['nbaTeam:write']],
-    normalizationContext: ['groups' => ['nbaTeam:read']]
+    operations: [
+        new Get(),
+        new GetCollection(),
+    ],
+    normalizationContext: ['groups' => ['nbaTeam:read']],
+    denormalizationContext: ['groups' => ['nbaTeam:write']]
 )]
 #[ApiFilter(OrderFilter::class, properties: [
     'id', 'city', 'nickname', 'fullName', 'tricode', 'conference', 'division', 'updatedAt',
