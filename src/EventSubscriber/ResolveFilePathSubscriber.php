@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use ApiPlatform\Core\EventListener\EventPriorities;
-use ApiPlatform\Core\Util\RequestAttributesExtractor;
+use ApiPlatform\Symfony\EventListener\EventPriorities;
+use ApiPlatform\Util\RequestAttributesExtractor;
 use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
