@@ -92,7 +92,7 @@ class NbaPlayer
 
     #[Groups(['nbaPlayer:read'])]
     #[ORM\Column(type: 'boolean')]
-    private bool $isAllowedInExoticLeague = false;
+    private bool $isAllowedInExoticLeague = true;
 
     #[Groups(['nbaPlayer:read'])]
     #[ORM\Column(type: 'datetime')]

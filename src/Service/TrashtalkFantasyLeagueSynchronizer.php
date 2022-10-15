@@ -249,7 +249,8 @@ class TrashtalkFantasyLeagueSynchronizer
                 ->setUsername($username)
                 ->setTtflId($ttflId)
                 ->setFantasyTeam($fantasyTeam)
-                ->setIsExoticUser($fantasyTeam->getIsExoticTeam());
+                ->setIsExoticUser($fantasyTeam->getIsExoticTeam())
+                ->setIsSynchronizationActive(false);
 
             $this->entityManager->persist($fantasyUser);
         }
