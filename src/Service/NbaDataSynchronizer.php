@@ -8,6 +8,7 @@ use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Entity\NbaTeam;
+use App\Repository\NbaPlayerRepository;
 use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -55,9 +56,14 @@ class NbaDataSynchronizer
     {
         $nbaDataPlayers = $this->nbaDataProvider->getPlayersList();
 
+        $syncBeginAt = new \DateTimeImmutable();
+
+        /** @var NbaPlayerRepository $nbaPlayerRepository */
+        $nbaPlayerRepository = $this->entityManager->getRepository(NbaPlayer::class);
+
         foreach ($nbaDataPlayers as $nbaDataPlayer) {
             /** @var ?NbaPlayer $player */
-            $player = $this->entityManager->getRepository(NbaPlayer::class)->find($nbaDataPlayer['personId']);
+            $player = $nbaPlayerRepository->find($nbaDataPlayer['personId']);
 
             if (null === $player) {
                 $player = (new NbaPlayer())
@@ -75,7 +81,8 @@ class NbaDataSynchronizer
                 ->setFullName($nbaDataPlayer['firstName'].' '.$nbaDataPlayer['lastName'])
                 ->setPosition($nbaDataPlayer['pos'])
                 ->setJersey($nbaDataPlayer['jersey'])
-                ->setNbaTeam($nbaTeam);
+                ->setNbaTeam($nbaTeam)
+                ->setUpdatedAt(new \DateTimeImmutable());
 
             if (null === $player->getFullNameInTtfl() || '' === $player->getFullNameInTtfl()) {
                 $player->setFullNameInTtfl((string) $player->getFullName());
@@ -85,6 +92,8 @@ class NbaDataSynchronizer
         $this->entityManager->flush();
 
         $this->synchronizationLogger->info(\count($nbaDataPlayers).' NBA Players have been synchronized');
+
+        $this->synchronizationLogger->info($nbaPlayerRepository->setInactivePlayersAsFreeAgent($syncBeginAt).' NBA Players have been set as Free Agent');
 
         return \count($nbaDataPlayers);
     }
