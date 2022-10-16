@@ -24,6 +24,7 @@ use Symfony\Component\HttpClient\HttpClient;
 class TrashtalkFantasyLeagueSynchronizer
 {
     private ?HttpBrowser $browser = null;
+    private ?string $cookie = null;
     private int $nbaSeasonYear;
     private bool $isNbaPlayoffs;
 
@@ -35,15 +36,19 @@ class TrashtalkFantasyLeagueSynchronizer
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
     }
 
+    public function setCookie(string $cookie): void
+    {
+        $this->cookie = $cookie;
+    }
+
     public function getHttpBrowser(): HttpBrowser
     {
         if (null === $this->browser) {
-            $this->browser = new HttpBrowser(HttpClient::create());
-            $this->browser->request('GET', 'https://fantasy.trashtalk.co/login/');
-            $this->browser->submitForm('Se connecter', [
-                'email' => $_ENV['TTFL_USERNAME'],
-                'password' => $_ENV['TTFL_PASSWORD'],
-            ]);
+            $this->browser = new HttpBrowser(HttpClient::create([
+                'headers' => [
+                    'Cookie' => $this->cookie,
+                ],
+            ]));
         }
 
         return $this->browser;
