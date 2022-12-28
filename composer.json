@@ -36,7 +36,7 @@
         "symfony/validator": "6.1.*",
         "symfony/webpack-encore-bundle": "^1.6",
         "symfony/yaml": "6.1.*",
-        "vich/uploader-bundle": "^1.19"
+        "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.4",
