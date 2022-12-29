@@ -9,6 +9,7 @@ use JasonRoman\NbaApi\Request\Data\Prod\Game\BoxscoreRequest;
 use JasonRoman\NbaApi\Request\Data\Prod\Roster\LeagueRosterPlayersRequest;
 use JasonRoman\NbaApi\Request\Data\Prod\Schedule\LeagueScheduleRequest;
 use JasonRoman\NbaApi\Request\Data\Prod\Teams\TeamsRequest;
+use Symfony\Component\HttpClient\HttpClient;
 
 class NbaDataProvider
 {
@@ -137,5 +138,13 @@ class NbaDataProvider
         }
 
         return $results['stats'] ?? null;
+    }
+
+    public function alternateGameBoxScore(string $gameId): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://cdn.nba.com/static/json/liveData/boxscore/boxscore_'.$gameId.'.json');
+
+        return $response->toArray();
     }
 }

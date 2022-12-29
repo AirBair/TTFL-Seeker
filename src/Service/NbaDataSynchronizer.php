@@ -146,7 +146,7 @@ class NbaDataSynchronizer
 
         /** @var NbaGame $nbaGame */
         foreach ($nbaGames as $nbaGame) {
-            $nbaActivePlayers += $this->synchronizeGameBoxscore($nbaGame);
+            $nbaActivePlayers += $this->synchronizeAlternateGameBoxscore($nbaGame);
         }
 
         $this->entityManager->flush();
@@ -228,6 +228,92 @@ class NbaDataSynchronizer
         }
 
         return \count($nbaDataBoxscore['activePlayers']);
+    }
+
+    public function synchronizeAlternateGameBoxscore(NbaGame $nbaGame): int
+    {
+        if (null === $nbaGame->getId() || null === $nbaGame->getLocalNbaTeam() || null === $nbaGame->getVisitorNbaTeam()) {
+            return 0;
+        }
+        $nbaDataBoxscore = $this->nbaDataProvider->alternateGameBoxScore($nbaGame->getId());
+
+        $nbaGame
+            ->setLocalScore((int) $nbaDataBoxscore['game']['homeTeam']['score'])
+            ->setVisitorScore((int) $nbaDataBoxscore['game']['awayTeam']['score']);
+
+        $winningTeam = ($nbaGame->getLocalScore() > $nbaGame->getVisitorScore()) ?
+            $nbaGame->getLocalNbaTeam() :
+            $nbaGame->getVisitorNbaTeam();
+
+        $nbaStatsLogs = [];
+
+        foreach ($nbaDataBoxscore['game']['homeTeam']['players'] as $homePlayer) {
+            $nbaStatsLogs[] = $this->synchronizeAlternatePlayerBoxscore(
+                $nbaGame,
+                $nbaGame->getLocalNbaTeam(),
+                $winningTeam === $nbaGame->getLocalNbaTeam(),
+                $homePlayer
+            );
+        }
+
+        foreach ($nbaDataBoxscore['game']['awayTeam']['players'] as $awayPlayer) {
+            $nbaStatsLogs[] = $this->synchronizeAlternatePlayerBoxscore(
+                $nbaGame,
+                $nbaGame->getVisitorNbaTeam(),
+                $winningTeam === $nbaGame->getVisitorNbaTeam(),
+                $awayPlayer
+            );
+        }
+
+        return \count(array_filter($nbaStatsLogs));
+    }
+
+    public function synchronizeAlternatePlayerBoxscore(NbaGame $nbaGame, NbaTeam $nbaTeam, bool $hasWon, array $playerBoxscore): ?NbaStatsLog
+    {
+        /** @var ?NbaPlayer $nbaPlayer */
+        $nbaPlayer = $this->entityManager->getRepository(NbaPlayer::class)->find($playerBoxscore['personId']);
+
+        if (null === $nbaPlayer || 'ACTIVE' !== $playerBoxscore['status']) {
+            return null;
+        }
+
+        /** @var ?NbaStatsLog $nbaStatsLog */
+        $nbaStatsLog = $this->entityManager->getRepository(NbaStatsLog::class)->findOneBy([
+            'nbaPlayer' => $nbaPlayer,
+            'nbaGame' => $nbaGame,
+        ]);
+
+        if (null === $nbaStatsLog) {
+            $nbaStatsLog = (new NbaStatsLog())
+                ->setNbaPlayer($nbaPlayer)
+                ->setNbaGame($nbaGame)
+                ->setNbaTeam($nbaTeam);
+
+            $this->entityManager->persist($nbaStatsLog);
+        }
+
+        $statistics = $playerBoxscore['statistics'];
+
+        $nbaStatsLog
+            ->setPoints((int) $statistics['points'])
+            ->setAssists((int) $statistics['assists'])
+            ->setRebounds((int) $statistics['reboundsTotal'])
+            ->setSteals((int) $statistics['steals'])
+            ->setBlocks((int) $statistics['blocks'])
+            ->setTurnovers((int) $statistics['turnovers'])
+            ->setFieldGoals((int) $statistics['fieldGoalsMade'])
+            ->setFieldGoalsAttempts((int) $statistics['fieldGoalsAttempted'])
+            ->setThreePointsFieldGoals((int) $statistics['threePointersMade'])
+            ->setThreePointsFieldGoalsAttempts((int) $statistics['threePointersAttempted'])
+            ->setFreeThrows((int) $statistics['freeThrowsMade'])
+            ->setFreeThrowsAttempts((int) $statistics['freeThrowsAttempted'])
+            ->setMinutesPlayed((int) preg_replace('/[^0-9]+/', '', $statistics['minutesCalculated']))
+            ->setHasWon($hasWon)
+            ->setIsBestPick(false);
+
+        $nbaStatsLog->setFantasyPoints($this->fantasyPointsCalculator->calculatePlayerGameFantasyPoints($nbaStatsLog));
+
+        return $nbaStatsLog;
     }
 
     public function markBestPick(\DateTime $day): int
