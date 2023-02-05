@@ -16,10 +16,10 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
-###> phpunit/phpunit ###
-/phpunit.xml
+###> symfony/phpunit-bridge ###
 .phpunit.result.cache
-###< phpunit/phpunit ###
+/phpunit.xml
+###< symfony/phpunit-bridge ###
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
