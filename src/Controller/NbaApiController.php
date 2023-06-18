@@ -35,9 +35,9 @@ class NbaApiController extends AbstractController
         return $this->json($this->nbaDataProvider->getGamesList());
     }
 
-    #[Route(path: '/boxscore/{gameDate}/{gameId}', name: 'boxscore')]
-    public function boxscore(\DateTime $gameDate, string $gameId): JsonResponse
+    #[Route(path: '/boxscore/{gameId}', name: 'boxscore')]
+    public function boxscore(string $gameId): JsonResponse
     {
-        return $this->json($this->nbaDataProvider->gameBoxScore($gameDate, $gameId));
+        return $this->json($this->nbaDataProvider->gameBoxScore($gameId));
     }
 }
