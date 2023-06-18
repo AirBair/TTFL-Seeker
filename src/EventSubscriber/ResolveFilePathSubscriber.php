@@ -23,9 +23,6 @@ final class ResolveFilePathSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
