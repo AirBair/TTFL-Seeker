@@ -17,8 +17,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@DoctrineAnnotation' => true,
         '@PHPUnit84Migration:risky' => true,
+        '@PHP82Migration' => true,
         '@PHP80Migration:risky' => true,
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     ])
