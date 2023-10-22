@@ -2,23 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\EventSubscriber\Doctrine;
+namespace App\EventListener\Doctrine;
 
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 
-class TimestampableSubscriber implements EventSubscriberInterface
+#[AsDoctrineListener(event: Events::prePersist)]
+#[AsDoctrineListener(event: Events::preUpdate)]
+class TimestampableListener
 {
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::prePersist,
-            Events::preUpdate,
-        ];
-    }
-
-    public function prePersist(LifecycleEventArgs $eventArgs): void
+    public function prePersist(PrePersistEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
 
@@ -28,7 +23,7 @@ class TimestampableSubscriber implements EventSubscriberInterface
         ]);
     }
 
-    public function preUpdate(LifecycleEventArgs $eventArgs): void
+    public function preUpdate(PreUpdateEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
 

@@ -20,8 +20,7 @@ class NbaDataSynchronizer
         private readonly NbaDataProvider $nbaDataProvider,
         private readonly FantasyPointsCalculator $fantasyPointsCalculator,
         private readonly LoggerInterface $synchronizationLogger
-    ) {
-    }
+    ) {}
 
     public function synchronizeTeams(): int
     {

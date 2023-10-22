@@ -26,6 +26,10 @@ yarn-error.log
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
 
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
 ###> app ###
 /.idea/
 /public/uploads/nba-teams-logos/
