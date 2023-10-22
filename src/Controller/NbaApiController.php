@@ -14,8 +14,7 @@ class NbaApiController extends AbstractController
 {
     public function __construct(
         private readonly NbaDataProvider $nbaDataProvider
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/teams', name: 'teams')]
     public function teams(): JsonResponse
