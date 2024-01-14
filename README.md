@@ -7,7 +7,7 @@ Web App to follow-up the **T**rash**T**alk **F**antasy **L**eague
 
 - [PHP](https://secure.php.net)
 - [Composer](https://getcomposer.org)
-- [Yarn](https://yarnpkg.com)
+- [Node](https://nodejs.org)
 
 ## Installation
 
@@ -31,7 +31,7 @@ Copy the `.env` file to `.env.local` and complete it with required credentials &
 
 ### 4 - Generate static resources (css, javascript, ..)
 
-`yarn install && yarn build`
+`npm install && npm run build`
 
 ### 5 - Grant write access on var & uploads directories to the web user
 
