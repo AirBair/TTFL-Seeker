@@ -29,10 +29,4 @@ class SecurityController extends AbstractController
             'target_path' => $this->generateUrl('admin'),
         ]);
     }
-
-    #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
-    {
-        throw new \LogicException('This method should not be reachable - it will be intercepted by the logout key on the firewall.');
-    }
 }

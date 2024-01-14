@@ -19,8 +19,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 success_handler: App\Security\AuthenticationSuccessHandler
-            logout:
-                path: app_logout
+            logout: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
