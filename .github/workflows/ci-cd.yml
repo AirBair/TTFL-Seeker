@@ -34,7 +34,7 @@ jobs:
             - run: php bin/phpunit
     yarn:
         runs-on: ubuntu-latest
-        container: node:20-alpine
+        container: node:alpine
         steps:
             - uses: actions/checkout@v2
             - uses: actions/cache@v1
