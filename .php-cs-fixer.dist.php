@@ -18,7 +18,7 @@ return (new PhpCsFixer\Config())
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
         '@PHPUnit84Migration:risky' => true,
-        '@PHP82Migration' => true,
+        '@PHP83Migration' => true,
         '@PHP80Migration:risky' => true,
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     ])
