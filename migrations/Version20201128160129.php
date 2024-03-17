@@ -9,11 +9,13 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20201128160129 extends AbstractMigration
 {
+    #[\Override]
     public function getDescription(): string
     {
         return 'Initial Migration.';
     }
 
+    #[\Override]
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE fantasy_pick (id INT AUTO_INCREMENT NOT NULL, fantasy_user_id INT NOT NULL, nba_player_id VARCHAR(255) NOT NULL, season INT NOT NULL, is_playoffs TINYINT(1) NOT NULL, picked_at DATE NOT NULL, fantasy_points INT NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_A0A75E6213BC7FA0 (fantasy_user_id), INDEX IDX_A0A75E6299A217B7 (nba_player_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -38,6 +40,7 @@ final class Version20201128160129 extends AbstractMigration
         $this->addSql('ALTER TABLE nba_stats_log ADD CONSTRAINT FK_E769AA06CF29ABC2 FOREIGN KEY (nba_team_id) REFERENCES nba_team (id)');
     }
 
+    #[\Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE fantasy_team_ranking DROP FOREIGN KEY FK_1F19534E9DBE749B');

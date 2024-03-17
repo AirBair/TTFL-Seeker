@@ -21,19 +21,20 @@ jobs:
                 options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5
         env:
             APP_ENV: test
-            DATABASE_URL: "mysql://ttfl:ttfl@mariadb:3306/ttfl?serverVersion=11.0.2-MariaDB&charset=utf8mb4"
+            DATABASE_URL: "mysql://ttfl:ttfl@mariadb:3306/ttfl?serverVersion=11.3.2-MariaDB&charset=utf8mb4"
         steps:
             -   uses: actions/checkout@v4
             -   name: Get Composer cache directory
                 id: composer-cache
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: ${{ runner.os }}-composer-
             -   run: composer install
             -   run: php vendor/bin/php-cs-fixer fix --dry-run --diff
+            -   run: php vendor/bin/rector --dry-run
             -   run: php vendor/bin/phpstan analyse --memory-limit=1G
             -   run: php bin/phpunit
     node:
@@ -45,7 +46,7 @@ jobs:
                 id: npm-cache-dir
                 shell: bash
                 run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v4
                 id: npm-cache
                 with:
                     path: ${{ steps.npm-cache-dir.outputs.dir }}

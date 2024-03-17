@@ -18,7 +18,7 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
 {
     use NormalizerAwareTrait;
 
-    private const ALREADY_CALLED = 'ATTACHMENT_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'ATTACHMENT_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
         private readonly StorageInterface $storage
@@ -30,6 +30,7 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
      *
      * @throws ExceptionInterface
      */
+    #[\Override]
     public function normalize(mixed $object, ?string $format = null, array $context = []): null|array|\ArrayObject|bool|float|int|string
     {
         $context[self::ALREADY_CALLED] = true;
@@ -56,6 +57,7 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
     /**
      * @param array<string, mixed> $context
      */
+    #[\Override]
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
@@ -68,6 +70,7 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
     /**
      * @return array<'*'|'object'|class-string|string, null|bool>
      */
+    #[\Override]
     public function getSupportedTypes(?string $format): array
     {
         return [

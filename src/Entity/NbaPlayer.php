@@ -43,7 +43,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'averageFantasyPoints', 'pastYearFantasyPoints',
 ])]
 #[ORM\Entity(repositoryClass: NbaPlayerRepository::class)]
-class NbaPlayer
+class NbaPlayer implements \Stringable
 {
     #[Groups(['nbaPlayer:read', 'fantasyPick:read', 'fantasyUser:read'])]
     #[ORM\Id]
@@ -98,6 +98,7 @@ class NbaPlayer
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->lastName.' '.$this->firstName;

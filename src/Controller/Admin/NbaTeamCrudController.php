@@ -19,23 +19,27 @@ use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class NbaTeamCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return NbaTeam::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['city' => 'ASC']);
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

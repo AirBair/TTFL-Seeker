@@ -241,7 +241,7 @@ class NbaDataSynchronizer
             ->setThreePointsFieldGoalsAttempts((int) $statistics['threePointersAttempted'])
             ->setFreeThrows((int) $statistics['freeThrowsMade'])
             ->setFreeThrowsAttempts((int) $statistics['freeThrowsAttempted'])
-            ->setMinutesPlayed((int) preg_replace('/[^0-9]+/', '', $statistics['minutesCalculated']))
+            ->setMinutesPlayed((int) preg_replace('/[^0-9]+/', '', (string) $statistics['minutesCalculated']))
             ->setHasWon($hasWon)
             ->setIsBestPick(false);
 

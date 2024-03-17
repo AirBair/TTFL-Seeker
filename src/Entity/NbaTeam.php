@@ -39,7 +39,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     'division' => 'exact',
 ])]
 #[ORM\Entity(repositoryClass: NbaTeamRepository::class)]
-class NbaTeam
+class NbaTeam implements \Stringable
 {
     #[Groups(['nbaTeam:read', 'nbaPlayer:read', 'nbaGame:read', 'nbaStatsLog:read'])]
     #[ORM\Id]
@@ -99,6 +99,7 @@ class NbaTeam
         $this->nbaPlayers = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getCity().' '.$this->getNickname();

@@ -25,8 +25,8 @@ class TrashtalkFantasyLeagueSynchronizer
 {
     private ?HttpBrowser $browser = null;
     private ?string $cookie = null;
-    private int $nbaSeasonYear;
-    private bool $isNbaPlayoffs;
+    private readonly int $nbaSeasonYear;
+    private readonly bool $isNbaPlayoffs;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

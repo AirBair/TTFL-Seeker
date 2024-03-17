@@ -16,23 +16,27 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class NbaStatsLogCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return NbaStatsLog::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['nbaGame.gameDay' => 'DESC', 'fantasyPoints' => 'DESC']);
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

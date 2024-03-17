@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(DateFilter::class, properties: ['pickedAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['fantasyPoints'])]
 #[ORM\Entity(repositoryClass: FantasyPickRepository::class)]
-class FantasyPick
+class FantasyPick implements \Stringable
 {
     #[Groups(['fantasyPick:read', 'fantasyUser:read'])]
     #[ORM\Id]
@@ -90,6 +90,7 @@ class FantasyPick
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->fantasyUser.' - '.$this->pickedAt?->format('d/m/Y').' - '.$this->nbaPlayer.' - '.$this->fantasyPoints.'pts';

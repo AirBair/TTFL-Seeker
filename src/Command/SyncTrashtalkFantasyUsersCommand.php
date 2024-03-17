@@ -24,11 +24,13 @@ class SyncTrashtalkFantasyUsersCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument('cookie', InputArgument::REQUIRED, 'Active cookie from the TTFL account which will make requests to retrieve data.');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

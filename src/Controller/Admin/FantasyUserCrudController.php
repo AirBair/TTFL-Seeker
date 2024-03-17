@@ -30,17 +30,20 @@ class FantasyUserCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordHasher;
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return FantasyUser::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['username' => 'ASC']);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -66,6 +69,7 @@ class FantasyUserCrudController extends AbstractCrudController
         ];
     }
 
+    #[\Override]
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
         $formBuilder = parent::createEditFormBuilder($entityDto, $formOptions, $context);
@@ -75,6 +79,7 @@ class FantasyUserCrudController extends AbstractCrudController
         return $formBuilder;
     }
 
+    #[\Override]
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
         $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $context);

@@ -16,17 +16,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class NbaPlayerCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return NbaPlayer::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['lastName' => 'ASC']);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

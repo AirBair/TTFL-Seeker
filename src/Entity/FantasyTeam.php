@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'fantasyPoints', 'fantasyRank',
 ])]
 #[ORM\Entity(repositoryClass: FantasyTeamRepository::class)]
-class FantasyTeam
+class FantasyTeam implements \Stringable
 {
     #[Groups(['fantasyTeam:read', 'fantasyUser:read'])]
     #[ORM\Id]
@@ -86,6 +86,7 @@ class FantasyTeam
         $this->fantasyUsers = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->name;
