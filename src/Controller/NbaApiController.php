@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Service\NbaDataProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/nba-api', name: 'nba_api_')]
 class NbaApiController extends AbstractController

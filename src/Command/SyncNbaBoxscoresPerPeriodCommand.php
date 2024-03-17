@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class SyncNbaBoxscoresPerPeriodCommand extends Command
 {
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -24,6 +25,7 @@ class SyncNbaBoxscoresPerPeriodCommand extends Command
             ->addArgument('endingDay', InputArgument::REQUIRED, 'Ending day of the games under the format Y-m-d');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!\is_string($input->getArgument('beginningDay')) || !\is_string($input->getArgument('endingDay'))) {

@@ -25,6 +25,7 @@ class CalculateAverageFantasyPointsCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -32,6 +33,7 @@ class CalculateAverageFantasyPointsCommand extends Command
             ->addOption('pastYear', null, InputOption::VALUE_OPTIONAL, 'Save as average on past year ?', false);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

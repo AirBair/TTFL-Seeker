@@ -24,11 +24,13 @@ class SyncNbaBoxscoresCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument('day', InputArgument::OPTIONAL, 'Day of the games under the format Y-m-d (default: yesterday)');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

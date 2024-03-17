@@ -22,6 +22,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $this->entityManager = $entityManager;
     }
 
+    #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): ?Response
     {
         $user = $token->getUser();

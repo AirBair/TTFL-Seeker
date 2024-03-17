@@ -47,7 +47,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'localScore', 'visitorScore',
 ])]
 #[ORM\Entity(repositoryClass: NbaGameRepository::class)]
-class NbaGame
+class NbaGame implements \Stringable
 {
     #[Groups(['nbaGame:read', 'nbaStatsLog:read'])]
     #[ORM\Id]
@@ -106,6 +106,7 @@ class NbaGame
         $this->nbaStatsLogs = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->gameDay?->format('d/m/Y').' - '.$this->localNbaTeam?->getTricode().' vs '.$this->visitorNbaTeam?->getTricode();

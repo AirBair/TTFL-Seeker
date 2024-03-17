@@ -44,26 +44,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'fantasyPoints', 'fantasyRank',
 ])]
 #[ORM\Entity(repositoryClass: FantasyUserRepository::class)]
-class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
+class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface, \Stringable
 {
     #[Groups(['fantasyUser:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $username = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $ttflId = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\ManyToOne(targetEntity: FantasyTeam::class, inversedBy: 'fantasyUsers')]
     private ?FantasyTeam $fantasyTeam = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'boolean')]
     private bool $isExoticUser = false;
@@ -71,7 +67,6 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     /** @var array<string> */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
-
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $password = null;
 
@@ -79,15 +74,12 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
      * Plain password used before encryption. Not persisted in database.
      */
     private ?string $plainPassword = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'boolean')]
     private bool $isSynchronizationActive = true;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyPoints = null;
-
     #[Groups(['fantasyUser:read'])]
     #[ORM\Column(type: 'integer')]
     private ?int $fantasyRank = null;
@@ -105,10 +97,8 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyUserRanking::class, orphanRemoval: true)]
     #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyUserRankings;
-
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $registeredAt = null;
-
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $lastLoginAt = null;
 
@@ -118,6 +108,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
         $this->fantasyUserRankings = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->username;
@@ -179,6 +170,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -197,6 +189,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[\Override]
     public function getPassword(): ?string
     {
         return (string) $this->password;
@@ -346,6 +339,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return (string) $this->username;
@@ -362,6 +356,7 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;

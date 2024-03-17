@@ -15,17 +15,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
 class FantasyPickCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return FantasyPick::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['pickedAt' => 'DESC']);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [

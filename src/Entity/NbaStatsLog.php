@@ -49,7 +49,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'nbaGame.isPlayoffs', 'hasWon', 'isBestPick',
 ])]
 #[ORM\Entity(repositoryClass: NbaStatsLogRepository::class)]
-class NbaStatsLog
+class NbaStatsLog implements \Stringable
 {
     #[Groups(['nbaStatsLog:read'])]
     #[ORM\Id]
@@ -140,6 +140,7 @@ class NbaStatsLog
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->nbaPlayer.' - '.$this->fantasyPoints.'pts';

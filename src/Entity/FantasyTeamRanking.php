@@ -43,7 +43,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     'rankingAt',
 ])]
 #[ORM\Entity(repositoryClass: FantasyTeamRankingRepository::class)]
-class FantasyTeamRanking
+class FantasyTeamRanking implements \Stringable
 {
     #[Groups(['fantasyTeamRanking:read', 'fantasyTeam:read'])]
     #[ORM\Id]
@@ -86,6 +86,7 @@ class FantasyTeamRanking
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->fantasyTeam.' - '.$this->rankingAt?->format('d/m/Y').' - '.$this->fantasyPoints.'pts - '.$this->fantasyRank.'th';

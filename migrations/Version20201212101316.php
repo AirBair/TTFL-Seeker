@@ -9,17 +9,20 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20201212101316 extends AbstractMigration
 {
+    #[\Override]
     public function getDescription(): string
     {
         return 'Adding isAllowedInExoticLeague attribute in NbaPlayer';
     }
 
+    #[\Override]
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE nba_player ADD is_allowed_in_exotic_league TINYINT(1) NOT NULL');
         $this->addSql('UPDATE nba_player SET is_allowed_in_exotic_league=1');
     }
 
+    #[\Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE nba_player DROP is_allowed_in_exotic_league');

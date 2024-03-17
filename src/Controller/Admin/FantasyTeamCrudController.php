@@ -14,17 +14,20 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class FantasyTeamCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return FantasyTeam::class;
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
             ->setDefaultSort(['name' => 'ASC']);
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [
