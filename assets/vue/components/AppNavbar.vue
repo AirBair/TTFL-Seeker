@@ -1,21 +1,25 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useNavigationDrawerStore } from '../stores/navigation-drawer'
+
+const route = useRoute()
+const navigationDrawerStore = useNavigationDrawerStore()
+
+const navbarLabel = computed(() => {
+    return route.meta.navbarLabel ?? ''
+})
+</script>
+
 <template>
-    <v-app-bar app dark>
-        <v-app-bar-nav-icon @click.stop="toggleSidebarDrawer()" />
+    <v-app-bar
+        app
+        theme="dark"
+    >
+        <v-app-bar-nav-icon @click.stop="navigationDrawerStore.toggleDrawer()" />
         <v-toolbar-title>
-            {{ $route.meta.navbarLabel }}
+            {{ navbarLabel }}
         </v-toolbar-title>
+        <v-spacer />
     </v-app-bar>
 </template>
-
-<script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
-import { appModule } from '../helpers/store-accessor'
-
-@Component
-export default class AppNavbar extends Vue {
-    toggleSidebarDrawer (): void {
-        appModule.toggleSidebarDrawer()
-    }
-}
-</script>

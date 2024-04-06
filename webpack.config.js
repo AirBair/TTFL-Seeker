@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const webpack = require('webpack');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -6,7 +7,7 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const { VuetifyPlugin } = require('webpack-plugin-vuetify')
 
 Encore
     // directory where compiled assets will be stored
@@ -56,9 +57,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    .enableSassLoader(options => {
-        options.implementation = require('sass')
-    })
+    //.enableSassLoader()
 
     // uncomment if you use TypeScript
     .enableTypeScriptLoader()
@@ -67,7 +66,14 @@ Encore
     .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
 
     // add vuetify-loader plugin
-    .addPlugin(new VuetifyLoaderPlugin())
+    .addPlugin(new VuetifyPlugin())
+
+    // configure compile-time feature flags, see https://vuejs.org/api/compile-time-flags.html#webpack
+    .addPlugin(new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: 'true',
+        __VUE_PROD_DEVTOOLS__: 'false',
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+    }))
 
     // uncomment if you use React
     //.enableReactPreset()
