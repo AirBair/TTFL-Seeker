@@ -1,8 +1,8 @@
-import Vue, { VNode } from 'vue'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
-import router from './plugins/router'
-import store from './store/store'
 import vuetify from './plugins/vuetify'
+import { router } from './router/router'
 
 declare global {
     interface Window {
@@ -11,12 +11,10 @@ declare global {
     }
 }
 
-const vue = new Vue({
-    router,
-    store,
-    vuetify,
-    render (h): VNode {
-        return h(App)
-    }
-})
-vue.$mount('#app')
+const pinia = createPinia()
+const app = createApp(App)
+
+app.use(vuetify)
+app.use(pinia)
+app.use(router)
+app.mount('#app')

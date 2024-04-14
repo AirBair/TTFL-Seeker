@@ -1,14 +1,32 @@
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import '@mdi/font/scss/materialdesignicons.scss'
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
 
-Vue.use(Vuetify)
-
-const vuetify = new Vuetify({
-    icons: {
-        iconfont: 'mdi'
+export default createVuetify({
+    defaults: {
+        VAutocomplete: {
+            variant: 'outlined',
+            density: 'compact',
+            hideDetails: 'auto',
+            clearable: true
+        },
+        VDataTableServer: {
+            itemsPerPageOptions: [10, 30, 50, 100]
+        },
+        VRadioGroup: {
+            density: 'compact',
+            hideDetails: 'auto'
+        },
+        VSelect: {
+            variant: 'outlined',
+            density: 'compact',
+            hideDetails: 'auto',
+            clearable: true
+        },
+        VTextField: {
+            variant: 'outlined',
+            density: 'compact',
+            hideDetails: 'auto'
+        }
     }
 })
-
-export default vuetify

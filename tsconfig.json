@@ -1,12 +1,13 @@
 {
-  "compilerOptions": {
-    "module": "es2015",
-    "strict": true,
-    "target": "es5",
-    "moduleResolution": "node",
-    "experimentalDecorators": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "module": "es6",
+        "strict": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "noImplicitAny": false
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }
