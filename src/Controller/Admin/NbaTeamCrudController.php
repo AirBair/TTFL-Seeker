@@ -43,16 +43,16 @@ class NbaTeamCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->setMaxLength(-1)->setFormTypeOption('disabled', true),
+            IdField::new('id')->setMaxLength(-1),
             TextField::new('fullName'),
-            TextField::new('city')->setFormTypeOption('disabled', true),
-            TextField::new('nickname')->setFormTypeOption('disabled', true),
-            TextField::new('tricode')->setFormTypeOption('disabled', true),
+            TextField::new('city'),
+            TextField::new('nickname'),
+            TextField::new('tricode'),
             TextField::new('logoFile', 'Logo')->setFormType(VichFileType::class)->onlyOnForms(),
             ImageField::new('logoFileName', 'Logo')->setBasePath('/uploads/nba-teams-logos')->onlyOnIndex(),
             ColorField::new('primaryColor'),
-            TextField::new('conference')->setFormTypeOption('disabled', true),
-            TextField::new('division')->setFormTypeOption('disabled', true),
+            TextField::new('conference'),
+            TextField::new('division'),
             ArrayField::new('nbaPlayers')->onlyOnDetail(),
             DateTimeField::new('updatedAt')->hideOnForm(),
         ];

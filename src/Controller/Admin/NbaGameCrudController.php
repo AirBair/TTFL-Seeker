@@ -53,7 +53,7 @@ class NbaGameCrudController extends AbstractCrudController
             IntegerField::new('visitorScore'),
             DateTimeField::new('scheduledAt'),
             ArrayField::new('nbaStatsLogs')->onlyOnDetail(),
-            DateTimeField::new('updatedAt'),
+            DateTimeField::new('updatedAt')->hideOnForm(),
         ];
     }
 }

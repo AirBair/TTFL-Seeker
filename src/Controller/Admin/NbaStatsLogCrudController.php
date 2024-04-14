@@ -59,7 +59,7 @@ class NbaStatsLogCrudController extends AbstractCrudController
             IntegerField::new('freeThrowsAttempts')->onlyOnDetail(),
             IntegerField::new('minutesPlayed')->onlyOnDetail(),
             BooleanField::new('hasWon')->onlyOnDetail(),
-            DateTimeField::new('updatedAt'),
+            DateTimeField::new('updatedAt')->hideOnForm(),
         ];
     }
 }
