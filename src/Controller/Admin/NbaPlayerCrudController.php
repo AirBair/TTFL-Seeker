@@ -33,18 +33,18 @@ class NbaPlayerCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id')->setMaxLength(-1)->setFormTypeOption('disabled', true),
-            TextField::new('lastName')->setFormTypeOption('disabled', true),
-            TextField::new('firstName')->setFormTypeOption('disabled', true),
+            IdField::new('id')->setMaxLength(-1),
+            TextField::new('lastName'),
+            TextField::new('firstName'),
             TextField::new('fullNameInTtfl'),
-            TextField::new('position')->setFormTypeOption('disabled', true),
-            TextField::new('jersey')->setFormTypeOption('disabled', true),
+            TextField::new('position'),
+            TextField::new('jersey'),
             AssociationField::new('nbaTeam'),
             BooleanField::new('isInjured')->renderAsSwitch(),
-            NumberField::new('averageFantasyPoints')->setFormTypeOption('disabled', true),
-            NumberField::new('pastYearFantasyPoints')->setFormTypeOption('disabled', true),
+            NumberField::new('averageFantasyPoints'),
+            NumberField::new('pastYearFantasyPoints'),
             BooleanField::new('isAllowedInExoticLeague')->renderAsSwitch(),
-            DateTimeField::new('updatedAt')->setFormTypeOption('disabled', true),
+            DateTimeField::new('updatedAt')->hideOnForm(),
         ];
     }
 }
