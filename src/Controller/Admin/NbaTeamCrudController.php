@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -53,6 +54,7 @@ class NbaTeamCrudController extends AbstractCrudController
             ColorField::new('primaryColor'),
             TextField::new('conference'),
             TextField::new('division'),
+            AssociationField::new('nbaPlayers')->onlyOnForms()->setFormTypeOption('by_reference', false),
             ArrayField::new('nbaPlayers')->onlyOnDetail(),
             DateTimeField::new('updatedAt')->hideOnForm(),
         ];
