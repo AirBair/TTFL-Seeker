@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\NbaPlayer;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -36,7 +37,7 @@ class NbaPlayerCrudController extends AbstractCrudController
             IdField::new('id')->setMaxLength(-1),
             TextField::new('lastName'),
             TextField::new('firstName'),
-            TextField::new('fullNameInTtfl'),
+            TextField::new('fullNameInTtfl')->setRequired(false),
             TextField::new('position'),
             TextField::new('jersey'),
             AssociationField::new('nbaTeam'),
@@ -46,5 +47,22 @@ class NbaPlayerCrudController extends AbstractCrudController
             BooleanField::new('isAllowedInExoticLeague')->renderAsSwitch(),
             DateTimeField::new('updatedAt')->hideOnForm(),
         ];
+    }
+
+    /**
+     * @param NbaPlayer $entityInstance
+     */
+    #[\Override]
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (null === $entityInstance->getFullName() || '' === $entityInstance->getFullName()) {
+            $entityInstance->setFullName($entityInstance->getFirstName().' '.$entityInstance->getLastName());
+        }
+
+        if (null === $entityInstance->getFullNameInTtfl() || '' === $entityInstance->getFullNameInTtfl()) {
+            $entityInstance->setFullNameInTtfl((string) $entityInstance->getFullName());
+        }
+
+        parent::persistEntity($entityManager, $entityInstance);
     }
 }
