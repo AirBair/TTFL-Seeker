@@ -22,6 +22,6 @@ return RectorConfig::configure()
     // See https://github.com/rectorphp/rector-symfony/pull/572 for a great explanation.
     ->withSets([
         SymfonySetList::SYMFONY_64,
-        PHPUnitSetList::PHPUNIT_90,
+        PHPUnitSetList::PHPUNIT_100,
         TwigSetList::TWIG_240,
     ]);

@@ -1,11 +1,11 @@
 {
     "api-platform/core": {
-        "version": "3.2",
+        "version": "3.3",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
-            "version": "3.2",
-            "ref": "696d44adc3c0d4f5d25a2f1c4f3700dd8a5c6db9"
+            "version": "3.3",
+            "ref": "74b45ac570c57eb1fbe56c984091a9ff87e18bab"
         },
         "files": [
             "config/packages/api_platform.yaml",
@@ -52,7 +52,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.12",
-            "ref": "32f890075233ac4a1176e848a0f8e932ac6536d6"
+            "ref": "7266981c201efbbe02ae53c87f8bb378e3f825ae"
         },
         "files": [
             "config/packages/doctrine.yaml",
@@ -257,9 +257,6 @@
     },
     "sebastian/recursion-context": {
         "version": "4.0.4"
-    },
-    "sebastian/resource-operations": {
-        "version": "3.0.3"
     },
     "sebastian/type": {
         "version": "3.0.0"
