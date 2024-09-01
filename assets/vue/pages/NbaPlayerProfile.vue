@@ -20,15 +20,15 @@ const dataTableHeaders = [
     { title: '', key: 'againstNbaTeam.fullName', sortable: false },
     { title: 'Fantasy Points', key: 'fantasyPoints' },
     { title: 'Minutes Played', key: 'minutesPlayed' },
-    { title: 'Best Pick ?', key: 'isBestPick' }
+    { title: 'Best Pick ?', key: 'isBestPick' },
 ]
 const dataTableOptions = reactive({
     page: 1,
     itemsPerPage: 50,
     sortBy: [{
         key: 'nbaGame.gameDay',
-        order: 'desc'
-    }]
+        order: 'desc',
+    }],
 })
 
 const loadNbaPlayer = async (): Promise<void> => {
@@ -41,9 +41,9 @@ const loadNbaStatLogs = async (): Promise<void> => {
         page: dataTableOptions.page,
         itemsPerPage: dataTableOptions.itemsPerPage,
         order: {
-            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order
+            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order,
         },
-        nbaPlayer: nbaPlayer.value['@id']
+        nbaPlayer: nbaPlayer.value['@id'],
     })
     nbaStatsLogs.value = response.data['hydra:member']
     totalNbaStatsLogs.value = response.data['hydra:totalItems']

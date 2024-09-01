@@ -16,7 +16,7 @@ const dataTableHeaders = [
     { title: 'Exotic User ?', key: 'isExoticUser' },
     { title: 'Fantasy Rank', key: 'fantasyRank' },
     { title: 'Fantasy Points', key: 'fantasyPoints' },
-    { title: 'Last Pick', key: 'lastFantasyPick', sortable: false }
+    { title: 'Last Pick', key: 'lastFantasyPick', sortable: false },
 ]
 
 const availableFilters: Filter[] = reactive([{
@@ -24,55 +24,55 @@ const availableFilters: Filter[] = reactive([{
     label: 'Username',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'ttflId',
     label: 'TTFL ID',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyTeam.name',
     label: 'Fantasy Team',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isExoticUser',
     label: 'Exotic User',
     type: FilterType.Boolean,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isSynchronizationActive',
     label: 'Synchronization Active',
     type: FilterType.Boolean,
     isActive: true,
-    value: 'true'
+    value: 'true',
 }, {
     key: 'fantasyPoints[gte]',
     label: 'Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyPoints[lte]',
     label: 'Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyRank[gte]',
     label: 'Fantasy Rank',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyRank[lte]',
     label: 'Fantasy Rank',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }])
 
 const {
@@ -82,12 +82,12 @@ const {
     totalItems,
     loadItems,
     applyFilters,
-    resetFilters
+    resetFilters,
 } = useCommonList<FantasyUser>(
     fantasyUserApiHelper,
     'fantasy_users_list',
     props,
-    availableFilters
+    availableFilters,
 )
 </script>
 

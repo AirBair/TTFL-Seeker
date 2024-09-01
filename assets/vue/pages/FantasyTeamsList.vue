@@ -14,7 +14,7 @@ const dataTableHeaders = [
     { title: 'Name', key: 'name' },
     { title: 'Exotic Team ?', key: 'isExoticTeam' },
     { title: 'Fantasy Rank', key: 'fantasyRank' },
-    { title: 'Fantasy Points', key: 'fantasyPoints' }
+    { title: 'Fantasy Points', key: 'fantasyPoints' },
 ]
 
 const availableFilters: Filter[] = reactive([{
@@ -22,43 +22,43 @@ const availableFilters: Filter[] = reactive([{
     label: 'Name',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isExoticTeam',
     label: 'Exotic Team',
     type: FilterType.Boolean,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isSynchronizationActive',
     label: 'Synchronization Active',
     type: FilterType.Boolean,
     isActive: true,
-    value: 'true'
+    value: 'true',
 }, {
     key: 'fantasyPoints[gte]',
     label: 'Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyPoints[lte]',
     label: 'Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyRank[gte]',
     label: 'Fantasy Rank',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fantasyRank[lte]',
     label: 'Fantasy Rank',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }])
 
 const {
@@ -68,12 +68,12 @@ const {
     totalItems,
     loadItems,
     applyFilters,
-    resetFilters
+    resetFilters,
 } = useCommonList<FantasyTeam>(
     fantasyTeamApiHelper,
     'fantasy_teams_list',
     props,
-    availableFilters
+    availableFilters,
 )
 </script>
 

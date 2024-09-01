@@ -18,15 +18,15 @@ const dataTableHeaders = [
     { title: 'Picked At', key: 'pickedAt' },
     { title: 'Nba Player', key: 'nbaPlayer' },
     { title: 'Fantasy Points', key: 'fantasyPoints' },
-    { title: 'No Pick ?', key: 'isNoPick' }
+    { title: 'No Pick ?', key: 'isNoPick' },
 ]
 const dataTableOptions = reactive({
     page: 1,
     itemsPerPage: 50,
     sortBy: [{
         key: 'pickedAt',
-        order: 'desc'
-    }]
+        order: 'desc',
+    }],
 })
 
 const loadFantasyUser = async (): Promise<void> => {
@@ -39,9 +39,9 @@ const loadFantasyPicks = async (): Promise<void> => {
         page: dataTableOptions.page,
         itemsPerPage: dataTableOptions.itemsPerPage,
         order: {
-            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order
+            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order,
         },
-        fantasyUser: fantasyUser.value['@id']
+        fantasyUser: fantasyUser.value['@id'],
     })
     fantasyPicks.value = response.data['hydra:member']
     totalFantasyPicks.value = response.data['hydra:totalItems']

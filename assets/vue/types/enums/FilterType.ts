@@ -3,5 +3,5 @@ export enum FilterType {
     Number,
     Date,
     Boolean,
-    Choice
+    Choice,
 }

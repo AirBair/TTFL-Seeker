@@ -15,12 +15,12 @@ const isLoading = ref(false)
 const search = ref('')
 const items: Ref<FantasyTeam[]> = ref([])
 const selectedItem = computed({
-    get (): FantasyTeam | null | undefined {
+    get(): FantasyTeam | null | undefined {
         return props.fantasyTeam
     },
-    set (value: FantasyTeam | null | undefined) {
+    set(value: FantasyTeam | null | undefined) {
         emits('update:fantasyTeam', value)
-    }
+    },
 })
 
 watch(search, async (): Promise<void> => {
@@ -29,8 +29,8 @@ watch(search, async (): Promise<void> => {
         const response = await fantasyTeamApiHelper.findAll({
             name: search.value,
             order: {
-                name: 'asc'
-            }
+                name: 'asc',
+            },
         })
         items.value = response.data['hydra:member']
         isLoading.value = false
