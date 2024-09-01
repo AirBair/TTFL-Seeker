@@ -2,7 +2,7 @@ import AbstractApiHelper from './AbstractApiHelper'
 import { type FantasyTeamRanking } from '../types/FantasyTeamRanking'
 
 class FantasyTeamRankingApiHelper extends AbstractApiHelper<FantasyTeamRanking> {
-    constructor () {
+    constructor() {
         super('/api/fantasy-team-rankings')
     }
 }

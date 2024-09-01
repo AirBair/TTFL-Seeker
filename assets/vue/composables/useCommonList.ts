@@ -8,11 +8,11 @@ import { type CommonListProps } from '../types/CommonListProps'
 import { type Filter } from '../types/Filter'
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export default function useCommonList<T extends ApiResource> (
+export default function useCommonList<T extends ApiResource>(
     api: AbstractApiHelper<T>,
     listRoute: string,
     props: CommonListProps,
-    availableFilters: Filter[]
+    availableFilters: Filter[],
 ) {
     const router = useRouter()
     const isLoading = ref(true)
@@ -23,9 +23,9 @@ export default function useCommonList<T extends ApiResource> (
         itemsPerPage: parseInt(props.itemsPerPage ?? '30'),
         sortBy: [{
             key: props.sortBy ?? 'name',
-            order: props.sortOrder ?? 'asc'
+            order: props.sortOrder ?? 'asc',
         }],
-        filters: {}
+        filters: {},
     })
 
     const loadItems = async (): Promise<void> => {
@@ -34,9 +34,9 @@ export default function useCommonList<T extends ApiResource> (
             page: options.page,
             itemsPerPage: options.itemsPerPage,
             order: {
-                [options.sortBy[0]?.key]: options.sortBy[0]?.order
+                [options.sortBy[0]?.key]: options.sortBy[0]?.order,
             },
-            ...options.filters
+            ...options.filters,
         })
         items.value = response.data['hydra:member']
         totalItems.value = response.data['hydra:totalItems']
@@ -93,13 +93,13 @@ export default function useCommonList<T extends ApiResource> (
                 itemsPerPage: options.itemsPerPage,
                 sortBy: options.sortBy[0]?.key,
                 sortOrder: options.sortBy[0]?.order,
-                filters: QueryString.stringify(options.filters)
-            }
+                filters: QueryString.stringify(options.filters),
+            },
         })
     })
 
     watch(availableFilters, async () => {
-        if (availableFilters.filter((v) => v.isActive).length === 0) {
+        if (availableFilters.filter(v => v.isActive).length === 0) {
             await resetFilters()
         }
     })
@@ -116,6 +116,6 @@ export default function useCommonList<T extends ApiResource> (
         loadItems,
         initFilters,
         applyFilters,
-        resetFilters
+        resetFilters,
     }
 }

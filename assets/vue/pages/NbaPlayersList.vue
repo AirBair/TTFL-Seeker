@@ -10,7 +10,7 @@ import { nbaPlayerApiHelper } from '../api/NbaPlayerApiHelper'
 
 const props = withDefaults(defineProps<CommonListProps>(), {
     sortBy: 'averageFantasyPoints',
-    sortOrder: 'desc'
+    sortOrder: 'desc',
 })
 
 const dataTableHeaders = [
@@ -20,7 +20,7 @@ const dataTableHeaders = [
     { title: 'Injured ?', key: 'isInjured' },
     { title: 'AVG Fantasy Points', key: 'averageFantasyPoints' },
     { title: 'Past Year Fantasy Points', key: 'pastYearFantasyPoints' },
-    { title: 'Allowed in Exotic League ?', key: 'isAllowedInExoticLeague' }
+    { title: 'Allowed in Exotic League ?', key: 'isAllowedInExoticLeague' },
 ]
 
 const availableFilters: Filter[] = reactive([{
@@ -28,73 +28,73 @@ const availableFilters: Filter[] = reactive([{
     label: 'First Name',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'lastName',
     label: 'Last Name',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'fullName',
     label: 'Full Name',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'position',
     label: 'Position',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'jersey',
     label: 'Jersey No.',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isInjured',
     label: 'Injured ?',
     type: FilterType.Boolean,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'nbaTeam.fullName',
     label: 'Nba Team',
     type: FilterType.String,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'averageFantasyPoints[gte]',
     label: 'AVG Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'averageFantasyPoints[lte]',
     label: 'AVG Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'pastYearFantasyPoints[gte]',
     label: 'Past Year Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'pastYearFantasyPoints[lte]',
     label: 'Past Year Fantasy Points',
     type: FilterType.Number,
     isActive: false,
-    value: null
+    value: null,
 }, {
     key: 'isAllowedInExoticLeague',
     label: 'Allowed in Exotic League ?',
     type: FilterType.Boolean,
     isActive: false,
-    value: null
+    value: null,
 }])
 
 const {
@@ -104,12 +104,12 @@ const {
     totalItems,
     loadItems,
     applyFilters,
-    resetFilters
+    resetFilters,
 } = useCommonList<NbaPlayer>(
     nbaPlayerApiHelper,
     'nba_players_list',
     props,
-    availableFilters
+    availableFilters,
 )
 </script>
 

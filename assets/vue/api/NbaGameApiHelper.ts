@@ -2,7 +2,7 @@ import AbstractApiHelper from './AbstractApiHelper'
 import { type NbaGame } from '../types/NbaGame'
 
 class NbaGameApiHelper extends AbstractApiHelper<NbaGame> {
-    constructor () {
+    constructor() {
         super('/api/nba-games')
     }
 }

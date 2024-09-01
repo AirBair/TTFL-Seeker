@@ -18,58 +18,58 @@ export const router = createRouter({
     history: createWebHistory(),
     routes: [{
         path: '/',
-        redirect: { name: 'picks_of_the_day' }
+        redirect: { name: 'picks_of_the_day' },
     }, {
         path: '/nba-players/list',
         name: 'nba_players_list',
         component: NbaPlayersList,
         meta: {
-            navbarLabel: 'NBA Players'
-        }
+            navbarLabel: 'NBA Players',
+        },
     }, {
         path: '/nba-players/:id',
         name: 'nba_player_profile',
         component: NbaPlayerProfile,
         props: (route: RouteLocationNormalizedLoaded) => ({ id: Number(route.params.id) }),
         meta: {
-            navbarLabel: 'Nba Player Profile'
-        }
+            navbarLabel: 'Nba Player Profile',
+        },
     }, {
         path: '/picks-of-the-day',
         name: 'picks_of_the_day',
         component: PicksOfTheDay,
         meta: {
-            navbarLabel: 'Picks of the Day'
-        }
+            navbarLabel: 'Picks of the Day',
+        },
     }, {
         path: '/fantasy-users/list',
         name: 'fantasy_users_list',
         component: FantasyUsersList,
         meta: {
-            navbarLabel: 'Fantasy Users'
-        }
+            navbarLabel: 'Fantasy Users',
+        },
     }, {
         path: '/fantasy-users/:id',
         name: 'fantasy_user_profile',
         component: FantasyUserProfile,
         props: (route: RouteLocationNormalizedLoaded) => ({ id: Number(route.params.id) }),
         meta: {
-            navbarLabel: 'Fantasy User Profile'
-        }
+            navbarLabel: 'Fantasy User Profile',
+        },
     }, {
         path: '/fantasy-teams/list',
         name: 'fantasy_teams_list',
         component: FantasyTeamsList,
         meta: {
-            navbarLabel: 'Fantasy Teams'
-        }
+            navbarLabel: 'Fantasy Teams',
+        },
     }, {
         path: '/fantasy-teams/:id',
         name: 'fantasy_team_profile',
         component: FantasyTeamProfile,
         props: (route: RouteLocationNormalizedLoaded) => ({ id: Number(route.params.id) }),
         meta: {
-            navbarLabel: 'Fantasy Team Profile'
-        }
-    }]
+            navbarLabel: 'Fantasy Team Profile',
+        },
+    }],
 })

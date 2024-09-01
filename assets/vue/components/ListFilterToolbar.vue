@@ -14,16 +14,16 @@ const emits = defineEmits<(e: 'update:filters', value: Filter[]) => void>()
 const filterType = FilterType
 
 const availableFilters = computed({
-    get () {
+    get() {
         return props.filters
     },
-    set (value) {
+    set(value) {
         emits('update:filters', value)
-    }
+    },
 })
 
 const activeFilters = computed(() => {
-    return availableFilters.value.filter((v) => v.isActive)
+    return availableFilters.value.filter(v => v.isActive)
 })
 </script>
 

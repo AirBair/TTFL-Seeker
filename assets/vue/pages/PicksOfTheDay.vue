@@ -30,10 +30,10 @@ const nbaPeriod = useNbaPeriod()
 const nbaTeamIds = computed((): string[] => {
     const ids: string[] = []
     nbaGames.value.forEach(function (nbaGame: NbaGame) {
-        if (nbaGame?.localNbaTeam?.['@id'] != null) {
+        if (nbaGame.localNbaTeam?.['@id'] != null) {
             ids.push(nbaGame.localNbaTeam['@id'])
         }
-        if (nbaGame?.visitorNbaTeam?.['@id'] != null) {
+        if (nbaGame.visitorNbaTeam?.['@id'] != null) {
             ids.push(nbaGame.visitorNbaTeam['@id'])
         }
     })
@@ -44,9 +44,10 @@ const nbaTeamIds = computed((): string[] => {
 const extraLabel = computed((): string => {
     let label = ''
     if (fantasyTeam.value !== null) {
-        label = 'Available for ' + fantasyTeam.value.name
-    } else if (fantasyUser.value !== null && !nbaPeriod.isNbaPlayoffs) {
-        label = 'Days left for ' + fantasyUser.value.username
+        label = 'Available for ' + (fantasyTeam.value.name ?? '')
+    }
+    else if (fantasyUser.value !== null && !nbaPeriod.isNbaPlayoffs) {
+        label = 'Days left for ' + (fantasyUser.value.username ?? '')
     }
 
     return label
@@ -60,15 +61,15 @@ const dataTableHeaders = [
     { title: 'AVG Fantasy Points', key: 'averageFantasyPoints' },
     { title: 'Past Year Fantasy Points', key: 'pastYearFantasyPoints' },
     { title: 'Allowed in Exotic League ?', key: 'isAllowedInExoticLeague' },
-    { title: extraLabel, key: 'extra', sortable: false }
+    { title: extraLabel, key: 'extra', sortable: false },
 ]
 const dataTableOptions = reactive({
     page: 1,
     itemsPerPage: 50,
     sortBy: [{
         key: 'averageFantasyPoints',
-        order: 'desc'
-    }]
+        order: 'desc',
+    }],
 })
 
 const nbDaysLockedForUser = (nbaPlayer: NbaPlayer): number => {
@@ -85,7 +86,7 @@ const nbDaysLockedForUser = (nbaPlayer: NbaPlayer): number => {
 
 const nbAvailableInTeam = (nbaPlayer: NbaPlayer): number => {
     return 10 - lockedTeamFantasyPicks.value.filter(
-        item => item.nbaPlayer != null && item.nbaPlayer['@id'] === nbaPlayer['@id']
+        item => item.nbaPlayer != null && item.nbaPlayer['@id'] === nbaPlayer['@id'],
     ).length
 }
 
@@ -93,7 +94,8 @@ const isPlayerLock = (nbaPlayer: NbaPlayer): boolean => {
     let locked = false
     if (fantasyTeam.value !== null) {
         locked = nbAvailableInTeam(nbaPlayer) <= 0
-    } else if (fantasyUser.value !== null) {
+    }
+    else if (fantasyUser.value !== null) {
         locked = nbDaysLockedForUser(nbaPlayer) > 0
     }
 
@@ -105,10 +107,10 @@ const loadNbaGames = async (): Promise<void> => {
     const response = await nbaGameApiHelper.findAll({
         'gameDay[after]': gameDay.value,
         'gameDay[before]': gameDay.value,
-        order: {
-            scheduledAt: 'asc'
+        'order': {
+            scheduledAt: 'asc',
         },
-        pagination: false
+        'pagination': false,
     })
     nbaGames.value = response.data['hydra:member']
     totalNbaGames.value = response.data['hydra:totalItems']
@@ -121,9 +123,9 @@ const loadNbaPlayers = async (): Promise<void> => {
         page: dataTableOptions.page,
         itemsPerPage: dataTableOptions.itemsPerPage,
         order: {
-            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order
+            [dataTableOptions.sortBy[0]?.key]: dataTableOptions.sortBy[0]?.order,
         },
-        nbaTeam: nbaTeamIds.value
+        nbaTeam: nbaTeamIds.value,
     })
     nbaPlayers.value = response.data['hydra:member']
     totalNbaPlayers.value = response.data['hydra:totalItems']
@@ -134,16 +136,16 @@ const loadLockedTeamFantasyPicks = async (): Promise<void> => {
     lockedTeamFantasyPicks.value = []
     if (fantasyTeam.value !== null) {
         const response = await fantasyPickApiHelper.findAll({
-            'fantasyUser.fantasyTeam': fantasyTeam.value?.['@id'],
-            season: nbaPeriod.nbaYear,
-            isPlayoffs: nbaPeriod.isNbaPlayoffs,
+            'fantasyUser.fantasyTeam': fantasyTeam.value['@id'],
+            'season': nbaPeriod.nbaYear,
+            'isPlayoffs': nbaPeriod.isNbaPlayoffs,
             'pickedAt[strictly_after]': nbaPeriod.isNbaPlayoffs
                 ? undefined
                 : moment(gameDay.value, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
-            order: {
-                pickedAt: 'desc'
+            'order': {
+                pickedAt: 'desc',
             },
-            pagination: false
+            'pagination': false,
         })
         lockedTeamFantasyPicks.value = response.data['hydra:member']
     }
@@ -153,16 +155,16 @@ const loadLockedUserFantasyPicks = async (): Promise<void> => {
     lockedUserFantasyPicks.value = []
     if (fantasyUser.value !== null) {
         const response = await fantasyPickApiHelper.findAll({
-            fantasyUser: fantasyUser.value?.['@id'],
-            season: nbaPeriod.nbaYear,
-            isPlayoffs: nbaPeriod.isNbaPlayoffs,
+            'fantasyUser': fantasyUser.value['@id'],
+            'season': nbaPeriod.nbaYear,
+            'isPlayoffs': nbaPeriod.isNbaPlayoffs,
             'pickedAt[strictly_after]': nbaPeriod.isNbaPlayoffs
                 ? undefined
                 : moment(gameDay.value, 'YYYY-MM-DD').subtract(30, 'days').format('YYYY-MM-DD'),
-            order: {
-                pickedAt: 'desc'
+            'order': {
+                pickedAt: 'desc',
             },
-            pagination: false
+            'pagination': false,
         })
         lockedUserFantasyPicks.value = response.data['hydra:member']
     }

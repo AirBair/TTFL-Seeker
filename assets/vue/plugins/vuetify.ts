@@ -8,25 +8,25 @@ export default createVuetify({
             variant: 'outlined',
             density: 'compact',
             hideDetails: 'auto',
-            clearable: true
+            clearable: true,
         },
         VDataTableServer: {
-            itemsPerPageOptions: [10, 30, 50, 100]
+            itemsPerPageOptions: [10, 30, 50, 100],
         },
         VRadioGroup: {
             density: 'compact',
-            hideDetails: 'auto'
+            hideDetails: 'auto',
         },
         VSelect: {
             variant: 'outlined',
             density: 'compact',
             hideDetails: 'auto',
-            clearable: true
+            clearable: true,
         },
         VTextField: {
             variant: 'outlined',
             density: 'compact',
-            hideDetails: 'auto'
-        }
-    }
+            hideDetails: 'auto',
+        },
+    },
 })

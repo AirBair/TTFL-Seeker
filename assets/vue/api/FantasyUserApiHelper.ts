@@ -2,7 +2,7 @@ import AbstractApiHelper from './AbstractApiHelper'
 import { type FantasyUser } from '../types/FantasyUser'
 
 class FantasyUserApiHelper extends AbstractApiHelper<FantasyUser> {
-    constructor () {
+    constructor() {
         super('/api/fantasy-users')
     }
 }
