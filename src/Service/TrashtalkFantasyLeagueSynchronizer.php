@@ -107,11 +107,13 @@ class TrashtalkFantasyLeagueSynchronizer
             trim((string) $crawler->filter('#decks li:nth-child(1) div.media-body small')->getNode(0)?->textContent),
             $dateAndPoints
         );
-        $pickedAt = \DateTime::createFromFormat('d-m-Y', $dateAndPoints[1]);
-        if (false === $pickedAt) {
+        if (isset($dateAndPoints[1], $dateAndPoints[2])) {
+            $pickedAt = \DateTime::createFromFormat('d-m-Y', $dateAndPoints[1]);
+            $pickFantasyPoints = (int) $dateAndPoints[2];
+        }
+        if (!isset($pickedAt) || false === $pickedAt || !isset($pickFantasyPoints)) {
             return;
         }
-        $pickFantasyPoints = (int) $dateAndPoints[2];
 
         /** @var FantasyPickRepository $fantasyPickRepository */
         $fantasyPickRepository = $this->entityManager->getRepository(FantasyPick::class);
