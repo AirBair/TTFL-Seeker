@@ -7,7 +7,6 @@ import { type ApiResource } from '../types/ApiResource'
 import { type CommonListProps } from '../types/CommonListProps'
 import { type Filter } from '../types/Filter'
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default function useCommonList<T extends ApiResource>(
     api: AbstractApiHelper<T>,
     listRoute: string,
