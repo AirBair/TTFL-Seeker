@@ -45,8 +45,8 @@ const loadNbaStatLogs = async (): Promise<void> => {
         },
         nbaPlayer: nbaPlayer.value['@id'],
     })
-    nbaStatsLogs.value = response.data['hydra:member']
-    totalNbaStatsLogs.value = response.data['hydra:totalItems']
+    nbaStatsLogs.value = response.data.member
+    totalNbaStatsLogs.value = response.data.totalItems
 }
 
 onMounted(async () => {

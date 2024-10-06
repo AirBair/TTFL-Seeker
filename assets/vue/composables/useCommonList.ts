@@ -38,8 +38,8 @@ export default function useCommonList<T extends ApiResource>(
             },
             ...options.filters,
         })
-        items.value = response.data['hydra:member']
-        totalItems.value = response.data['hydra:totalItems']
+        items.value = response.data.member
+        totalItems.value = response.data.totalItems
         isLoading.value = false
     }
 

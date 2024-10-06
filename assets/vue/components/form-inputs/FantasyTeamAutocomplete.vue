@@ -32,7 +32,7 @@ watch(search, async (): Promise<void> => {
                 name: 'asc',
             },
         })
-        items.value = response.data['hydra:member']
+        items.value = response.data.member
         isLoading.value = false
     }
 })
