@@ -6,7 +6,7 @@ jobs:
     php:
         runs-on: ubuntu-latest
         container:
-            image: airbair/php:ttfl
+            image: airbair/frankenphp:ttfl
             credentials:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
