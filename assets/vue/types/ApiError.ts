@@ -1,6 +1,6 @@
 export interface ApiError {
-    'hydra:title': string
-    'hydra:description': string
+    title: string
+    description: string
 }
 
 export interface ApiViolation {

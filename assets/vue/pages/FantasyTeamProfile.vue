@@ -44,8 +44,8 @@ const loadFantasyUsers = async (): Promise<void> => {
         },
         fantasyTeam: fantasyTeam.value['@id'],
     })
-    fantasyUsers.value = response.data['hydra:member']
-    totalFantasyUsers.value = response.data['hydra:totalItems']
+    fantasyUsers.value = response.data.member
+    totalFantasyUsers.value = response.data.totalItems
 }
 
 onMounted(async () => {

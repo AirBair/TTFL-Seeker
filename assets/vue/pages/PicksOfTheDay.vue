@@ -112,8 +112,8 @@ const loadNbaGames = async (): Promise<void> => {
         },
         'pagination': false,
     })
-    nbaGames.value = response.data['hydra:member']
-    totalNbaGames.value = response.data['hydra:totalItems']
+    nbaGames.value = response.data.member
+    totalNbaGames.value = response.data.totalItems
     isNbaGamesLoading.value = false
 }
 
@@ -127,8 +127,8 @@ const loadNbaPlayers = async (): Promise<void> => {
         },
         nbaTeam: nbaTeamIds.value,
     })
-    nbaPlayers.value = response.data['hydra:member']
-    totalNbaPlayers.value = response.data['hydra:totalItems']
+    nbaPlayers.value = response.data.member
+    totalNbaPlayers.value = response.data.totalItems
     isNbaPlayersLoading.value = false
 }
 
@@ -147,7 +147,7 @@ const loadLockedTeamFantasyPicks = async (): Promise<void> => {
             },
             'pagination': false,
         })
-        lockedTeamFantasyPicks.value = response.data['hydra:member']
+        lockedTeamFantasyPicks.value = response.data.member
     }
 }
 
@@ -166,7 +166,7 @@ const loadLockedUserFantasyPicks = async (): Promise<void> => {
             },
             'pagination': false,
         })
-        lockedUserFantasyPicks.value = response.data['hydra:member']
+        lockedUserFantasyPicks.value = response.data.member
     }
 }
 
