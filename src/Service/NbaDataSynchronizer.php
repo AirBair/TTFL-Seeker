@@ -172,9 +172,9 @@ class NbaDataSynchronizer
             ->setLocalScore((int) $nbaDataBoxscore['game']['homeTeam']['score'])
             ->setVisitorScore((int) $nbaDataBoxscore['game']['awayTeam']['score']);
 
-        $winningTeam = ($nbaGame->getLocalScore() > $nbaGame->getVisitorScore()) ?
-            $nbaGame->getLocalNbaTeam() :
-            $nbaGame->getVisitorNbaTeam();
+        $winningTeam = ($nbaGame->getLocalScore() > $nbaGame->getVisitorScore())
+            ? $nbaGame->getLocalNbaTeam()
+            : $nbaGame->getVisitorNbaTeam();
 
         $nbaStatsLogs = [];
 
