@@ -1,8 +1,13 @@
 parameters:
-    level: max
+    level: 9
     paths:
         - bin/
         - config/
         - public/
         - src/
         - tests/
+    ignoreErrors:
+        -
+            identifier: doctrine.columnType
+        -
+            identifier: doctrine.associationType

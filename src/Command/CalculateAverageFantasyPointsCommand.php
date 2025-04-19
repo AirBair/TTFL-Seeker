@@ -19,17 +19,24 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class CalculateAverageFantasyPointsCommand extends Command
 {
+    private readonly int $defaultNbaYear;
+
     public function __construct(
         private readonly FantasyPointsCalculator $fantasyPointsCalculator
     ) {
         parent::__construct();
+
+        if (false === is_numeric($_ENV['NBA_YEAR'])) {
+            throw new \InvalidArgumentException('NBA_YEAR environment variable is not set or not numeric.');
+        }
+        $this->defaultNbaYear = (int) $_ENV['NBA_YEAR'];
     }
 
     #[\Override]
     protected function configure(): void
     {
         $this
-            ->addArgument('season', InputArgument::OPTIONAL, 'Season year. Default: '.$_ENV['NBA_YEAR'])
+            ->addArgument('season', InputArgument::OPTIONAL, 'Season year. Default: '.$this->defaultNbaYear)
             ->addOption('pastYear', null, InputOption::VALUE_OPTIONAL, 'Save as average on past year ?', false);
     }
 
@@ -42,7 +49,7 @@ class CalculateAverageFantasyPointsCommand extends Command
             return Command::FAILURE;
         }
 
-        $season = (null === $input->getArgument('season')) ? (int) $_ENV['NBA_YEAR'] : (int) $input->getArgument('season');
+        $season = (null === $input->getArgument('season')) ? $this->defaultNbaYear : (int) $input->getArgument('season');
         $isForPastYear = !\is_bool($input->getOption('pastYear')) || $input->getOption('pastYear');
 
         $result = $this->fantasyPointsCalculator->calculateNbaPlayersAverageFantasyPoints($season, $isForPastYear);

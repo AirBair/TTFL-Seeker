@@ -117,7 +117,7 @@ class NbaDataSynchronizer
             $visitorNbaTeam = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataGame['vTeam']['teamId']);
 
             $game
-                ->setSeason((int) $_ENV['NBA_YEAR'])
+                ->setSeason(is_numeric($_ENV['NBA_YEAR']) ? (int) $_ENV['NBA_YEAR'] : throw new \InvalidArgumentException('NBA_YEAR must be a number'))
                 ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
                 ->setLocalNbaTeam($localNbaTeam)
                 ->setVisitorNbaTeam($visitorNbaTeam)

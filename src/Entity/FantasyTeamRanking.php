@@ -82,7 +82,7 @@ class FantasyTeamRanking implements \Stringable
 
     public function __construct()
     {
-        $this->season = (int) $_ENV['NBA_YEAR'];
+        $this->season = is_numeric($_ENV['NBA_YEAR']) ? (int) $_ENV['NBA_YEAR'] : throw new \InvalidArgumentException('NBA_YEAR must be a number');
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
     }
 

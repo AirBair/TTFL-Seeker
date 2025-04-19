@@ -92,7 +92,7 @@ class NbaGame implements \Stringable
      * @var Collection<int, NbaStatsLog>
      */
     #[Groups(['nbaGame:read'])]
-    #[ORM\OneToMany(mappedBy: 'nbaGame', targetEntity: NbaStatsLog::class, cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: NbaStatsLog::class, mappedBy: 'nbaGame', cascade: ['remove'], orphanRemoval: true)]
     private Collection $nbaStatsLogs;
 
     #[Groups(['nbaGame:read', 'nbaStatsLog:read'])]
@@ -101,7 +101,7 @@ class NbaGame implements \Stringable
 
     public function __construct()
     {
-        $this->season = (int) $_ENV['NBA_YEAR'];
+        $this->season = is_numeric($_ENV['NBA_YEAR']) ? (int) $_ENV['NBA_YEAR'] : throw new \InvalidArgumentException('NBA_YEAR must be a number');
         $this->isPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
         $this->nbaStatsLogs = new ArrayCollection();
     }

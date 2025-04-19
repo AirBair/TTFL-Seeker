@@ -32,6 +32,9 @@ class TrashtalkFantasyLeagueSynchronizer
         private readonly EntityManagerInterface $entityManager,
         private readonly LoggerInterface $synchronizationLogger
     ) {
+        if (false === is_numeric($_ENV['NBA_YEAR'])) {
+            throw new \InvalidArgumentException('NBA_YEAR must be a number');
+        }
         $this->nbaSeasonYear = (int) $_ENV['NBA_YEAR'];
         $this->isNbaPlayoffs = (bool) $_ENV['NBA_PLAYOFFS'];
     }
@@ -208,8 +211,8 @@ class TrashtalkFantasyLeagueSynchronizer
         $fantasyRank = (int) $crawler->filter('.profile-stat-count')->getNode(1)?->textContent;
 
         $fantasyTeamRanking
-            ->setSeason((int) $_ENV['NBA_YEAR'])
-            ->setIsPlayoffs((bool) $_ENV['NBA_PLAYOFFS'])
+            ->setSeason($this->nbaSeasonYear)
+            ->setIsPlayoffs($this->isNbaPlayoffs)
             ->setFantasyTeam($fantasyTeam)
             ->setRankingAt(new \DateTime())
             ->setFantasyPoints($fantasyPoints)

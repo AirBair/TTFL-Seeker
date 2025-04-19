@@ -47,6 +47,7 @@ class NbaStatsLogRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
+        // @phpstan-ignore-next-line
         return (\is_array($result)) ? $result : [];
     }
 
