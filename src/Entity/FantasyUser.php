@@ -16,6 +16,7 @@ use App\Repository\FantasyUserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -342,7 +343,12 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface, 
     #[\Override]
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        $identifier = (string) $this->username;
+        if ('' === $identifier) {
+            throw new BadCredentialsException();
+        }
+
+        return $identifier;
     }
 
     /**

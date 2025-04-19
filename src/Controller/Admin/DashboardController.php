@@ -13,6 +13,7 @@ use App\Entity\NbaGame;
 use App\Entity\NbaPlayer;
 use App\Entity\NbaStatsLog;
 use App\Entity\NbaTeam;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -20,15 +21,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 
+#[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator
     ) {}
 
-    #[Route(path: '/admin', name: 'admin')]
     #[\Override]
     public function index(): Response
     {

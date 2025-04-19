@@ -2,7 +2,6 @@
 framework:
     secret: '%env(APP_SECRET)%'
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
-    #csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
