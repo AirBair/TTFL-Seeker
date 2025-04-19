@@ -69,6 +69,9 @@ class FantasyUserCrudController extends AbstractCrudController
         ];
     }
 
+    /**
+     * @return FormBuilderInterface<FantasyUser>
+     */
     #[\Override]
     public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
@@ -79,6 +82,9 @@ class FantasyUserCrudController extends AbstractCrudController
         return $formBuilder;
     }
 
+    /**
+     * @return FormBuilderInterface<FantasyUser>
+     */
     #[\Override]
     public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
     {
@@ -95,6 +101,9 @@ class FantasyUserCrudController extends AbstractCrudController
         $this->passwordHasher = $passwordHasher;
     }
 
+    /**
+     * @param FormBuilderInterface<FantasyUser> $formBuilder
+     */
     protected function addEncodePasswordEventListener(FormBuilderInterface $formBuilder): void
     {
         $formBuilder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {

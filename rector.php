@@ -21,7 +21,7 @@ return RectorConfig::configure()
     // Do not use UP_TO_* level sets for frameworks or libraries for performance.
     // See https://github.com/rectorphp/rector-symfony/pull/572 for a great explanation.
     ->withSets([
-        SymfonySetList::SYMFONY_64,
-        PHPUnitSetList::PHPUNIT_100,
-        TwigSetList::TWIG_240,
+        SymfonySetList::SYMFONY_72,
+        PHPUnitSetList::PHPUNIT_110,
+        TwigSetList::TWIG_24,
     ]);
