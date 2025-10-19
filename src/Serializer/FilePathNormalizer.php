@@ -31,7 +31,7 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
      * @throws ExceptionInterface
      */
     #[\Override]
-    public function normalize(mixed $object, ?string $format = null, array $context = []): null|array|\ArrayObject|bool|float|int|string
+    public function normalize(mixed $object, ?string $format = null, array $context = []): array|\ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 

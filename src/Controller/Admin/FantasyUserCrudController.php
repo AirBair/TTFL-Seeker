@@ -26,6 +26,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @template-extends AbstractCrudController<FantasyUser>
+ */
 class FantasyUserCrudController extends AbstractCrudController
 {
     private UserPasswordHasherInterface $passwordHasher;

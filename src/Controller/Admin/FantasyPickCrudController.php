@@ -13,6 +13,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
+/**
+ * @template-extends AbstractCrudController<FantasyPick>
+ */
 class FantasyPickCrudController extends AbstractCrudController
 {
     #[\Override]

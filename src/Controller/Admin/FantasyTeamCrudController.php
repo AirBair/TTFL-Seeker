@@ -13,6 +13,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @template-extends AbstractCrudController<FantasyTeam>
+ */
 class FantasyTeamCrudController extends AbstractCrudController
 {
     #[\Override]

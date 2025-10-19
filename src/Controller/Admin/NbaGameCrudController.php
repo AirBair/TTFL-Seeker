@@ -17,6 +17,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
+/**
+ * @template-extends AbstractCrudController<NbaGame>
+ */
 class NbaGameCrudController extends AbstractCrudController
 {
     #[\Override]
