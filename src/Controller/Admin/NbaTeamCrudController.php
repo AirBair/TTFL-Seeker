@@ -18,6 +18,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
+/**
+ * @template-extends AbstractCrudController<NbaTeam>
+ */
 class NbaTeamCrudController extends AbstractCrudController
 {
     #[\Override]

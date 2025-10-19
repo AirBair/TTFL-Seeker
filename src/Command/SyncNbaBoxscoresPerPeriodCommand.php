@@ -4,41 +4,32 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:sync-nba-boxscores-per-period',
     description: 'Synchronize boxscores (teams & players stats) on a given period from NBA API to the local database.',
 )]
-class SyncNbaBoxscoresPerPeriodCommand extends Command
+final readonly class SyncNbaBoxscoresPerPeriodCommand
 {
-    #[\Override]
-    protected function configure(): void
-    {
-        $this
-            ->addArgument('beginningDay', InputArgument::REQUIRED, 'Beginning day of the games under the format Y-m-d')
-            ->addArgument('endingDay', InputArgument::REQUIRED, 'Ending day of the games under the format Y-m-d');
-    }
+    public function __construct(
+        private SyncNbaBoxscoresCommand $syncNbaBoxscoresCommand,
+    ) {}
 
-    #[\Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        if (!\is_string($input->getArgument('beginningDay')) || !\is_string($input->getArgument('endingDay'))) {
-            return Command::INVALID;
-        }
-
-        $currentDay = new \DateTime($input->getArgument('beginningDay'));
-        $endingDay = new \DateTime($input->getArgument('endingDay'));
-
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'Beginning day of the games under the format Y-m-d')]
+        string $beginningDay,
+        #[Argument(description: 'Ending day of the games under the format Y-m-d')]
+        string $endingDay,
+    ): int {
+        $currentDay = new \DateTime($beginningDay);
+        $endingDay = new \DateTime($endingDay);
         while ($currentDay <= $endingDay) {
-            $this->getApplication()?->find((string) SyncNbaBoxscoresCommand::getDefaultName())->run(new ArrayInput([
-                'day' => $currentDay->format('Y-m-d'),
-            ]), $output);
+            $this->syncNbaBoxscoresCommand->__invoke($io, $currentDay->format('Y-m-d'));
             $currentDay->modify('+1 day');
         }
 

@@ -14,6 +14,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 
+/**
+ * @template-extends AbstractCrudController<NbaStatsLog>
+ */
 class NbaStatsLogCrudController extends AbstractCrudController
 {
     #[\Override]

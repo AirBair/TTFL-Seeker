@@ -15,6 +15,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
+/**
+ * @template-extends AbstractCrudController<NbaPlayer>
+ */
 class NbaPlayerCrudController extends AbstractCrudController
 {
     #[\Override]

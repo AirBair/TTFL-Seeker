@@ -17,9 +17,9 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@PHPUnit100Migration:risky' => true,
-        '@PHP83Migration' => true,
-        '@PHP80Migration:risky' => true,
+        '@autoPHPUnitMigration:risky' => true,
+        '@autoPHPMigration' => true,
+        '@autoPHPMigration:risky' => true,
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
     ])
     ->setFinder($finder);
