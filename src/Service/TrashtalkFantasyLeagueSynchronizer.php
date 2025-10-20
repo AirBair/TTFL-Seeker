@@ -255,7 +255,7 @@ class TrashtalkFantasyLeagueSynchronizer
                 '',
                 (string) $crawler->filter('#decks tbody tr:nth-child('.$playerIndex.') td:nth-child(2) b a')->attr('href')
             );
-            $fantasyUser = (new FantasyUser())
+            $fantasyUser = new FantasyUser()
                 ->setUsername($username)
                 ->setTtflId($ttflId)
                 ->setIsSynchronizationActive(false);
