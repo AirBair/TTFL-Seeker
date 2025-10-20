@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useNavigationDrawerStore } from '../stores/navigation-drawer'
 import { useNbaPeriod } from '../stores/nba-period'
+import logoNbaPlayoffs from '../../img/logo-nba-playoffs.png'
 
 const navigationDrawerStore = useNavigationDrawerStore()
 const nbaPeriod = useNbaPeriod()
@@ -61,7 +62,7 @@ const nbaPeriod = useNbaPeriod()
                 v-if="nbaPeriod.isNbaPlayoffs"
                 class="py-2 bg-grey-lighten-3"
             >
-                <v-img :src="require('../../img/logo-nba-playoffs.png')" />
+                <v-img :src="logoNbaPlayoffs" />
             </div>
         </template>
     </v-navigation-drawer>
