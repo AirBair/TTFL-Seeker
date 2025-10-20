@@ -5,6 +5,7 @@ import { type FantasyUser } from '../types/FantasyUser'
 import { type FantasyPick } from '../types/FantasyPick'
 import { fantasyUserApiHelper } from '../api/FantasyUserApiHelper'
 import { fantasyPickApiHelper } from '../api/FantasyPickApiHelper'
+import logoExoticLeague from '../../img/exotic-league-logo.jpg'
 
 const props = defineProps<{
     id: number
@@ -76,7 +77,7 @@ onMounted(async () => {
                 <v-spacer />
                 <v-img
                     v-if="fantasyUser.isExoticUser"
-                    :src="require('../../img/exotic-league-logo.jpg')"
+                    :src="logoExoticLeague"
                     alt="Exotic League"
                     max-height="40"
                     max-width="40"

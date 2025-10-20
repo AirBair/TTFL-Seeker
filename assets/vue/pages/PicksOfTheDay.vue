@@ -9,9 +9,10 @@ import { type FantasyPick } from '../types/FantasyPick'
 import { nbaGameApiHelper } from '../api/NbaGameApiHelper'
 import { nbaPlayerApiHelper } from '../api/NbaPlayerApiHelper'
 import { fantasyPickApiHelper } from '../api/FantasyPickApiHelper'
-import * as moment from 'moment'
+import moment from 'moment'
 import FantasyTeamAutocomplete from '../components/form-inputs/FantasyTeamAutocomplete.vue'
 import FantasyUserAutocomplete from '../components/form-inputs/FantasyUserAutocomplete.vue'
+import logoExoticLeague from '../../img/exotic-league-logo.jpg'
 
 const gameDay: Ref<string> = ref(new Date().toISOString().substring(0, 10))
 const fantasyTeam: Ref<FantasyTeam | null> = ref(null)
@@ -327,7 +328,7 @@ onMounted(async () => {
                         <td>
                             <v-img
                                 v-if="item.isAllowedInExoticLeague"
-                                :src="require('../../img/exotic-league-logo.jpg')"
+                                :src="logoExoticLeague"
                                 alt="Exotic League"
                                 height="40"
                                 width="40"

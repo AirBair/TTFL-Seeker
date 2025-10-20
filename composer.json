@@ -12,6 +12,7 @@
         "doctrine/orm": "^3.5.2",
         "easycorp/easyadmin-bundle": "^4.26.5",
         "nelmio/cors-bundle": "^2.5.0",
+        "pentatrion/vite-bundle": "^8.2",
         "symfony/asset": "7.3.*",
         "symfony/browser-kit": "7.3.*",
         "symfony/console": "7.3.*",
@@ -31,7 +32,6 @@
         "symfony/string": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
         "symfony/validator": "7.3.*",
-        "symfony/webpack-encore-bundle": "^2.3.0",
         "symfony/yaml": "7.3.*",
         "vich/uploader-bundle": "^2.8.1"
     },

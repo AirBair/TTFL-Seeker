@@ -5,7 +5,9 @@
         "target": "es6",
         "moduleResolution": "node",
         "resolveJsonModule": true,
-        "noImplicitAny": false
+        "noImplicitAny": false,
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true // https://vite.dev/guide/features.html#isolatedmodules
     },
     "exclude": [
         "node_modules"

@@ -7,6 +7,7 @@ import { type Filter } from '../types/Filter'
 import ListFilterToolbar from '../components/ListFilterToolbar.vue'
 import { type NbaPlayer } from '../types/NbaPlayer'
 import { nbaPlayerApiHelper } from '../api/NbaPlayerApiHelper'
+import logoExoticLeague from '../../img/exotic-league-logo.jpg'
 
 const props = withDefaults(defineProps<CommonListProps>(), {
     sortBy: 'averageFantasyPoints',
@@ -166,7 +167,7 @@ const {
                     <td>
                         <v-img
                             v-if="item.isAllowedInExoticLeague"
-                            :src="require('../../img/exotic-league-logo.jpg')"
+                            :src="logoExoticLeague"
                             alt="Exotic League"
                             height="40"
                             width="40"

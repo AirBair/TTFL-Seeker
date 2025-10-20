@@ -5,7 +5,7 @@
         <title>{% block title %}TTFL Follow-Up{% endblock %}</title>
         <link rel="icon" href="{{ asset('img/favicon.ico') }}"/>
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
+            {{ vite_entry_link_tags('app') }}
         {% endblock %}
     </head>
     <body>
@@ -17,7 +17,7 @@
             window.nbaYear = {{ nbaYear }}
             window.isNbaPlayoffs = {{ isNbaPlayoffs ? 'true' : 'false' }}
         </script>
-        {{ encore_entry_script_tags('app') }}
+        {{ vite_entry_script_tags('app') }}
     {% endblock %}
     </body>
 </html>

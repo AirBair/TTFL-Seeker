@@ -7,6 +7,7 @@ import { type Filter } from '../types/Filter'
 import ListFilterToolbar from '../components/ListFilterToolbar.vue'
 import { type FantasyTeam } from '../types/FantasyTeam'
 import { fantasyTeamApiHelper } from '../api/FantasyTeamApiHelper'
+import logoExoticLeague from '../../img/exotic-league-logo.jpg'
 
 const props = defineProps<CommonListProps>()
 
@@ -106,7 +107,7 @@ const {
             <template #[`item.isExoticTeam`]="{ item }">
                 <v-img
                     v-if="item.isExoticTeam"
-                    :src="require('../../img/exotic-league-logo.jpg')"
+                    :src="logoExoticLeague"
                     alt="Exotic League"
                     height="40"
                     width="40"
