@@ -31,7 +31,7 @@ class NbaDataSynchronizer
             $team = $this->entityManager->getRepository(NbaTeam::class)->find($nbaDataTeam['teamId']);
 
             if (null === $team) {
-                $team = (new NbaTeam())->setId($nbaDataTeam['teamId']);
+                $team = new NbaTeam()->setId($nbaDataTeam['teamId']);
                 $this->entityManager->persist($team);
             }
 
@@ -65,7 +65,7 @@ class NbaDataSynchronizer
             $player = $nbaPlayerRepository->find($nbaDataPlayer['personId']);
 
             if (null === $player) {
-                $player = (new NbaPlayer())
+                $player = new NbaPlayer()
                     ->setId($nbaDataPlayer['personId'])
                     ->setIsInjured(false);
                 $this->entityManager->persist($player);
@@ -106,7 +106,7 @@ class NbaDataSynchronizer
             $game = $this->entityManager->getRepository(NbaGame::class)->find($nbaDataGame['gameId']);
 
             if (null === $game) {
-                $game = (new NbaGame())->setId($nbaDataGame['gameId']);
+                $game = new NbaGame()->setId($nbaDataGame['gameId']);
                 $this->entityManager->persist($game);
             }
 
@@ -218,7 +218,7 @@ class NbaDataSynchronizer
         ]);
 
         if (null === $nbaStatsLog) {
-            $nbaStatsLog = (new NbaStatsLog())
+            $nbaStatsLog = new NbaStatsLog()
                 ->setNbaPlayer($nbaPlayer)
                 ->setNbaGame($nbaGame)
                 ->setNbaTeam($nbaTeam);
