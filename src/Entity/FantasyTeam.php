@@ -16,7 +16,7 @@ use App\Repository\FantasyTeamRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
@@ -70,14 +70,14 @@ class FantasyTeam implements \Stringable
     /**
      * @var Collection<int, FantasyTeamRanking>
      */
-    #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyTeamRanking::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: FantasyTeamRanking::class, mappedBy: 'fantasyTeam', orphanRemoval: true)]
     #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyTeamRankings;
 
     /**
      * @var Collection<int, FantasyUser>
      */
-    #[ORM\OneToMany(mappedBy: 'fantasyTeam', targetEntity: FantasyUser::class)]
+    #[ORM\OneToMany(targetEntity: FantasyUser::class, mappedBy: 'fantasyTeam')]
     private Collection $fantasyUsers;
 
     public function __construct()

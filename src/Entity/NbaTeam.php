@@ -15,8 +15,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ApiResource(
     operations: [
@@ -87,7 +87,7 @@ class NbaTeam implements \Stringable
      * @var Collection<int, NbaPlayer>
      */
     #[Groups(['nbaTeam:read'])]
-    #[ORM\OneToMany(mappedBy: 'nbaTeam', targetEntity: NbaPlayer::class)]
+    #[ORM\OneToMany(targetEntity: NbaPlayer::class, mappedBy: 'nbaTeam')]
     private Collection $nbaPlayers;
 
     #[Groups(['nbaTeam:read'])]
