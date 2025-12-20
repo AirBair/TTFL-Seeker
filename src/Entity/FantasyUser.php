@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
@@ -88,14 +88,14 @@ class FantasyUser implements UserInterface, PasswordAuthenticatedUserInterface, 
     /**
      * @var Collection<int, FantasyPick>
      */
-    #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyPick::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: FantasyPick::class, mappedBy: 'fantasyUser', orphanRemoval: true)]
     #[ORM\OrderBy(value: ['pickedAt' => 'ASC'])]
     private Collection $fantasyPicks;
 
     /**
      * @var Collection<int, FantasyUserRanking>
      */
-    #[ORM\OneToMany(mappedBy: 'fantasyUser', targetEntity: FantasyUserRanking::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: FantasyUserRanking::class, mappedBy: 'fantasyUser', orphanRemoval: true)]
     #[ORM\OrderBy(value: ['rankingAt' => 'ASC'])]
     private Collection $fantasyUserRankings;
     #[ORM\Column(type: 'datetime')]

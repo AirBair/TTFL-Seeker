@@ -25,33 +25,33 @@ class FilePathNormalizer implements NormalizerInterface, NormalizerAwareInterfac
     ) {}
 
     /**
-     * @param NbaGame|NbaPlayer|NbaStatsLog|NbaTeam $object
+     * @param NbaGame|NbaPlayer|NbaStatsLog|NbaTeam $data
      * @param array<string, mixed>                  $context
      *
      * @throws ExceptionInterface
      */
     #[\Override]
-    public function normalize(mixed $object, ?string $format = null, array $context = []): array|\ArrayObject|bool|float|int|string|null
+    public function normalize(mixed $data, ?string $format = null, array $context = []): array|\ArrayObject|bool|float|int|string|null
     {
         $context[self::ALREADY_CALLED] = true;
 
-        if ($object instanceof NbaTeam) {
-            $object->setLogoFilePath($this->storage->resolveUri($object, 'logoFile'));
+        if ($data instanceof NbaTeam) {
+            $data->setLogoFilePath($this->storage->resolveUri($data, 'logoFile'));
         }
-        if ($object instanceof NbaPlayer && null !== $object->getNbaTeam()) {
-            $object->getNbaTeam()->setLogoFilePath($this->storage->resolveUri($object->getNbaTeam(), 'logoFile'));
+        if ($data instanceof NbaPlayer && null !== $data->getNbaTeam()) {
+            $data->getNbaTeam()->setLogoFilePath($this->storage->resolveUri($data->getNbaTeam(), 'logoFile'));
         }
-        if ($object instanceof NbaStatsLog) {
-            $object->getNbaTeam()?->setLogoFilePath($this->storage->resolveUri($object->getNbaTeam(), 'logoFile'));
-            $object->getNbaGame()?->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($object->getNbaGame()?->getLocalNbaTeam(), 'logoFile'));
-            $object->getNbaGame()?->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($object->getNbaGame()?->getVisitorNbaTeam(), 'logoFile'));
+        if ($data instanceof NbaStatsLog) {
+            $data->getNbaTeam()?->setLogoFilePath($this->storage->resolveUri($data->getNbaTeam(), 'logoFile'));
+            $data->getNbaGame()?->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($data->getNbaGame()?->getLocalNbaTeam(), 'logoFile'));
+            $data->getNbaGame()?->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($data->getNbaGame()?->getVisitorNbaTeam(), 'logoFile'));
         }
-        if ($object instanceof NbaGame) {
-            $object->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($object->getLocalNbaTeam(), 'logoFile'));
-            $object->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($object->getVisitorNbaTeam(), 'logoFile'));
+        if ($data instanceof NbaGame) {
+            $data->getLocalNbaTeam()?->setLogoFilePath($this->storage->resolveUri($data->getLocalNbaTeam(), 'logoFile'));
+            $data->getVisitorNbaTeam()?->setLogoFilePath($this->storage->resolveUri($data->getVisitorNbaTeam(), 'logoFile'));
         }
 
-        return $this->normalizer->normalize($object, $format, $context);
+        return $this->normalizer->normalize($data, $format, $context);
     }
 
     /**

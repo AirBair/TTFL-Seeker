@@ -13,13 +13,13 @@ use App\Repository\NbaStatsLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
-class NbaDataSynchronizer
+readonly class NbaDataSynchronizer
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly NbaDataProvider $nbaDataProvider,
-        private readonly FantasyPointsCalculator $fantasyPointsCalculator,
-        private readonly LoggerInterface $synchronizationLogger
+        private EntityManagerInterface $entityManager,
+        private NbaDataProvider $nbaDataProvider,
+        private FantasyPointsCalculator $fantasyPointsCalculator,
+        private LoggerInterface $synchronizationLogger
     ) {}
 
     public function synchronizeTeams(): int
