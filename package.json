@@ -20,7 +20,7 @@
         "vite-plugin-vuetify": "^2.1.2",
         "vue": "^3.4.21",
         "vue-eslint-parser": "^10.2.0",
-        "vue-router": "^4.3.0",
+        "vue-router": "^5.0.2",
         "vuetify": "^3.5.14"
     },
     "license": "UNLICENSED",
